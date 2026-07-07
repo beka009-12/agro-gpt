@@ -60,7 +60,8 @@ export function GrowingSprouts({ className }: GrowingSproutsProps) {
         return (
           <motion.g
             key={sprout.x}
-            animate={reduced ? undefined : { rotate: [-1.5, 1.5, -1.5] }}
+            initial={{ rotate: 0 }}
+            animate={reduced ? undefined : { rotate: [0, 1.5, 0, -1.5, 0] }}
             transition={{
               duration: sprout.swayDuration,
               repeat: Infinity,
