@@ -10,6 +10,7 @@
     "generate-api": "orval"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "@tanstack/react-query": "^5.101.2",
     "@tanstack/react-query-devtools": "^5.101.2",
     "axios": "^1.18.1",

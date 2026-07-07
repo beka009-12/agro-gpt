@@ -54,5 +54,58 @@
   },
   "footer": {
     "copyright": "© 2026 ibo — AI-помощник агронома"
+  },
+  "auth": {
+    "register": {
+      "title": "Создайте аккаунт",
+      "subtitle": "Пара полей — и AI-агроном уже работает на вас.",
+      "nameLabel": "Имя",
+      "namePlaceholder": "Асан Асанов",
+      "phoneLabel": "Телефон",
+      "phonePlaceholder": "+996700123456",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "emailHint": "Нужен для повторного входа по коду",
+      "emailWarning": "Без email вы не сможете войти в аккаунт с другого устройства",
+      "regionLabel": "Регион",
+      "regionPlaceholder": "Чуйская область",
+      "languageLabel": "Язык ответов",
+      "submit": "Создать аккаунт",
+      "haveAccount": "Уже есть аккаунт?",
+      "loginLink": "Войти"
+    },
+    "login": {
+      "title": "Вход в ibo",
+      "subtitle": "Пароль не нужен — пришлём код на email.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submitEmail": "Отправить код",
+      "otpSentPrefix": "Код отправлен на",
+      "otpLabel": "Код из письма",
+      "otpPlaceholder": "123456",
+      "submitOtp": "Войти",
+      "resend": "Отправить код ещё раз",
+      "resendDone": "Код отправлен повторно",
+      "changeEmail": "Изменить email",
+      "noAccount": "Нет аккаунта?",
+      "registerLink": "Создать аккаунт"
+    },
+    "chat": {
+      "greetingNamed": "Привет, {name}!",
+      "greeting": "Привет!",
+      "wip": "Чат скоро здесь. Мы уже прикручиваем диагностику по фото и советы агронома.",
+      "badge": "в разработке",
+      "logout": "Выйти"
+    },
+    "errors": {
+      "nameMin": "Имя — минимум 2 символа",
+      "phoneFormat": "Телефон: 9–15 цифр, можно с +",
+      "emailFormat": "Проверьте формат email",
+      "otpFormat": "Код — только цифры",
+      "network": "Нет соединения. Проверьте интернет",
+      "unavailable": "Сервис временно недоступен",
+      "checkData": "Проверьте правильность данных",
+      "unexpectedResponse": "Сервер вернул неожиданный ответ"
+    }
   }
 }
