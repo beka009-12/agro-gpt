@@ -23,7 +23,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="font-display text-xl font-bold text-fg">
+        <Link href="/" className="font-display text-xl font-bold text-fg" aria-label="ibo">
           ibo<span className="text-accent">●</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-3">
