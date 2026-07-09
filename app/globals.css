@@ -27,12 +27,6 @@
       transform: rotate(2deg);
     }
   }
-
-  /* временные алиасы до Task 8 (cleanup) — держат нерестайленные компоненты */
-  --color-bg-elevated: #ffffff;
-  --color-fg-soft: #1f4e39;
-  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
