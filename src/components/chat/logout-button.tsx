@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/src/components/ui/button"
 import ru from "@/src/i18n/ru.json"
 
 export function LogoutButton() {
@@ -21,8 +20,13 @@ export function LogoutButton() {
   }
 
   return (
-    <Button type="button" loading={loading} onClick={onLogout}>
-      {ru.auth.chat.logout}
-    </Button>
+    <button
+      type="button"
+      onClick={onLogout}
+      disabled={loading}
+      className="text-[13px] font-semibold text-fg-faint transition-colors hover:text-fg disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      {ru.chat.logout}
+    </button>
   )
 }

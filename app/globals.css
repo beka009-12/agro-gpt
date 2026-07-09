@@ -16,6 +16,18 @@
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
+  --animate-sprout-sway: sprout-sway 4s ease-in-out infinite;
+
+  @keyframes sprout-sway {
+    0%,
+    100% {
+      transform: rotate(-2deg);
+    }
+    50% {
+      transform: rotate(2deg);
+    }
+  }
+
   /* временные алиасы до Task 8 (cleanup) — держат нерестайленные компоненты */
   --color-bg-elevated: #ffffff;
   --color-fg-soft: #1f4e39;

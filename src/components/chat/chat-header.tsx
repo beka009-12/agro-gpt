@@ -1,0 +1,31 @@
+import Link from "next/link"
+import ru from "@/src/i18n/ru.json"
+import { LogoutButton } from "./logout-button"
+
+export function ChatHeader() {
+  return (
+    <header className="flex items-center gap-3.5 border-b border-edge bg-card px-4 py-4 sm:px-6">
+      <Link
+        href="/"
+        className="rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg"
+      >
+        {ru.chat.back}
+      </Link>
+      <span aria-hidden className="h-5 w-px bg-edge" />
+      <span
+        aria-hidden
+        className="flex size-10 items-center justify-center rounded-full bg-accent text-lg"
+      >
+        🌱
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[15px] font-bold text-fg">{ru.chat.botName}</p>
+        <p className="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-accent">
+          <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+          {ru.chat.online}
+        </p>
+      </div>
+      <LogoutButton />
+    </header>
+  )
+}
