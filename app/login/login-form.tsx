@@ -158,7 +158,7 @@ export function LoginForm() {
         autoFocus
         label={ru.auth.login.otpLabel}
         placeholder={ru.auth.login.otpPlaceholder}
-        className="font-mono tracking-[0.3em]"
+        className="tracking-[0.3em]"
         error={otpForm.formState.errors.otp_code?.message}
         {...otpForm.register("otp_code")}
       />

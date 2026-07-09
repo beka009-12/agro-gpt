@@ -14,12 +14,12 @@ export function Button({
   return (
     <button
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-full bg-fg px-5 py-3 text-sm font-medium text-bg transition-colors hover:bg-fg-soft disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-fg ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent ${className}`}
       {...rest}
     >
       {loading && (
         <span
-          className="size-4 animate-spin rounded-full border-2 border-bg/30 border-t-bg"
+          className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
           aria-hidden
         />
       )}

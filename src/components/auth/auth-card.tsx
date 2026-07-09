@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
+import { LogoMark } from "@/src/components/layout/logo"
 
 interface AuthCardProps {
   title: string
@@ -16,14 +17,15 @@ export function AuthCard({ title, subtitle, children, footer }: AuthCardProps) {
         <Link
           href="/"
           aria-label="ibo — на главную"
-          className="mb-6 block text-center font-display text-3xl font-bold text-fg"
+          className="mb-6 flex items-center justify-center gap-2.5"
         >
-          ibo<span className="text-accent">●</span>
+          <LogoMark size={30} />
+          <span className="text-[19px] font-bold tracking-tight text-fg">
+            ibo
+          </span>
         </Link>
-        <div className="rounded-2xl border border-edge bg-bg-elevated p-6 sm:p-8">
-          <h1 className="font-display text-2xl font-semibold text-fg sm:text-3xl">
-            {title}
-          </h1>
+        <div className="rounded-2xl border border-edge bg-card p-6 shadow-[0_4px_20px_rgba(45,106,79,0.08)] sm:p-8">
+          <h1 className="text-2xl font-bold text-fg sm:text-3xl">{title}</h1>
           {subtitle && <p className="mt-2 text-sm text-fg-muted">{subtitle}</p>}
           <div className="mt-6">{children}</div>
         </div>

@@ -22,7 +22,7 @@ export function Input({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg-muted"
+        className="text-sm font-medium text-fg"
       >
         {label}
       </label>
@@ -30,7 +30,7 @@ export function Input({
         id={id}
         ref={ref}
         aria-invalid={error ? true : undefined}
-        className={`rounded-lg border bg-bg px-3.5 py-2.5 text-fg outline-none transition-colors placeholder:text-fg-muted/50 focus:border-accent focus:ring-2 focus:ring-accent/25 ${
+        className={`rounded-xl border bg-card px-4 py-3 text-fg outline-none transition-colors placeholder:text-fg-faint focus:border-accent focus:ring-2 focus:ring-accent/25 ${
           error ? "border-danger/60" : "border-edge"
         } ${className}`}
         {...rest}
