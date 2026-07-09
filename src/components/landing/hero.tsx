@@ -1,43 +1,63 @@
 import Link from "next/link"
 import ru from "@/src/i18n/ru.json"
-import { GrowingSprouts } from "./growing-sprouts"
 
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-32 md:pb-24 md:pt-40 lg:grid-cols-2 lg:gap-16">
+    <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-28 md:pt-36 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
       <div>
-        <p className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
-          <span aria-hidden className="h-px w-8 bg-accent" />
+        <p className="inline-flex items-center gap-2 rounded-full bg-mint-soft px-4 py-2 text-[13px] font-semibold text-accent">
+          <span aria-hidden className="size-1.5 rounded-full bg-accent" />
           {ru.hero.badge}
         </p>
-        <h1 className="mt-6 font-display text-5xl font-semibold leading-[1.05] text-fg md:text-7xl">
+        <h1 className="mt-5 text-4xl font-bold leading-[1.12] tracking-tight text-balance text-fg md:text-[50px]">
           {ru.hero.title}
         </h1>
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-fg-muted md:text-lg">
+        <p className="mt-5 max-w-md text-[17px] leading-relaxed text-fg-muted">
           {ru.hero.subtitle}
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-6">
+        <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link
-            href="/register"
-            className="rounded-full bg-fg px-7 py-3.5 text-sm font-medium text-bg transition-colors hover:bg-fg-soft"
+            href="/chat"
+            className="rounded-full bg-accent px-7 py-4 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong"
           >
             {ru.hero.ctaPrimary}
           </Link>
           <a
             href="#how-it-works"
-            className="text-sm font-medium text-fg underline decoration-edge decoration-2 underline-offset-8 transition-colors hover:decoration-accent"
+            className="px-1 py-4 text-sm font-semibold text-fg transition-colors hover:text-accent"
           >
             {ru.hero.ctaSecondary} ↓
           </a>
         </div>
+        <ul className="mt-10 flex flex-wrap items-center gap-5 border-t border-edge pt-7">
+          {ru.hero.trust.map((item) => (
+            <li key={item} className="text-[13px] font-medium text-fg-faint">
+              ✓ {item}
+            </li>
+          ))}
+        </ul>
       </div>
-      <figure className="overflow-hidden rounded-2xl border border-edge bg-bg-elevated">
-        <GrowingSprouts className="h-56 w-full text-accent md:h-72" />
-        <figcaption className="flex items-center justify-between border-t border-edge px-5 py-3 font-mono text-[11px] uppercase tracking-[0.15em]">
-          <span className="text-fg-muted">{ru.hero.figureCaption}</span>
-          <span className="text-accent">{ru.hero.figureLabel}</span>
-        </figcaption>
-      </figure>
+      <div
+        aria-hidden
+        className="overflow-hidden rounded-2xl border border-edge bg-card shadow-[0_20px_50px_rgba(45,106,79,0.14)]"
+      >
+        <div className="flex items-center gap-1.5 border-b border-edge px-4 py-3">
+          <span className="size-2.5 rounded-full bg-edge" />
+          <span className="size-2.5 rounded-full bg-edge" />
+          <span className="size-2.5 rounded-full bg-edge" />
+        </div>
+        <div className="flex flex-col gap-3.5 bg-bg p-5">
+          <p className="max-w-[78%] self-start rounded-[16px_16px_16px_4px] bg-mint-soft px-4 py-3 text-sm leading-normal text-fg">
+            {ru.hero.mockup[0]}
+          </p>
+          <p className="max-w-[78%] self-end rounded-[16px_16px_4px_16px] bg-accent px-4 py-3 text-sm leading-normal text-white">
+            {ru.hero.mockup[1]}
+          </p>
+          <p className="max-w-[84%] self-start rounded-[16px_16px_16px_4px] bg-mint-soft px-4 py-3 text-sm leading-normal text-fg">
+            {ru.hero.mockup[2]}
+          </p>
+        </div>
+      </div>
     </section>
   )
 }
