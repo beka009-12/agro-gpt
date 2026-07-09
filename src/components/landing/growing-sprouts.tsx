@@ -10,16 +10,14 @@ interface SproutConfig {
 }
 
 const SPROUTS: SproutConfig[] = [
-  { x: 60, height: 140, swayDuration: 5.2 },
-  { x: 260, height: 200, swayDuration: 4.4 },
-  { x: 480, height: 120, swayDuration: 5.8 },
-  { x: 720, height: 230, swayDuration: 4.8 },
-  { x: 960, height: 150, swayDuration: 5.5 },
-  { x: 1160, height: 210, swayDuration: 4.2 },
-  { x: 1360, height: 130, swayDuration: 6.0 },
+  { x: 90, height: 130, swayDuration: 5.2 },
+  { x: 220, height: 200, swayDuration: 4.4 },
+  { x: 360, height: 150, swayDuration: 5.8 },
+  { x: 500, height: 230, swayDuration: 4.8 },
+  { x: 630, height: 120, swayDuration: 5.5 },
 ]
 
-const BASE_Y = 320
+const BASE_Y = 300
 
 function stemPath({ x, height }: SproutConfig): string {
   const topY = BASE_Y - height
@@ -45,11 +43,20 @@ export function GrowingSprouts({ className }: GrowingSproutsProps) {
 
   return (
     <svg
-      viewBox="0 0 1440 320"
-      preserveAspectRatio="xMidYMax slice"
+      viewBox="0 0 720 320"
+      preserveAspectRatio="xMidYMax meet"
       aria-hidden="true"
       className={className}
     >
+      <line
+        x1={24}
+        y1={BASE_Y}
+        x2={696}
+        y2={BASE_Y}
+        stroke="currentColor"
+        strokeOpacity={0.25}
+        strokeWidth={1.5}
+      />
       {SPROUTS.map((sprout, i) => {
         const growDelay = i * SPROUT_STAGGER
         const leaves = [
@@ -73,8 +80,8 @@ export function GrowingSprouts({ className }: GrowingSproutsProps) {
             <motion.path
               d={stemPath(sprout)}
               fill="none"
-              stroke="#4ade80"
-              strokeWidth={3}
+              stroke="currentColor"
+              strokeWidth={2.5}
               strokeLinecap="round"
               initial={reduced ? false : { pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -88,8 +95,10 @@ export function GrowingSprouts({ className }: GrowingSproutsProps) {
               <motion.path
                 key={leaf.dir}
                 d={leafPath(sprout.x, leaf.cy, leaf.dir)}
-                fill="#4ade80"
-                fillOpacity={0.85}
+                fill="currentColor"
+                fillOpacity={0.15}
+                stroke="currentColor"
+                strokeWidth={1.5}
                 initial={reduced ? false : { scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{

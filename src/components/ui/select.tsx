@@ -23,15 +23,18 @@ export function Select({
 }: SelectProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-fg-muted">
+      <label
+        htmlFor={id}
+        className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg-muted"
+      >
         {label}
       </label>
       <select
         id={id}
         ref={ref}
         aria-invalid={error ? true : undefined}
-        className={`appearance-none rounded-lg border bg-bg px-3.5 py-2.5 text-fg outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/30 ${
-          error ? "border-red-400/60" : "border-edge"
+        className={`appearance-none rounded-lg border bg-bg px-3.5 py-2.5 text-fg outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25 ${
+          error ? "border-danger/60" : "border-edge"
         } ${className}`}
         {...rest}
       >
@@ -42,7 +45,7 @@ export function Select({
         ))}
       </select>
       {error && (
-        <p className="text-xs text-red-400" role="alert">
+        <p className="text-xs text-danger" role="alert">
           {error}
         </p>
       )}
