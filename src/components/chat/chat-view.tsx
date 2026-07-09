@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import ru from "@/src/i18n/ru.json"
 import { ChatInput } from "./chat-input"
@@ -38,6 +39,7 @@ function readErrorMessage(data: unknown): string | null {
 }
 
 export function ChatView() {
+  const router = useRouter()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
   const chatIdRef = useRef<string | null>(null)
@@ -77,6 +79,12 @@ export function ChatView() {
 
       const res = await fetch("/api/chat/message", { method: "POST", body: form })
       const data: unknown = await res.json().catch(() => null)
+
+      if (!res.ok && res.status === 401) {
+        router.push("/login")
+        router.refresh()
+        return
+      }
 
       if (!res.ok) {
         pushMessage({

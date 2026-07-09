@@ -3,11 +3,15 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import ru from "@/src/i18n/ru.json"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { TOKEN_COOKIE } from "@/src/lib/auth-cookies"
+import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 import {
   chatCreateResponseSchema,
+  chatIdSchema,
   diagnosisResponseSchema,
 } from "@/src/lib/chat-schemas"
+
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024
+const MAX_TEXT_LENGTH = 4000
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -15,7 +19,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const token = store.get(TOKEN_COOKIE)?.value
     if (!token) {
       return NextResponse.json(
-        { message: ru.auth.errors.checkData },
+        { message: ru.auth.errors.unauthorized },
         { status: 401 }
       )
     }
@@ -40,9 +44,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 400 }
       )
     }
+    if (image instanceof File && image.size > MAX_IMAGE_BYTES) {
+      return NextResponse.json(
+        { message: ru.chat.errors.imageTooLarge },
+        { status: 413 }
+      )
+    }
+    if (hasImage && !image.type.startsWith("image/")) {
+      return NextResponse.json(
+        { message: ru.auth.errors.checkData },
+        { status: 400 }
+      )
+    }
+    if (trimmedText.length > MAX_TEXT_LENGTH) {
+      return NextResponse.json(
+        { message: ru.auth.errors.checkData },
+        { status: 400 }
+      )
+    }
 
-    let chatId =
-      typeof chatIdRaw === "string" && chatIdRaw.length > 0 ? chatIdRaw : null
+    const parsedChatId = chatIdSchema.safeParse(chatIdRaw)
+    let chatId = parsedChatId.success ? parsedChatId.data : null
     if (!chatId) {
       const created = await apiFetch("/chat/", {
         method: "POST",
@@ -81,6 +103,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ chatId, answer: diagnosis.data.answer })
   } catch (error) {
+    if (error instanceof ApiError && error.status === 401) {
+      const store = await cookies()
+      clearAuthCookies(store)
+      return NextResponse.json(
+        { message: ru.auth.errors.unauthorized },
+        { status: 401 }
+      )
+    }
     if (error instanceof ApiError) {
       return NextResponse.json(
         { message: error.message },
