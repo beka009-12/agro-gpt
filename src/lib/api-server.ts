@@ -22,9 +22,13 @@ export async function apiFetch(
 
   let res: Response
   try {
+    // для FormData Content-Type ставит fetch (boundary), вручную нельзя
+    const isFormData = init?.body instanceof FormData
     res = await fetch(`${baseUrl}${path}`, {
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: isFormData
+        ? init?.headers
+        : { "Content-Type": "application/json", ...init?.headers },
     })
   } catch (error) {
     console.error(`[api-server] network error for ${path}:`, error)
