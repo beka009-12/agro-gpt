@@ -3,21 +3,12 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import ru from "@/src/i18n/ru.json"
-import { USER_COOKIE } from "@/src/lib/auth-cookies"
-
-function hasUserCookie(): boolean {
-  return document.cookie
-    .split("; ")
-    .some((part) => part.startsWith(`${USER_COOKIE}=`))
-}
+import { LogoMark } from "./logo"
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
-  const [authenticated, setAuthenticated] = useState(false)
 
   useEffect(() => {
-    setAuthenticated(hasUserCookie())
-
     const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -33,34 +24,36 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
-        <Link href="/" className="font-display text-2xl font-bold text-fg" aria-label="ibo">
-          ibo<span className="text-accent">●</span>
+        <Link
+          href="/"
+          aria-label="ibo — на главную"
+          className="flex items-center gap-2.5"
+        >
+          <LogoMark size={30} />
+          <span className="text-[19px] font-bold tracking-tight text-fg">
+            ibo
+          </span>
         </Link>
-        {authenticated ? (
-          <nav className="flex items-center">
-            <Link
-              href="/chat"
-              className="rounded-full bg-fg px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-fg-soft"
-            >
-              {ru.header.openChat}
-            </Link>
-          </nav>
-        ) : (
-          <nav className="flex items-center gap-2 sm:gap-4">
-            <Link
-              href="/login"
-              className="px-2 py-2 text-sm text-fg-muted underline-offset-4 transition-colors hover:text-fg hover:underline"
-            >
-              {ru.header.login}
-            </Link>
-            <Link
-              href="/register"
-              className="rounded-full bg-fg px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-fg-soft"
-            >
-              {ru.header.register}
-            </Link>
-          </nav>
-        )}
+        <nav className="flex items-center gap-3 sm:gap-6">
+          <a
+            href="#features"
+            className="hidden text-sm font-medium text-fg-muted transition-colors hover:text-fg sm:block"
+          >
+            {ru.header.nav.features}
+          </a>
+          <a
+            href="#how-it-works"
+            className="hidden text-sm font-medium text-fg-muted transition-colors hover:text-fg sm:block"
+          >
+            {ru.header.nav.howItWorks}
+          </a>
+          <Link
+            href="/chat"
+            className="rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent-strong"
+          >
+            {ru.header.startChat}
+          </Link>
+        </nav>
       </div>
     </header>
   )

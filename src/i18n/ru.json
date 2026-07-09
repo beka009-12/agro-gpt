@@ -1,8 +1,10 @@
 {
   "header": {
-    "login": "Войти",
-    "register": "Попробовать ibo",
-    "openChat": "Открыть чат"
+    "nav": {
+      "features": "Возможности",
+      "howItWorks": "Как это работает"
+    },
+    "startChat": "Начать чат"
   },
   "hero": {
     "badge": "AI для агрономов",
@@ -58,7 +60,8 @@
     ]
   },
   "footer": {
-    "copyright": "© 2026 ibo — AI-помощник агронома"
+    "copyright": "© 2026 ibo — ИИ-помощник агронома",
+    "askLink": "Задать вопрос →"
   },
   "auth": {
     "register": {
