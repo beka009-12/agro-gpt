@@ -1,4 +1,5 @@
 import ru from "@/src/i18n/ru.json"
+import { SproutIcon } from "@/src/components/ui/icons"
 
 interface EmptyStateProps {
   onSuggestion: (text: string) => void
@@ -9,9 +10,9 @@ export function EmptyState({ onSuggestion }: EmptyStateProps) {
     <div className="m-auto flex flex-col items-center gap-2 px-5 text-center">
       <span
         aria-hidden
-        className="flex size-14 origin-bottom animate-sprout-sway items-center justify-center rounded-full bg-mint-soft text-[26px] motion-reduce:animate-none"
+        className="flex size-14 origin-bottom animate-sprout-sway items-center justify-center rounded-full bg-mint-soft text-accent motion-reduce:animate-none"
       >
-        🌱
+        <SproutIcon size={30} />
       </span>
       <h2 className="mt-2.5 text-xl font-bold text-fg">{ru.chat.emptyTitle}</h2>
       <p className="max-w-[340px] text-sm text-fg-muted">

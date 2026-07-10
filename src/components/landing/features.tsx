@@ -1,4 +1,5 @@
 import ru from "@/src/i18n/ru.json"
+import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons"
 import { SectionReveal } from "./section-reveal"
 
 export function Features() {
@@ -14,10 +15,13 @@ export function Features() {
           {ru.features.items.map((item, i) => (
             <SectionReveal key={item.title} delay={i * 0.08} className="h-full">
               <article className="h-full rounded-2xl bg-card p-6 shadow-[0_4px_20px_rgba(45,106,79,0.06)]">
-                <span className="text-[26px]" aria-hidden>
-                  {item.emoji}
+                <span
+                  aria-hidden
+                  className="flex size-12 items-center justify-center rounded-xl bg-mint-soft text-accent"
+                >
+                  <LandingIcon id={item.icon as LandingIconId} />
                 </span>
-                <h3 className="mt-3.5 font-bold text-fg">{item.title}</h3>
+                <h3 className="mt-4 font-bold text-fg">{item.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
                   {item.description}
                 </p>

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import ru from "@/src/i18n/ru.json"
+import { CheckIcon } from "@/src/components/ui/icons"
 
 export function Hero() {
   return (
@@ -31,8 +32,12 @@ export function Hero() {
         </div>
         <ul className="mt-10 flex flex-wrap items-center gap-5 border-t border-edge pt-7">
           {ru.hero.trust.map((item) => (
-            <li key={item} className="text-[13px] font-medium text-fg-faint">
-              ✓ {item}
+            <li
+              key={item}
+              className="flex items-center gap-1.5 text-[13px] font-medium text-fg-faint"
+            >
+              <CheckIcon size={14} className="text-accent" />
+              {item}
             </li>
           ))}
         </ul>

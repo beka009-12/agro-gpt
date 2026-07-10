@@ -1,5 +1,6 @@
 import Link from "next/link"
 import ru from "@/src/i18n/ru.json"
+import { LogoMark } from "@/src/components/layout/logo"
 import { LogoutButton } from "./logout-button"
 
 export function ChatHeader() {
@@ -12,12 +13,7 @@ export function ChatHeader() {
         {ru.chat.back}
       </Link>
       <span aria-hidden className="h-5 w-px bg-edge" />
-      <span
-        aria-hidden
-        className="flex size-10 items-center justify-center rounded-full bg-accent text-lg"
-      >
-        🌱
-      </span>
+      <LogoMark size={40} className="flex-none" />
       <div className="min-w-0 flex-1">
         <p className="text-[15px] font-bold text-fg">{ru.chat.botName}</p>
         <p className="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-accent">

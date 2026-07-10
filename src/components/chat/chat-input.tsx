@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import type { FormEvent } from "react"
 import ru from "@/src/i18n/ru.json"
+import { ArrowUpIcon, PaperclipIcon } from "@/src/components/ui/icons"
 
 interface ChatInputProps {
   pending: boolean
@@ -45,9 +46,9 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         onClick={() => fileRef.current?.click()}
         disabled={pending}
         aria-label={ru.chat.attachLabel}
-        className="flex size-11 flex-none items-center justify-center rounded-full border border-edge bg-card text-[17px] transition-colors hover:border-accent disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex size-11 flex-none items-center justify-center rounded-full border border-edge bg-card text-fg-muted transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-60"
       >
-        📎
+        <PaperclipIcon size={18} />
       </button>
       <input
         value={value}
@@ -59,9 +60,9 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         type="submit"
         disabled={pending || !value.trim()}
         aria-label={ru.chat.sendLabel}
-        className="flex size-11 flex-none items-center justify-center rounded-full bg-accent text-[17px] text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent"
+        className="flex size-11 flex-none items-center justify-center rounded-full bg-accent text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent"
       >
-        ↑
+        <ArrowUpIcon size={18} />
       </button>
     </form>
   )

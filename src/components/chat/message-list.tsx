@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
+import { LogoMark } from "@/src/components/layout/logo"
+import { PaperclipIcon } from "@/src/components/ui/icons"
 import { EmptyState } from "./empty-state"
 import { TypingIndicator } from "./typing-indicator"
 import type { ChatMessage } from "./types"
@@ -14,14 +16,7 @@ interface MessageListProps {
 }
 
 function BotAvatar() {
-  return (
-    <span
-      aria-hidden
-      className="flex size-8 flex-none items-center justify-center rounded-full bg-accent text-[15px]"
-    >
-      🌱
-    </span>
-  )
+  return <LogoMark size={32} className="flex-none" />
 }
 
 export function MessageList({ messages, pending, onSuggestion }: MessageListProps) {
@@ -69,7 +64,10 @@ export function MessageList({ messages, pending, onSuggestion }: MessageListProp
                   />
                 )}
                 {m.imageName && (
-                  <span className="text-xs text-white/80">📎 {m.imageName}</span>
+                  <span className="flex items-center gap-1 text-xs text-white/80">
+                    <PaperclipIcon size={12} />
+                    {m.imageName}
+                  </span>
                 )}
                 {m.text && <span>{m.text}</span>}
               </div>

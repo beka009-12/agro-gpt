@@ -1,4 +1,5 @@
 import ru from "@/src/i18n/ru.json"
+import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons"
 import { SectionReveal } from "./section-reveal"
 
 export function HowItWorks() {
@@ -18,9 +19,9 @@ export function HowItWorks() {
             <article className="h-full rounded-2xl border border-edge bg-bg p-7">
               <span
                 aria-hidden
-                className="flex size-12 items-center justify-center rounded-xl bg-mint-soft text-[22px]"
+                className="flex size-12 items-center justify-center rounded-xl bg-mint-soft text-accent"
               >
-                {step.emoji}
+                <LandingIcon id={step.icon as LandingIconId} />
               </span>
               <p className="mt-4 text-xs font-medium tracking-[0.1em] uppercase text-mint">
                 {ru.howItWorks.stepLabel} {i + 1}
