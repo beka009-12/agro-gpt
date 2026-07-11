@@ -1,8 +1,7 @@
 {
   "header": {
     "nav": {
-      "features": "Возможности",
-      "howItWorks": "Как это работает"
+      "about": "О нас"
     },
     "startChat": "Начать чат",
     "logoAria": "ibo — на главную"
@@ -124,7 +123,8 @@
   },
   "footer": {
     "copyright": "© 2026 ibo — ИИ-помощник агронома",
-    "askLink": "Задать вопрос →"
+    "aboutLink": "О нас",
+    "support": "Поддержка"
   },
   "chat": {
     "back": "← На главную",

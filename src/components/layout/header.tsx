@@ -1,12 +1,14 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import ru from "@/src/i18n/ru.json"
 import { LogoMark } from "./logo"
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -34,19 +36,17 @@ export function Header() {
             ibo
           </span>
         </Link>
-        <nav className="flex items-center gap-3 sm:gap-6">
-          <a
-            href="#features"
-            className="hidden text-sm font-medium text-fg-muted transition-colors hover:text-fg sm:block"
+        <nav className="flex items-center gap-4 sm:gap-6">
+          <Link
+            href="/about"
+            className={`text-sm transition-colors hover:text-fg ${
+              pathname === "/about"
+                ? "font-bold text-fg"
+                : "font-medium text-fg-muted"
+            }`}
           >
-            {ru.header.nav.features}
-          </a>
-          <a
-            href="#how-it-works"
-            className="hidden text-sm font-medium text-fg-muted transition-colors hover:text-fg sm:block"
-          >
-            {ru.header.nav.howItWorks}
-          </a>
+            {ru.header.nav.about}
+          </Link>
           <Link
             href="/chat"
             className="rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent-strong"
