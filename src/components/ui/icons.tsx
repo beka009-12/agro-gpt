@@ -139,6 +139,126 @@ export function CheckIcon(props: IconProps) {
   )
 }
 
+export function SparkleIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 4.5 13.7 9.8 19 11.5l-5.3 1.7L12 18.5l-1.7-5.3L5 11.5l5.3-1.7L12 4.5Z" />
+    </IconBase>
+  )
+}
+
+export function GlobeIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="8" />
+      <path d="M4 12h16" />
+      <path d="M12 4c2.2 2 3.4 5 3.4 8s-1.2 6-3.4 8c-2.2-2-3.4-5-3.4-8s1.2-6 3.4-8Z" />
+    </IconBase>
+  )
+}
+
+export function ConsultIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="10" cy="8.5" r="3" />
+      <path d="M4.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
+      <path d="m16.5 12.5 1.6 1.6L21 11" />
+    </IconBase>
+  )
+}
+
+export function SchemeIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="6" y="5" width="12" height="15" rx="1.6" />
+      <path d="M9 4.5h6a1 1 0 0 1 1 1v1H8v-1a1 1 0 0 1 1-1Z" />
+      <path d="M9 11h6M9 14.5h6M9 8h3" />
+    </IconBase>
+  )
+}
+
+export function LeafIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M6 18c-1-5 1-11 12-12 1 8-3 12-8 12-1.5 0-2.8-.2-4-1Z" />
+      <path d="M6 18c1.6-3 4-5.4 8-7.2" />
+    </IconBase>
+  )
+}
+
+export function RootsIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 4v6" />
+      <path d="M12 10c-1.5 1-2.3 3-2 6M12 10c1.5 1 2.3 3 2 6M12 10c-2.8 1-4.3 3.6-4.5 6.5M12 10c2.8 1 4.3 3.6 4.5 6.5" />
+    </IconBase>
+  )
+}
+
+export function GrowthIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m4 16 5-5 3.5 3.5L20 7" />
+      <path d="M14.5 7H20v5.5" />
+    </IconBase>
+  )
+}
+
+export function ResilienceIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M11 5.5a2 2 0 1 1 4 0v8.4a4 4 0 1 1-4 0V5.5Z" />
+      <path d="M13 9v5.5" />
+    </IconBase>
+  )
+}
+
+export function BloomIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="2" />
+      <circle cx="12" cy="7" r="2.3" />
+      <circle cx="12" cy="17" r="2.3" />
+      <circle cx="7" cy="12" r="2.3" />
+      <circle cx="17" cy="12" r="2.3" />
+    </IconBase>
+  )
+}
+
+export function HarvestIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 19v-8M12 19V5M19 19v-6" />
+    </IconBase>
+  )
+}
+
+export function StarIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m12 4.2 2.2 4.6 5 .7-3.6 3.5.8 5-4.4-2.4-4.4 2.4.8-5-3.6-3.5 5-.7L12 4.2Z" />
+    </IconBase>
+  )
+}
+
+export function RenewIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7" />
+      <path d="M17.7 3.5v3.3h-3.3M6.3 20.5v-3.3h3.3" />
+    </IconBase>
+  )
+}
+
+export function ShieldCheckIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m12 3.5 7 2.4v5.4c0 4.6-2.9 7.9-7 9.2-4.1-1.3-7-4.6-7-9.2V5.9l7-2.4Z" />
+      <path d="m9 12 2.2 2.2L15.5 10" />
+    </IconBase>
+  )
+}
+
 export type LandingIconId =
   | "chat-question"
   | "leaf-search"
@@ -164,5 +284,41 @@ export function LandingIcon({
   ...props
 }: { id: LandingIconId } & IconProps) {
   const Component = LANDING_ICONS[id]
+  return <Component {...props} />
+}
+
+export type AboutIconId =
+  | "flask"
+  | "consult"
+  | "scheme"
+  | "globe"
+  | "leaf"
+  | "roots"
+  | "growth"
+  | "resilience"
+  | "bloom"
+  | "harvest"
+  | "star"
+  | "renew"
+  | "shield"
+
+const ABOUT_ICONS: Record<AboutIconId, (props: IconProps) => ReactElement> = {
+  flask: FlaskIcon,
+  consult: ConsultIcon,
+  scheme: SchemeIcon,
+  globe: GlobeIcon,
+  leaf: LeafIcon,
+  roots: RootsIcon,
+  growth: GrowthIcon,
+  resilience: ResilienceIcon,
+  bloom: BloomIcon,
+  harvest: HarvestIcon,
+  star: StarIcon,
+  renew: RenewIcon,
+  shield: ShieldCheckIcon,
+}
+
+export function AboutIcon({ id, ...props }: { id: AboutIconId } & IconProps) {
+  const Component = ABOUT_ICONS[id]
   return <Component {...props} />
 }

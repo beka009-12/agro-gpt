@@ -14,7 +14,7 @@ export function Features() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {ru.features.items.map((item, i) => (
             <SectionReveal key={i} delay={i * 0.08} className="h-full">
-              <article className="h-full rounded-2xl bg-card p-6 shadow-[0_4px_20px_rgba(45,106,79,0.06)]">
+              <article className="h-full rounded-2xl border border-edge/60 bg-card p-6 shadow-[0_4px_20px_rgba(45,106,79,0.06)] transition-all duration-300 hover:-translate-y-[3px] hover:border-[#cfe3d6] hover:shadow-[0_16px_34px_rgba(45,106,79,0.13)] motion-reduce:transform-none">
                 <span
                   aria-hidden
                   className="flex size-12 items-center justify-center rounded-xl bg-mint-soft text-accent"

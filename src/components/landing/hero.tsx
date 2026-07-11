@@ -1,6 +1,20 @@
 import Link from "next/link"
+import type { ReactElement } from "react"
 import ru from "@/src/i18n/ru.json"
-import { CheckIcon } from "@/src/components/ui/icons"
+import {
+  CheckIcon,
+  GlobeIcon,
+  SparkleIcon,
+  type IconProps,
+} from "@/src/components/ui/icons"
+
+type TrustIconId = "check" | "sparkle" | "globe"
+
+const TRUST_ICONS: Record<TrustIconId, (props: IconProps) => ReactElement> = {
+  check: CheckIcon,
+  sparkle: SparkleIcon,
+  globe: GlobeIcon,
+}
 
 export function Hero() {
   return (
@@ -21,7 +35,7 @@ export function Hero() {
             href="/chat"
             className="rounded-full bg-accent px-7 py-4 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong"
           >
-            {ru.hero.ctaPrimary}
+            {ru.header.startChat}
           </Link>
           <a
             href="#how-it-works"
@@ -30,16 +44,19 @@ export function Hero() {
             {ru.hero.ctaSecondary} ↓
           </a>
         </div>
-        <ul className="mt-10 flex flex-wrap items-center gap-5 border-t border-edge pt-7">
-          {ru.hero.trust.map((item) => (
-            <li
-              key={item}
-              className="flex items-center gap-1.5 text-[13px] font-medium text-fg-faint"
-            >
-              <CheckIcon size={14} className="text-accent" />
-              {item}
-            </li>
-          ))}
+        <ul className="mt-10 flex flex-wrap items-center gap-3 border-t border-edge pt-7">
+          {ru.hero.trust.map((item, i) => {
+            const Icon = TRUST_ICONS[item.icon as TrustIconId]
+            return (
+              <li
+                key={i}
+                className="inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-4 py-2 text-[13px] font-semibold text-accent"
+              >
+                <Icon size={15} />
+                {item.text}
+              </li>
+            )
+          })}
         </ul>
       </div>
       <div

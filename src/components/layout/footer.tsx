@@ -11,12 +11,17 @@ export function Footer() {
           <span className="text-[15px] font-bold text-fg">ibo</span>
         </span>
         <span className="text-[13px] text-fg-faint">{ru.footer.copyright}</span>
-        <Link
-          href="/chat"
-          className="text-[13px] font-semibold text-accent transition-colors hover:text-accent-strong"
-        >
-          {ru.footer.askLink}
-        </Link>
+        <span className="flex items-center gap-5">
+          <Link
+            href="/about"
+            className="text-[13px] font-semibold text-accent transition-colors hover:text-accent-strong"
+          >
+            {ru.footer.aboutLink}
+          </Link>
+          <span className="text-[13px] font-semibold text-fg-faint">
+            {ru.footer.support}
+          </span>
+        </span>
       </div>
     </footer>
   )
