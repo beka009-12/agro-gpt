@@ -24,8 +24,14 @@ export function LogoutButton() {
       type="button"
       onClick={onLogout}
       disabled={loading}
-      className="text-[13px] font-semibold text-fg-faint transition-colors hover:text-fg disabled:cursor-not-allowed disabled:opacity-60"
+      className="flex items-center gap-1.5 text-[13px] font-semibold text-fg-faint transition-colors hover:text-fg disabled:cursor-not-allowed disabled:opacity-60"
     >
+      {loading && (
+        <span
+          aria-hidden
+          className="size-3 animate-spin rounded-full border-2 border-current border-t-transparent"
+        />
+      )}
       {ru.chat.logout}
     </button>
   )

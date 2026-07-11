@@ -26,7 +26,7 @@ export function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
         <Link
           href="/"
-          aria-label="ibo — на главную"
+          aria-label={ru.header.logoAria}
           className="flex items-center gap-2.5"
         >
           <LogoMark size={30} />

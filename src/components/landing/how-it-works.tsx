@@ -15,7 +15,7 @@ export function HowItWorks() {
       </SectionReveal>
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {ru.howItWorks.steps.map((step, i) => (
-          <SectionReveal key={step.title} delay={i * 0.12} className="h-full">
+          <SectionReveal key={i} delay={i * 0.12} className="h-full">
             <article className="h-full rounded-2xl border border-edge bg-bg p-7">
               <span
                 aria-hidden

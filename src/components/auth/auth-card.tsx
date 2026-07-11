@@ -2,6 +2,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 import { LogoMark } from "@/src/components/layout/logo"
+import ru from "@/src/i18n/ru.json"
 
 interface AuthCardProps {
   title: string
@@ -16,7 +17,7 @@ export function AuthCard({ title, subtitle, children, footer }: AuthCardProps) {
       <SectionReveal className="w-full max-w-md">
         <Link
           href="/"
-          aria-label="ibo — на главную"
+          aria-label={ru.header.logoAria}
           className="mb-6 flex items-center justify-center gap-2.5"
         >
           <LogoMark size={30} />

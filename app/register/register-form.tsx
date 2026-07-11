@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -39,7 +39,7 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
@@ -52,7 +52,7 @@ export function RegisterForm() {
     },
   })
 
-  const emailValue = watch("email")
+  const emailValue = useWatch({ control, name: "email" })
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null)

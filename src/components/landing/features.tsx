@@ -13,7 +13,7 @@ export function Features() {
         </SectionReveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {ru.features.items.map((item, i) => (
-            <SectionReveal key={item.title} delay={i * 0.08} className="h-full">
+            <SectionReveal key={i} delay={i * 0.08} className="h-full">
               <article className="h-full rounded-2xl bg-card p-6 shadow-[0_4px_20px_rgba(45,106,79,0.06)]">
                 <span
                   aria-hidden

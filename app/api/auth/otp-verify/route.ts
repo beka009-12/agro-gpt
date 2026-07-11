@@ -39,10 +39,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     setAuthCookies(store, {
       token: login.data.access_token,
       expiresAt: login.data.expires_at,
-      user: {
-        full_name: login.data.full_name ?? "",
-        language: login.data.language ?? "ru",
-      },
     })
 
     return NextResponse.json({ ok: true })

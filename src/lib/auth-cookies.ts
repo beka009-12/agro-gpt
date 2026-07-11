@@ -1,14 +1,11 @@
 import type { cookies } from "next/headers"
 
 export const TOKEN_COOKIE = "ibo_token"
-export const USER_COOKIE = "ibo_user"
+
+// ibo_user больше не пишется; удаляем при logout, пока живы старые cookie
+const LEGACY_USER_COOKIE = "ibo_user"
 
 export type CookieStore = Awaited<ReturnType<typeof cookies>>
-
-export interface AuthUser {
-  full_name: string
-  language: string
-}
 
 const DEFAULT_MAX_AGE = 60 * 60 * 24 * 7
 
@@ -20,44 +17,18 @@ function maxAgeFrom(expiresAt: string | undefined): number {
 
 export function setAuthCookies(
   store: CookieStore,
-  params: { token: string; expiresAt?: string; user: AuthUser }
+  params: { token: string; expiresAt?: string }
 ): void {
-  const common = {
+  store.set(TOKEN_COOKIE, params.token, {
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    sameSite: "lax",
     path: "/",
     maxAge: maxAgeFrom(params.expiresAt),
-  }
-  store.set(TOKEN_COOKIE, params.token, { ...common, httpOnly: true })
-  store.set(USER_COOKIE, JSON.stringify(params.user), {
-    ...common,
-    httpOnly: false,
+    httpOnly: true,
   })
 }
 
 export function clearAuthCookies(store: CookieStore): void {
   store.delete(TOKEN_COOKIE)
-  store.delete(USER_COOKIE)
-}
-
-export function parseAuthUser(raw: string | undefined): AuthUser | null {
-  if (!raw) return null
-  try {
-    const data: unknown = JSON.parse(raw)
-    if (
-      data !== null &&
-      typeof data === "object" &&
-      "full_name" in data &&
-      typeof data.full_name === "string"
-    ) {
-      const language =
-        "language" in data && typeof data.language === "string"
-          ? data.language
-          : "ru"
-      return { full_name: data.full_name, language }
-    }
-  } catch {
-    // повреждённая cookie — считаем, что пользователя нет
-  }
-  return null
+  store.delete(LEGACY_USER_COOKIE)
 }
