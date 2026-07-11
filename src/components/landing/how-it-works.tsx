@@ -1,6 +1,6 @@
-import ru from "@/src/i18n/ru.json"
-import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons"
-import { SectionReveal } from "./section-reveal"
+import ru from "@/src/i18n/ru.json";
+import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons";
+import { SectionReveal } from "./section-reveal";
 
 export function HowItWorks() {
   return (
@@ -16,7 +16,7 @@ export function HowItWorks() {
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {ru.howItWorks.steps.map((step, i) => (
           <SectionReveal key={i} delay={i * 0.12} className="h-full">
-            <article className="h-full rounded-2xl border border-edge bg-bg p-7">
+            <article className="h-full rounded-2xl border border-edge bg-bg p-7 transition-all duration-300 hover:-translate-y-[3px] hover:border-[#cfe3d6] hover:shadow-[0_14px_32px_rgba(45,106,79,0.12)] motion-reduce:transform-none">
               <span
                 aria-hidden
                 className="flex size-12 items-center justify-center rounded-xl bg-mint-soft text-accent"
@@ -35,5 +35,5 @@ export function HowItWorks() {
         ))}
       </div>
     </section>
-  )
+  );
 }
