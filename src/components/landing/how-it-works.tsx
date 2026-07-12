@@ -23,7 +23,7 @@ export function HowItWorks() {
               >
                 <LandingIcon id={step.icon as LandingIconId} />
               </span>
-              <p className="mt-4 text-xs font-medium tracking-[0.1em] uppercase text-mint">
+              <p className="mt-4 text-xs font-semibold tracking-[0.1em] uppercase text-accent">
                 {ru.howItWorks.stepLabel} {i + 1}
               </p>
               <h3 className="mt-1.5 text-lg font-bold text-fg">{step.title}</h3>

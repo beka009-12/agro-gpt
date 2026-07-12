@@ -8,7 +8,7 @@ export function BrandCard() {
       <SectionReveal>
         <div className="grid items-center gap-8 rounded-2xl bg-section-alt p-8 md:grid-cols-[0.9fr_1.1fr] md:p-11">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.12em] text-mint">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
               {ru.about.brand.overline}
             </p>
             <h2 className="mt-2.5 text-3xl font-bold tracking-tight text-fg">
