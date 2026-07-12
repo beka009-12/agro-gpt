@@ -121,6 +121,10 @@
       }
     ]
   },
+  "floatingNav": {
+    "toTop": "Наверх",
+    "toHome": "На главную"
+  },
   "footer": {
     "copyright": "© 2026 ibo — ИИ-помощник агронома",
     "aboutLink": "О нас",

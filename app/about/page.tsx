@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Header } from "@/src/components/layout/header"
 import { Footer } from "@/src/components/layout/footer"
+import { FloatingNav } from "@/src/components/layout/floating-nav"
 import { AboutHero } from "@/src/components/about/about-hero"
 import { BrandCard } from "@/src/components/about/brand-card"
 import { Activities } from "@/src/components/about/activities"
@@ -27,6 +28,7 @@ export default function AboutPage() {
         <Mission />
       </main>
       <Footer />
+      <FloatingNav showHome />
     </>
   )
 }
