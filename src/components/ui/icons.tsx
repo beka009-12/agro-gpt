@@ -139,6 +139,14 @@ export function CheckIcon(props: IconProps) {
   )
 }
 
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m6 9.5 6 6 6-6" />
+    </IconBase>
+  )
+}
+
 export function HomeIcon(props: IconProps) {
   return (
     <IconBase {...props}>

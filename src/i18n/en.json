@@ -13,7 +13,8 @@
       "about": "About us"
     },
     "startChat": "Start chat",
-    "logoAria": "ibo — home page"
+    "logoAria": "ibo — home page",
+    "menuLabel": "Menu"
   },
   "hero": {
     "badge": "AI assistant for agronomists",
