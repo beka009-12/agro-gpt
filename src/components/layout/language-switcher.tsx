@@ -10,10 +10,34 @@ import {
   GlobeIcon,
 } from "@/src/components/ui/icons"
 
-export function LanguageSwitcher() {
+function useLocaleSwitch() {
   const router = useRouter()
   const { locale, dict } = useI18n()
   const [pending, setPending] = useState(false)
+
+  const switchTo = async (next: Locale) => {
+    if (pending || next === locale) return
+    setPending(true)
+    try {
+      await fetch("/api/locale", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language: next }),
+      })
+      router.refresh()
+    } catch (error) {
+      console.error("[language-switcher]", error)
+    } finally {
+      setPending(false)
+    }
+  }
+
+  return { locale, dict, pending, switchTo }
+}
+
+/** Десктоп: сегментированные пилюли; мобильный: компактная кнопка с меню. */
+export function LanguageSwitcher() {
+  const { locale, dict, pending, switchTo } = useLocaleSwitch()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -33,34 +57,20 @@ export function LanguageSwitcher() {
     }
   }, [open])
 
-  const switchTo = async (next: Locale) => {
+  const choose = (code: Locale) => {
     setOpen(false)
-    if (pending || next === locale) return
-    setPending(true)
-    try {
-      await fetch("/api/locale", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language: next }),
-      })
-      router.refresh()
-    } catch (error) {
-      console.error("[language-switcher]", error)
-    } finally {
-      setPending(false)
-    }
+    void switchTo(code)
   }
 
   return (
     <div ref={rootRef} className="relative">
-      {/* десктоп: сегментированные пилюли */}
       <div className="hidden items-center rounded-full border border-edge bg-card p-0.5 sm:flex">
         {LOCALES.map((code) => (
           <button
             key={code}
             type="button"
             disabled={pending}
-            onClick={() => void switchTo(code)}
+            onClick={() => choose(code)}
             aria-label={dict.languageSwitcher[code]}
             aria-pressed={code === locale}
             className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase transition-colors disabled:opacity-60 ${
@@ -74,7 +84,6 @@ export function LanguageSwitcher() {
         ))}
       </div>
 
-      {/* мобильный: компактная кнопка + меню */}
       <button
         type="button"
         disabled={pending}
@@ -97,7 +106,7 @@ export function LanguageSwitcher() {
               key={code}
               type="button"
               disabled={pending}
-              onClick={() => void switchTo(code)}
+              onClick={() => choose(code)}
               className={`flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm transition-colors disabled:opacity-60 ${
                 code === locale
                   ? "bg-mint-soft font-semibold text-accent"
@@ -110,6 +119,35 @@ export function LanguageSwitcher() {
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+/** Ряд языков с полными названиями — для бургер-меню. */
+export function LanguageMenuList({ onDone }: { onDone?: () => void }) {
+  const { locale, dict, pending, switchTo } = useLocaleSwitch()
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {LOCALES.map((code) => (
+        <button
+          key={code}
+          type="button"
+          disabled={pending}
+          onClick={() => {
+            onDone?.()
+            void switchTo(code)
+          }}
+          aria-pressed={code === locale}
+          className={`rounded-xl border px-2 py-2.5 text-center text-[13px] transition-colors disabled:opacity-60 ${
+            code === locale
+              ? "border-accent bg-mint-soft font-semibold text-accent"
+              : "border-edge bg-card font-medium text-fg-muted"
+          }`}
+        >
+          {dict.languageSwitcher[code]}
+        </button>
+      ))}
     </div>
   )
 }

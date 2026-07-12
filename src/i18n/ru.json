@@ -13,7 +13,8 @@
       "about": "О нас"
     },
     "startChat": "Начать чат",
-    "logoAria": "ibo — на главную"
+    "logoAria": "ibo — на главную",
+    "menuLabel": "Меню"
   },
   "hero": {
     "badge": "ИИ-помощник для агрономов",
