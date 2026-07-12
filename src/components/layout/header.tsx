@@ -38,10 +38,8 @@ export function Header() {
             ibo
           </span>
         </Link>
-        <nav className="flex items-center gap-3 sm:gap-5">
-          <span className="hidden sm:block">
-            <LanguageSwitcher />
-          </span>
+        <nav className="flex items-center gap-2.5 sm:gap-5">
+          <LanguageSwitcher />
           <Link
             href="/about"
             className={`text-sm transition-colors hover:text-fg ${
@@ -54,14 +52,11 @@ export function Header() {
           </Link>
           <Link
             href="/chat"
-            className="rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent-strong"
+            className="rounded-full bg-accent px-4 py-2 text-[13px] font-bold text-white transition-colors hover:bg-accent-strong sm:px-5 sm:py-2.5 sm:text-sm"
           >
             {ru.header.startChat}
           </Link>
         </nav>
-      </div>
-      <div className="flex justify-end px-4 pb-2.5 sm:hidden">
-        <LanguageSwitcher />
       </div>
     </header>
   )
