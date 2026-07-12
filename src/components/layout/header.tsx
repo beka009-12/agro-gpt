@@ -3,12 +3,14 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
+import { LanguageSwitcher } from "./language-switcher"
 import { LogoMark } from "./logo"
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const { dict: ru } = useI18n()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -36,7 +38,8 @@ export function Header() {
             ibo
           </span>
         </Link>
-        <nav className="flex items-center gap-4 sm:gap-6">
+        <nav className="flex items-center gap-3 sm:gap-5">
+          <LanguageSwitcher />
           <Link
             href="/about"
             className={`text-sm transition-colors hover:text-fg ${

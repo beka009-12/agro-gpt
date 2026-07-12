@@ -1,9 +1,11 @@
 import Link from "next/link"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
+import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
 import { LogoMark } from "@/src/components/layout/logo"
 import { LogoutButton } from "./logout-button"
 
-export function ChatHeader() {
+export async function ChatHeader() {
+  const ru = await getDict()
   return (
     <header className="flex items-center gap-3.5 border-b border-edge bg-card px-4 py-4 sm:px-6">
       <Link
@@ -21,6 +23,7 @@ export function ChatHeader() {
           {ru.chat.online}
         </p>
       </div>
+      <LanguageSwitcher />
       <LogoutButton />
     </header>
   )
