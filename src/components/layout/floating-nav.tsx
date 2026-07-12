@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 import { ArrowUpIcon, HomeIcon } from "@/src/components/ui/icons"
 
 const BUTTON_CLASSES =
@@ -13,6 +13,7 @@ interface FloatingNavProps {
 }
 
 export function FloatingNav({ showHome = false }: FloatingNavProps) {
+  const { dict: ru } = useI18n()
   const [showTop, setShowTop] = useState(false)
 
   useEffect(() => {

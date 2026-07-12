@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { emailFormSchema } from "@/src/lib/auth-schemas"
+import { makeEmailFormSchema } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const ru = await getDict()
   try {
     const body: unknown = await request.json().catch(() => null)
-    const parsed = emailFormSchema.safeParse(body)
+    const parsed = makeEmailFormSchema(ru).safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
         { message: ru.auth.errors.checkData },
@@ -15,10 +16,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    await apiFetch("/user/login/request", {
-      method: "POST",
-      body: JSON.stringify({ email: parsed.data.email }),
-    })
+    await apiFetch(
+      "/user/login/request",
+      {
+        method: "POST",
+        body: JSON.stringify({ email: parsed.data.email }),
+      },
+      {
+        unavailable: ru.auth.errors.unavailable,
+        checkData: ru.auth.errors.checkData,
+      }
+    )
 
     return NextResponse.json({ ok: true })
   } catch (error) {

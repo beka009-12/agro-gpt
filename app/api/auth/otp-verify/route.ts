@@ -1,13 +1,14 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { isLocale } from "@/src/i18n/config"
 import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
 import { loginResponseSchema, otpVerifyDtoSchema } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const ru = await getDict()
   try {
     const body: unknown = await request.json().catch(() => null)
     const parsed = otpVerifyDtoSchema.safeParse(body)
@@ -18,14 +19,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const data = await apiFetch("/user/login/verify", {
-      method: "POST",
-      body: JSON.stringify({
-        email: parsed.data.email,
-        otp_code: parsed.data.otp_code,
-        device_info: request.headers.get("user-agent"),
-      }),
-    })
+    const data = await apiFetch(
+      "/user/login/verify",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: parsed.data.email,
+          otp_code: parsed.data.otp_code,
+          device_info: request.headers.get("user-agent"),
+        }),
+      },
+      {
+        unavailable: ru.auth.errors.unavailable,
+        checkData: ru.auth.errors.checkData,
+      }
+    )
 
     const login = loginResponseSchema.safeParse(data)
     if (!login.success) {

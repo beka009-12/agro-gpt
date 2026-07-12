@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 
 export function LogoutButton() {
   const router = useRouter()
+  const { dict: ru } = useI18n()
   const [loading, setLoading] = useState(false)
 
   const onLogout = async () => {

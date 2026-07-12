@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
@@ -8,9 +8,9 @@ import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Select } from "@/src/components/ui/select"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 import {
-  registerFormSchema,
+  makeRegisterFormSchema,
   type RegisterFormValues,
 } from "@/src/lib/auth-schemas"
 
@@ -20,7 +20,10 @@ const LANGUAGE_OPTIONS = [
   { value: "en", label: "English" },
 ] as const
 
-async function readErrorMessage(res: Response): Promise<string> {
+async function readErrorMessage(
+  res: Response,
+  fallback: string
+): Promise<string> {
   const data: unknown = await res.json().catch(() => null)
   if (
     data !== null &&
@@ -30,12 +33,14 @@ async function readErrorMessage(res: Response): Promise<string> {
   ) {
     return data.message
   }
-  return ru.auth.errors.unavailable
+  return fallback
 }
 
 export function RegisterForm() {
   const router = useRouter()
+  const { dict: ru } = useI18n()
   const [serverError, setServerError] = useState<string | null>(null)
+  const registerFormSchema = useMemo(() => makeRegisterFormSchema(ru), [ru])
   const {
     register,
     handleSubmit,
@@ -63,7 +68,7 @@ export function RegisterForm() {
         body: JSON.stringify(values),
       })
       if (!res.ok) {
-        setServerError(await readErrorMessage(res))
+        setServerError(await readErrorMessage(res, ru.auth.errors.unavailable))
         return
       }
       router.push("/chat")

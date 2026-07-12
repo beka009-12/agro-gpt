@@ -2,15 +2,23 @@ import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import type { UserInputSchema } from "@/src/api/generated/models/userInputSchema"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
-import { loginResponseSchema, registerFormSchema } from "@/src/lib/auth-schemas"
+import {
+  loginResponseSchema,
+  makeRegisterFormSchema,
+} from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const ru = await getDict()
+  const apiMsgs = {
+    unavailable: ru.auth.errors.unavailable,
+    checkData: ru.auth.errors.checkData,
+  }
   try {
     const body: unknown = await request.json().catch(() => null)
-    const parsed = registerFormSchema.safeParse(body)
+    const parsed = makeRegisterFormSchema(ru).safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
         { message: ru.auth.errors.checkData },
@@ -27,10 +35,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       region: region || null,
     }
 
-    const data = await apiFetch("/user/", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    })
+    const data = await apiFetch(
+      "/user/",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      apiMsgs
+    )
 
     const login = loginResponseSchema.safeParse(data)
     if (!login.success) {
