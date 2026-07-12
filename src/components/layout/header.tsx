@@ -39,7 +39,9 @@ export function Header() {
           </span>
         </Link>
         <nav className="flex items-center gap-3 sm:gap-5">
-          <LanguageSwitcher />
+          <span className="hidden sm:block">
+            <LanguageSwitcher />
+          </span>
           <Link
             href="/about"
             className={`text-sm transition-colors hover:text-fg ${
@@ -57,6 +59,9 @@ export function Header() {
             {ru.header.startChat}
           </Link>
         </nav>
+      </div>
+      <div className="flex justify-end px-4 pb-2.5 sm:hidden">
+        <LanguageSwitcher />
       </div>
     </header>
   )
