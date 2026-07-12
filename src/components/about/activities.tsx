@@ -1,8 +1,9 @@
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { AboutIcon, type AboutIconId } from "@/src/components/ui/icons"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 
-export function Activities() {
+export async function Activities() {
+  const ru = await getDict()
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16">
       <SectionReveal>

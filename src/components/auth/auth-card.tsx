@@ -2,7 +2,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 import { LogoMark } from "@/src/components/layout/logo"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 
 interface AuthCardProps {
   title: string
@@ -11,7 +11,13 @@ interface AuthCardProps {
   footer?: ReactNode
 }
 
-export function AuthCard({ title, subtitle, children, footer }: AuthCardProps) {
+export async function AuthCard({
+  title,
+  subtitle,
+  children,
+  footer,
+}: AuthCardProps) {
+  const ru = await getDict()
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 py-10">
       <SectionReveal className="w-full max-w-md">

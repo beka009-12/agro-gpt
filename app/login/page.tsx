@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { AuthCard } from "@/src/components/auth/auth-card"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { LoginForm } from "./login-form"
 
 export const metadata: Metadata = {
@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   description: "Войдите в ibo по коду из email.",
 }
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const ru = await getDict()
   return (
     <AuthCard
       title={ru.auth.login.title}

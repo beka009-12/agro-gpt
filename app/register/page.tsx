@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { AuthCard } from "@/src/components/auth/auth-card"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { RegisterForm } from "./register-form"
 
 export const metadata: Metadata = {
@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   description: "Создайте аккаунт ibo — AI-агроном в вашем кармане.",
 }
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const ru = await getDict()
   return (
     <AuthCard
       title={ru.auth.register.title}

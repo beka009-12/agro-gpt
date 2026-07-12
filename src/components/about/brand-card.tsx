@@ -1,8 +1,9 @@
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 import { LeafIcon } from "@/src/components/ui/icons"
 
-export function BrandCard() {
+export async function BrandCard() {
+  const ru = await getDict()
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16">
       <SectionReveal>
