@@ -33,7 +33,7 @@ export function Hero() {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link
             href="/chat"
-            className="rounded-full bg-accent px-7 py-4 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong"
+            className="rounded-full bg-accent px-6 py-3 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong sm:px-7 sm:py-3.5"
           >
             {ru.header.startChat}
           </Link>
