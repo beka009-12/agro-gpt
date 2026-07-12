@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import type { FormEvent } from "react"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 import { ArrowUpIcon, PaperclipIcon } from "@/src/components/ui/icons"
 
 interface ChatInputProps {
@@ -11,6 +11,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ pending, onSend }: ChatInputProps) {
+  const { dict: ru } = useI18n()
   const [value, setValue] = useState("")
   const fileRef = useRef<HTMLInputElement>(null)
 

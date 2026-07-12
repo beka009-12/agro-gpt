@@ -1,14 +1,15 @@
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 import { LeafIcon } from "@/src/components/ui/icons"
 
-export function BrandCard() {
+export async function BrandCard() {
+  const ru = await getDict()
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16">
       <SectionReveal>
         <div className="grid items-center gap-8 rounded-2xl bg-section-alt p-8 md:grid-cols-[0.9fr_1.1fr] md:p-11">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.12em] text-mint">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
               {ru.about.brand.overline}
             </p>
             <h2 className="mt-2.5 text-3xl font-bold tracking-tight text-fg">

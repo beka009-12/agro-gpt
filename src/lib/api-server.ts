@@ -10,14 +10,27 @@ export class ApiError extends Error {
   }
 }
 
+export interface ApiMessages {
+  unavailable: string
+  checkData: string
+}
+
+// fallback на русский — для вызовов без словаря (logout)
+const DEFAULT_MESSAGES: ApiMessages = {
+  unavailable: ru.auth.errors.unavailable,
+  checkData: ru.auth.errors.checkData,
+}
+
 export async function apiFetch(
   path: string,
-  init?: RequestInit
+  init?: RequestInit,
+  msgs?: ApiMessages
 ): Promise<unknown> {
+  const m = msgs ?? DEFAULT_MESSAGES
   const baseUrl = process.env.API_URL
   if (!baseUrl) {
     console.error("[api-server] env API_URL is not set")
-    throw new ApiError(ru.auth.errors.unavailable, 502)
+    throw new ApiError(m.unavailable, 502)
   }
 
   let res: Response
@@ -32,7 +45,7 @@ export async function apiFetch(
     })
   } catch (error) {
     console.error(`[api-server] network error for ${path}:`, error)
-    throw new ApiError(ru.auth.errors.unavailable, 502)
+    throw new ApiError(m.unavailable, 502)
   }
 
   if (!res.ok) {
@@ -54,9 +67,9 @@ export async function apiFetch(
       `[api-server] ${init?.method ?? "GET"} ${path} -> ${res.status}`,
       detail ?? ""
     )
-    if (res.status === 422) throw new ApiError(ru.auth.errors.checkData, 422)
-    if (res.status >= 500) throw new ApiError(ru.auth.errors.unavailable, 502)
-    throw new ApiError(detail ?? ru.auth.errors.checkData, res.status)
+    if (res.status === 422) throw new ApiError(m.checkData, 422)
+    if (res.status >= 500) throw new ApiError(m.unavailable, 502)
+    throw new ApiError(detail ?? m.checkData, res.status)
   }
 
   try {

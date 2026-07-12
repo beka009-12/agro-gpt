@@ -1,8 +1,9 @@
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons"
 import { SectionReveal } from "./section-reveal"
 
-export function Features() {
+export async function Features() {
+  const ru = await getDict()
   return (
     <section id="features" className="scroll-mt-24 bg-section-alt py-16 md:py-20">
       <div className="mx-auto max-w-6xl px-4">

@@ -1,4 +1,6 @@
-import ru from "@/src/i18n/ru.json"
+"use client"
+
+import { useI18n } from "@/src/i18n/client"
 import { SproutIcon } from "@/src/components/ui/icons"
 
 interface EmptyStateProps {
@@ -6,6 +8,7 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ onSuggestion }: EmptyStateProps) {
+  const { dict: ru } = useI18n()
   return (
     <div className="m-auto flex flex-col items-center gap-2 px-5 text-center">
       <span

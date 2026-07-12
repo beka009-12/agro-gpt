@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 import { ChatInput } from "./chat-input"
 import { MessageList } from "./message-list"
 import type { ChatMessage } from "./types"
@@ -40,6 +40,7 @@ function readErrorMessage(data: unknown): string | null {
 
 export function ChatView() {
   const router = useRouter()
+  const { dict: ru } = useI18n()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
   const chatIdRef = useRef<string | null>(null)

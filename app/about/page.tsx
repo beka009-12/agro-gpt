@@ -1,17 +1,21 @@
 import type { Metadata } from "next"
 import { Header } from "@/src/components/layout/header"
 import { Footer } from "@/src/components/layout/footer"
+import { FloatingNav } from "@/src/components/layout/floating-nav"
 import { AboutHero } from "@/src/components/about/about-hero"
 import { BrandCard } from "@/src/components/about/brand-card"
 import { Activities } from "@/src/components/about/activities"
 import { Product } from "@/src/components/about/product"
 import { Packaging } from "@/src/components/about/packaging"
 import { Mission } from "@/src/components/about/mission"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 
-export const metadata: Metadata = {
-  title: ru.about.metaTitle,
-  description: ru.about.metaDescription,
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDict()
+  return {
+    title: dict.about.metaTitle,
+    description: dict.about.metaDescription,
+  }
 }
 
 export default function AboutPage() {
@@ -27,6 +31,7 @@ export default function AboutPage() {
         <Mission />
       </main>
       <Footer />
+      <FloatingNav showHome />
     </>
   )
 }

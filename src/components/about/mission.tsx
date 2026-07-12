@@ -1,7 +1,8 @@
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { SectionReveal } from "@/src/components/landing/section-reveal"
 
-export function Mission() {
+export async function Mission() {
+  const ru = await getDict()
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16">
       <SectionReveal>

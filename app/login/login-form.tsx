@@ -1,23 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
-import ru from "@/src/i18n/ru.json"
+import { useI18n } from "@/src/i18n/client"
 import {
-  emailFormSchema,
-  otpFormSchema,
+  makeEmailFormSchema,
+  makeOtpFormSchema,
   type EmailFormValues,
   type OtpFormValues,
 } from "@/src/lib/auth-schemas"
 
 type LoginStep = "email" | "otp"
 
-async function readErrorMessage(res: Response): Promise<string> {
+async function readErrorMessage(
+  res: Response,
+  fallback: string
+): Promise<string> {
   const data: unknown = await res.json().catch(() => null)
   if (
     data !== null &&
@@ -27,24 +30,31 @@ async function readErrorMessage(res: Response): Promise<string> {
   ) {
     return data.message
   }
-  return ru.auth.errors.unavailable
+  return fallback
 }
 
-async function requestOtp(email: string): Promise<string | null> {
+async function requestOtp(
+  email: string,
+  fallback: string
+): Promise<string | null> {
   const res = await fetch("/api/auth/otp-request", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   })
-  return res.ok ? null : readErrorMessage(res)
+  return res.ok ? null : readErrorMessage(res, fallback)
 }
 
 export function LoginForm() {
   const router = useRouter()
+  const { dict: ru } = useI18n()
   const [step, setStep] = useState<LoginStep>("email")
   const [email, setEmail] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
   const [resending, setResending] = useState(false)
+
+  const emailFormSchema = useMemo(() => makeEmailFormSchema(ru), [ru])
+  const otpFormSchema = useMemo(() => makeOtpFormSchema(ru), [ru])
 
   const emailForm = useForm<EmailFormValues>({
     resolver: zodResolver(emailFormSchema),
@@ -59,7 +69,7 @@ export function LoginForm() {
   const onEmailSubmit = emailForm.handleSubmit(async (values) => {
     setServerError(null)
     try {
-      const error = await requestOtp(values.email)
+      const error = await requestOtp(values.email, ru.auth.errors.unavailable)
       if (error) {
         setServerError(error)
         return
@@ -80,7 +90,7 @@ export function LoginForm() {
         body: JSON.stringify({ email, otp_code: values.otp_code }),
       })
       if (!res.ok) {
-        setServerError(await readErrorMessage(res))
+        setServerError(await readErrorMessage(res, ru.auth.errors.unavailable))
         return
       }
       router.push("/chat")
@@ -93,7 +103,7 @@ export function LoginForm() {
     setServerError(null)
     setResending(true)
     try {
-      const error = await requestOtp(email)
+      const error = await requestOtp(email, ru.auth.errors.unavailable)
       if (error) {
         setServerError(error)
       } else {

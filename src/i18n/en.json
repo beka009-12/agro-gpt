@@ -1,1 +1,212 @@
-{}
+{
+  "meta": {
+    "title": "ibo — AI agronomist in your pocket",
+    "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English."
+  },
+  "languageSwitcher": {
+    "ky": "Кыргызча",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "header": {
+    "nav": {
+      "about": "About us"
+    },
+    "startChat": "Start chat",
+    "logoAria": "ibo — home page"
+  },
+  "hero": {
+    "badge": "AI assistant for agronomists",
+    "title": "Smart advice for your field — in seconds",
+    "subtitle": "Plant diseases, fertilizer selection, crop rotation and weather risks — just ask ibo. Answers in Kyrgyz, Russian and English.",
+    "ctaSecondary": "How it works",
+    "trust": [
+      { "icon": "check", "text": "Free" },
+      { "icon": "sparkle", "text": "Powered by AI" },
+      { "icon": "globe", "text": "RU / KY / EN" }
+    ],
+    "mockup": [
+      "Salam! I'm ibo — how can I help in the field today?",
+      "How do I treat tomatoes against late blight?",
+      "Use a copper-based fungicide every 7–10 days. Remove the affected leaves first."
+    ]
+  },
+  "about": {
+    "metaTitle": "About us — ibo",
+    "metaDescription": "AGRO IBO is a domestic company founded in Kyrgyzstan. HYDROWOOLKS next-generation organic fertilizers.",
+    "badge": "About the company",
+    "title": "AGRO IBO — a domestic company developing agriculture in Kyrgyzstan",
+    "subtitle": "Our main goal is to increase crop yields and preserve soil fertility by offering farmers high-quality, ecologically safe, and highly effective organic fertilizers.",
+    "brand": {
+      "overline": "Our brand",
+      "name": "HYDROWOOLKS",
+      "description": "A liquid organic fertilizer obtained through a special technology of hydrolyzing sheep's wool. Production is carried out in Kyrgyzstan, and the product is suitable for use on all types of agricultural crops."
+    },
+    "activities": {
+      "title": "What we do",
+      "items": [
+        { "icon": "flask", "title": "Fertilizer production", "description": "Production of liquid organic fertilizers." },
+        { "icon": "consult", "title": "Agronomic consultations", "description": "Providing agronomic consultations to farmers." },
+        { "icon": "scheme", "title": "Application schemes", "description": "Developing application schemes for crop cultivation." },
+        { "icon": "globe", "title": "Product export", "description": "Exporting products within Kyrgyzstan and abroad." },
+        { "icon": "leaf", "title": "Organic farming", "description": "Promoting the development of organic farming." }
+      ]
+    },
+    "product": {
+      "title": "Our product",
+      "subtitle": "HYDROWOOLKS — organic liquid fertilizer",
+      "composition": [
+        "Organic matter",
+        "Free amino acids",
+        "Organic nitrogen",
+        "Natural nutrients beneficial to plants"
+      ],
+      "benefits": [
+        { "icon": "roots", "title": "Strengthens roots", "description": "Strengthens the root system of plants." },
+        { "icon": "growth", "title": "Accelerates growth", "description": "Accelerates plant growth and development." },
+        { "icon": "resilience", "title": "Increases resilience", "description": "Resistance to heat, cold and drought." },
+        { "icon": "bloom", "title": "Improves flowering", "description": "Improves flowering and fruit setting." },
+        { "icon": "harvest", "title": "Increases yield", "description": "Helps increase the volume and quality of the harvest." },
+        { "icon": "star", "title": "Better taste and storage", "description": "Improves the taste, color and shelf life of fruits." },
+        { "icon": "renew", "title": "Restores the soil", "description": "Helps restore the biological activity of the soil." },
+        { "icon": "shield", "title": "Safe and convenient", "description": "Environmentally safe and convenient to use." }
+      ],
+      "cultures": "Suitable for all plants: field crops, trees, flowers, berries, fruits and vegetables."
+    },
+    "packaging": {
+      "title": "Packaging",
+      "subtitle": "The product is available in the following volumes:",
+      "sizes": ["1 kg", "5 kg", "10 kg", "20 kg"],
+      "bulk": "1000 kg · IBC container",
+      "note": "1 and 5 kg — retail package, 10 and 20 kg — wholesale package."
+    },
+    "mission": {
+      "overline": "Our goal",
+      "text": "To bring organic products manufactured in Kyrgyzstan to the global market, increase farmers' income, reduce dependence on chemical fertilizers, and preserve fertile, clean soil for future generations.",
+      "note": "Today, AGRO IBO cooperates with farmers across various regions of Kyrgyzstan and is actively working towards entering the international market, offering modern, effective and environmentally safe agricultural solutions."
+    }
+  },
+  "features": {
+    "title": "Features",
+    "items": [
+      {
+        "icon": "camera",
+        "title": "Photo diagnosis",
+        "description": "Identify diseases and pests from a description or photo."
+      },
+      {
+        "icon": "flask",
+        "title": "Fertilizer selection",
+        "description": "Precise doses for your crop and soil condition."
+      },
+      {
+        "icon": "calendar",
+        "title": "Work calendar",
+        "description": "Sowing, treatment and harvest timing for your region."
+      },
+      {
+        "icon": "book",
+        "title": "Expert answers",
+        "description": "Recommendations based on agronomic databases."
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "stepLabel": "Step",
+    "steps": [
+      {
+        "icon": "chat-question",
+        "title": "Ask a question",
+        "description": "Describe the problem in text or attach a photo of the plant."
+      },
+      {
+        "icon": "leaf-search",
+        "title": "AI analyzes",
+        "description": "ibo checks agronomic data and your region."
+      },
+      {
+        "icon": "clipboard-check",
+        "title": "Get a recommendation",
+        "description": "A clear action plan — what to do and when."
+      }
+    ]
+  },
+  "floatingNav": {
+    "toTop": "Back to top",
+    "toHome": "Home page"
+  },
+  "footer": {
+    "copyright": "© 2026 ibo — AI agronomist assistant",
+    "aboutLink": "About us",
+    "support": "Support"
+  },
+  "chat": {
+    "back": "← Home",
+    "botName": "AgroBot",
+    "online": "online",
+    "emptyTitle": "How can I help in the field today?",
+    "emptySubtitle": "Ask a question or pick one of the examples below",
+    "suggestions": [
+      "How do I treat tomatoes against late blight?",
+      "When should I sow wheat?",
+      "What fertilizers does corn need?",
+      "How do I protect an orchard from frost?"
+    ],
+    "inputPlaceholder": "Ask about crops, diseases, fertilizers…",
+    "attachLabel": "Attach photo",
+    "sendLabel": "Send",
+    "logout": "Log out",
+    "errors": {
+      "failed": "Couldn't get a response. Please try again.",
+      "imageTooLarge": "File is too large — attach a photo up to 10 MB"
+    }
+  },
+  "auth": {
+    "register": {
+      "title": "Create an account",
+      "subtitle": "A couple of fields — and the AI agronomist is working for you.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Asan Asanov",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+996700123456",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "emailHint": "Needed to sign in again with a code",
+      "emailWarning": "Without an email you won't be able to sign in from another device",
+      "regionLabel": "Region",
+      "regionPlaceholder": "Chüy region",
+      "languageLabel": "Answer language",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "login": {
+      "title": "Sign in to ibo",
+      "subtitle": "No password needed — we'll email you a code.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submitEmail": "Send code",
+      "otpSentPrefix": "Code sent to",
+      "otpLabel": "Code from the email",
+      "otpPlaceholder": "123456",
+      "submitOtp": "Sign in",
+      "resend": "Send the code again",
+      "resendDone": "Code sent again",
+      "changeEmail": "Change email",
+      "noAccount": "No account?",
+      "registerLink": "Create account"
+    },
+    "errors": {
+      "nameMin": "Name must be at least 2 characters",
+      "phoneFormat": "Phone: 9–15 digits, may start with +",
+      "emailFormat": "Check the email format",
+      "otpFormat": "The code must contain digits only",
+      "network": "No connection. Check your internet",
+      "unavailable": "Service is temporarily unavailable",
+      "checkData": "Please check your data",
+      "unexpectedResponse": "The server returned an unexpected response",
+      "unauthorized": "Session expired — please sign in again"
+    }
+  }
+}

@@ -139,6 +139,16 @@ export function CheckIcon(props: IconProps) {
   )
 }
 
+export function HomeIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m4.5 10.5 7.5-6 7.5 6" />
+      <path d="M6.5 9v9.5a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9" />
+      <path d="M10 19.5v-5h4v5" />
+    </IconBase>
+  )
+}
+
 export function SparkleIcon(props: IconProps) {
   return (
     <IconBase {...props}>

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { ReactElement } from "react"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import {
   CheckIcon,
   GlobeIcon,
@@ -16,7 +16,8 @@ const TRUST_ICONS: Record<TrustIconId, (props: IconProps) => ReactElement> = {
   globe: GlobeIcon,
 }
 
-export function Hero() {
+export async function Hero() {
+  const ru = await getDict()
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-28 md:pt-36 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
       <div>
@@ -33,7 +34,7 @@ export function Hero() {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link
             href="/chat"
-            className="rounded-full bg-accent px-7 py-4 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong"
+            className="rounded-full bg-accent px-6 py-3 text-[15px] font-bold text-white shadow-[0_4px_20px_rgba(45,106,79,0.25)] transition-colors hover:bg-accent-strong sm:px-7 sm:py-3.5"
           >
             {ru.header.startChat}
           </Link>

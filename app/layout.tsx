@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { I18nProvider } from "@/src/i18n/client";
+import { getDictionary } from "@/src/i18n/dictionaries";
+import { getDict, getLocale } from "@/src/i18n/server";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -8,21 +11,24 @@ const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
 });
 
-export const metadata: Metadata = {
-  title: "ibo — AI-агроном в вашем кармане",
-  description:
-    "Диагностика болезней растений по фото и советы агронома от AI. На кыргызском, русском и английском.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDict();
+  return { title: dict.meta.title, description: dict.meta.description };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
   return (
-    <html lang="ru" className={`${manrope.variable} h-full antialiased`}>
+    <html lang={locale} className={`${manrope.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <Providers>{children}</Providers>
+        <I18nProvider locale={locale} dict={dict}>
+          <Providers>{children}</Providers>
+        </I18nProvider>
       </body>
     </html>
   );

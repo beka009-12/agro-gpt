@@ -1,29 +1,38 @@
 import { z } from "zod"
-import ru from "@/src/i18n/ru.json"
+import type { Dictionary } from "@/src/i18n/dictionaries"
 
 const PHONE_REGEX = /^\+?\d{9,15}$/
 
-export const registerFormSchema = z.object({
-  full_name: z.string().trim().min(2, ru.auth.errors.nameMin),
-  phone: z.string().trim().regex(PHONE_REGEX, ru.auth.errors.phoneFormat),
-  email: z.union([z.email(ru.auth.errors.emailFormat), z.literal("")]),
-  region: z.string().trim(),
-  language: z.enum(["ky", "ru", "en"]),
-})
+export function makeRegisterFormSchema(dict: Dictionary) {
+  const e = dict.auth.errors
+  return z.object({
+    full_name: z.string().trim().min(2, e.nameMin),
+    phone: z.string().trim().regex(PHONE_REGEX, e.phoneFormat),
+    email: z.union([z.email(e.emailFormat), z.literal("")]),
+    region: z.string().trim(),
+    language: z.enum(["ky", "ru", "en"]),
+  })
+}
 
-export type RegisterFormValues = z.infer<typeof registerFormSchema>
+export type RegisterFormValues = z.infer<
+  ReturnType<typeof makeRegisterFormSchema>
+>
 
-export const emailFormSchema = z.object({
-  email: z.email(ru.auth.errors.emailFormat),
-})
+export function makeEmailFormSchema(dict: Dictionary) {
+  return z.object({
+    email: z.email(dict.auth.errors.emailFormat),
+  })
+}
 
-export type EmailFormValues = z.infer<typeof emailFormSchema>
+export type EmailFormValues = z.infer<ReturnType<typeof makeEmailFormSchema>>
 
-export const otpFormSchema = z.object({
-  otp_code: z.string().trim().regex(/^\d{4,8}$/, ru.auth.errors.otpFormat),
-})
+export function makeOtpFormSchema(dict: Dictionary) {
+  return z.object({
+    otp_code: z.string().trim().regex(/^\d{4,8}$/, dict.auth.errors.otpFormat),
+  })
+}
 
-export type OtpFormValues = z.infer<typeof otpFormSchema>
+export type OtpFormValues = z.infer<ReturnType<typeof makeOtpFormSchema>>
 
 export const otpVerifyDtoSchema = z.object({
   email: z.email(),
@@ -37,4 +46,5 @@ export const loginResponseSchema = z.object({
   expires_at: z.string().optional(),
   full_name: z.string().optional(),
   language: z.string().optional(),
+  user_id: z.string().optional(),
 })

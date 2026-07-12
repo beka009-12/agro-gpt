@@ -1,8 +1,9 @@
 import Link from "next/link"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { LogoMark } from "./logo"
 
-export function Footer() {
+export async function Footer() {
+  const ru = await getDict()
   return (
     <footer className="border-t border-edge py-7">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4">

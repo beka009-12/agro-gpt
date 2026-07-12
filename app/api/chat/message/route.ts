@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import ru from "@/src/i18n/ru.json"
+import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 import {
@@ -14,6 +14,11 @@ const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 const MAX_TEXT_LENGTH = 4000
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const ru = await getDict()
+  const apiMsgs = {
+    unavailable: ru.auth.errors.unavailable,
+    checkData: ru.auth.errors.checkData,
+  }
   try {
     const store = await cookies()
     const token = store.get(TOKEN_COOKIE)?.value
@@ -66,11 +71,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const parsedChatId = chatIdSchema.safeParse(chatIdRaw)
     let chatId = parsedChatId.success ? parsedChatId.data : null
     if (!chatId) {
-      const created = await apiFetch("/chat/", {
-        method: "POST",
-        headers: authHeaders,
-        body: JSON.stringify({}),
-      })
+      const created = await apiFetch(
+        "/chat/",
+        {
+          method: "POST",
+          headers: authHeaders,
+          body: JSON.stringify({}),
+        },
+        apiMsgs
+      )
       const parsed = chatCreateResponseSchema.safeParse(created)
       if (!parsed.success) {
         console.error("[chat/message] unexpected create-chat response:", created)
@@ -87,11 +96,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (trimmedText) backendForm.set("user_text", trimmedText)
     if (hasImage) backendForm.set("user_image", image)
 
-    const data = await apiFetch("/diagnosis/", {
-      method: "POST",
-      headers: authHeaders,
-      body: backendForm,
-    })
+    const data = await apiFetch(
+      "/diagnosis/",
+      {
+        method: "POST",
+        headers: authHeaders,
+        body: backendForm,
+      },
+      apiMsgs
+    )
     const diagnosis = diagnosisResponseSchema.safeParse(data)
     if (!diagnosis.success) {
       console.error("[chat/message] unexpected diagnosis response:", data)

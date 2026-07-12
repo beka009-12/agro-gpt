@@ -1,8 +1,9 @@
-import ru from "@/src/i18n/ru.json";
+import { getDict } from "@/src/i18n/server";
 import { LandingIcon, type LandingIconId } from "@/src/components/ui/icons";
 import { SectionReveal } from "./section-reveal";
 
-export function HowItWorks() {
+export async function HowItWorks() {
+  const ru = await getDict();
   return (
     <section
       id="how-it-works"
@@ -23,7 +24,7 @@ export function HowItWorks() {
               >
                 <LandingIcon id={step.icon as LandingIconId} />
               </span>
-              <p className="mt-4 text-xs font-medium tracking-[0.1em] uppercase text-mint">
+              <p className="mt-4 text-xs font-semibold tracking-[0.1em] uppercase text-accent">
                 {ru.howItWorks.stepLabel} {i + 1}
               </p>
               <h3 className="mt-1.5 text-lg font-bold text-fg">{step.title}</h3>
