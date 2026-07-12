@@ -37,4 +37,5 @@ export const loginResponseSchema = z.object({
   expires_at: z.string().optional(),
   full_name: z.string().optional(),
   language: z.string().optional(),
+  user_id: z.string().optional(),
 })

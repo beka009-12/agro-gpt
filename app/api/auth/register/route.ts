@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server"
 import type { UserInputSchema } from "@/src/api/generated/models/userInputSchema"
 import ru from "@/src/i18n/ru.json"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { setAuthCookies } from "@/src/lib/auth-cookies"
+import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
 import { loginResponseSchema, registerFormSchema } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -45,7 +45,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     setAuthCookies(store, {
       token: login.data.access_token,
       expiresAt: login.data.expires_at,
+      userId: login.data.user_id,
     })
+    setLocaleCookie(store, language)
 
     return NextResponse.json({ ok: true })
   } catch (error) {
