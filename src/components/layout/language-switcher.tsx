@@ -1,9 +1,12 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { createPortal } from "react-dom"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useI18n } from "@/src/i18n/client"
 import { LOCALES, type Locale } from "@/src/i18n/config"
+import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -35,119 +38,180 @@ function useLocaleSwitch() {
   return { locale, dict, pending, switchTo }
 }
 
-/** Десктоп: сегментированные пилюли; мобильный: компактная кнопка с меню. */
-export function LanguageSwitcher() {
+const noopSubscribe = () => () => {}
+
+/** true после гидратации — портал в body нельзя рендерить на сервере */
+function useMounted(): boolean {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  )
+}
+
+interface LanguageSwitcherProps {
+  /** compact — пилюля для хедера; row — широкая строка для бургер-меню */
+  variant?: "compact" | "row"
+  /** вызывается после выбора языка (например, закрыть бургер-меню) */
+  onDone?: () => void
+}
+
+/** Кнопка текущего языка; по нажатию снизу выезжает шторка выбора. */
+export function LanguageSwitcher({
+  variant = "compact",
+  onDone,
+}: LanguageSwitcherProps) {
   const { locale, dict, pending, switchTo } = useLocaleSwitch()
   const [open, setOpen] = useState(false)
-  const rootRef = useRef<HTMLDivElement>(null)
+  // портал: у хедера есть backdrop-filter, он делает fixed-потомков
+  // относительными к себе — шторку рендерим в body
+  const mounted = useMounted()
+  const sheetRef = useRef<HTMLDivElement>(null)
+  const reduced = useReducedMotion()
 
+  // Escape + скролл-лок, пока шторка открыта
   useEffect(() => {
     if (!open) return
-    const onPointerDown = (e: PointerEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false)
-    }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false)
+      if (e.key === "Tab") {
+        const focusable =
+          sheetRef.current?.querySelectorAll<HTMLElement>("button")
+        if (!focusable?.length) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
-    document.addEventListener("pointerdown", onPointerDown)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
     document.addEventListener("keydown", onKeyDown)
+    sheetRef.current
+      ?.querySelector<HTMLElement>("button[aria-pressed='true']")
+      ?.focus()
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown)
+      document.body.style.overflow = prevOverflow
       document.removeEventListener("keydown", onKeyDown)
     }
   }, [open])
 
   const choose = (code: Locale) => {
     setOpen(false)
+    onDone?.()
     void switchTo(code)
   }
 
   return (
-    <div ref={rootRef} className="relative">
-      <div className="hidden items-center rounded-full border border-edge bg-card p-0.5 sm:flex">
-        {LOCALES.map((code) => (
-          <button
-            key={code}
-            type="button"
-            disabled={pending}
-            onClick={() => choose(code)}
-            aria-label={dict.languageSwitcher[code]}
-            aria-pressed={code === locale}
-            className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase transition-colors disabled:opacity-60 ${
-              code === locale
-                ? "bg-accent text-white"
-                : "text-fg-faint hover:text-fg"
-            }`}
-          >
-            {code}
-          </button>
-        ))}
-      </div>
-
-      <button
-        type="button"
-        disabled={pending}
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-label={dict.languageSwitcher[locale]}
-        className="flex items-center gap-1 rounded-full border border-edge bg-card px-2.5 py-1.5 text-xs font-bold uppercase text-fg transition-colors disabled:opacity-60 sm:hidden"
-      >
-        <GlobeIcon size={14} className="text-accent" />
-        {locale}
-        <ChevronDownIcon
-          size={12}
-          className={`text-fg-faint transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-xl border border-edge bg-card py-1 shadow-[0_12px_32px_rgba(45,106,79,0.16)] sm:hidden">
-          {LOCALES.map((code) => (
-            <button
-              key={code}
-              type="button"
-              disabled={pending}
-              onClick={() => choose(code)}
-              className={`flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm transition-colors disabled:opacity-60 ${
-                code === locale
-                  ? "bg-mint-soft font-semibold text-accent"
-                  : "font-medium text-fg-muted hover:bg-bg hover:text-fg"
-              }`}
-            >
-              {dict.languageSwitcher[code]}
-              {code === locale && <CheckIcon size={15} />}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-/** Ряд языков с полными названиями — для бургер-меню. */
-export function LanguageMenuList({ onDone }: { onDone?: () => void }) {
-  const { locale, dict, pending, switchTo } = useLocaleSwitch()
-
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      {LOCALES.map((code) => (
+    <>
+      {variant === "compact" ? (
         <button
-          key={code}
           type="button"
           disabled={pending}
-          onClick={() => {
-            onDone?.()
-            void switchTo(code)
-          }}
-          aria-pressed={code === locale}
-          className={`rounded-xl border px-2 py-2.5 text-center text-[13px] transition-colors disabled:opacity-60 ${
-            code === locale
-              ? "border-accent bg-mint-soft font-semibold text-accent"
-              : "border-edge bg-card font-medium text-fg-muted"
-          }`}
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-label={dict.languageSwitcher.title}
+          className="flex items-center gap-1.5 rounded-full border border-edge bg-card px-3 py-1.5 text-xs font-bold uppercase text-fg transition-colors hover:border-mint hover:bg-mint-soft disabled:opacity-60"
         >
-          {dict.languageSwitcher[code]}
+          <GlobeIcon size={14} className="text-accent" />
+          {locale}
+          <ChevronDownIcon size={12} className="text-fg-faint" />
         </button>
-      ))}
-    </div>
+      ) : (
+        <button
+          type="button"
+          disabled={pending}
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          className="flex w-full items-center justify-between rounded-xl border border-edge bg-card px-3.5 py-3 text-[15px] font-medium text-fg transition-colors hover:bg-mint-soft disabled:opacity-60"
+        >
+          <span className="flex items-center gap-2.5">
+            <GlobeIcon size={17} className="text-accent" />
+            {dict.languageSwitcher[locale]}
+          </span>
+          <ChevronDownIcon size={15} className="text-fg-faint" />
+        </button>
+      )}
+
+      {mounted &&
+        createPortal(
+          <AnimatePresence mode="wait">
+            {open && (
+              <motion.div
+                key="language-sheet"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DURATION.fast }}
+                className="fixed inset-0 z-[70] flex items-end justify-center"
+              >
+                <button
+                  type="button"
+                  aria-hidden
+                  tabIndex={-1}
+                  onClick={() => setOpen(false)}
+                  className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-[2px]"
+                />
+                <motion.div
+                  ref={sheetRef}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={dict.languageSwitcher.title}
+                  initial={reduced ? { opacity: 0 } : { y: "100%" }}
+                  animate={reduced ? { opacity: 1 } : { y: 0 }}
+                  exit={reduced ? { opacity: 0 } : { y: "100%" }}
+                  transition={{ duration: DURATION.base * 0.7, ease: EASE_OUT }}
+                  className="relative w-full max-w-md rounded-t-[26px] border border-edge bg-card px-5 pb-[max(20px,env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_55px_rgba(6,78,59,0.18)] sm:mb-6 sm:rounded-[26px] sm:pb-5"
+                >
+                  <span
+                    aria-hidden
+                    className="mx-auto block h-1 w-10 rounded-full bg-edge"
+                  />
+                  <p className="mt-4 text-[15px] font-extrabold text-fg">
+                    {dict.languageSwitcher.title}
+                  </p>
+                  <div className="mt-3 grid gap-2">
+                    {LOCALES.map((code) => (
+                      <button
+                        key={code}
+                        type="button"
+                        disabled={pending}
+                        onClick={() => choose(code)}
+                        aria-pressed={code === locale}
+                        className={`flex w-full items-center justify-between rounded-[14px] border px-4 py-3.5 text-left text-[15px] transition-colors disabled:opacity-60 ${
+                          code === locale
+                            ? "border-mint bg-mint-soft font-bold text-accent"
+                            : "border-edge bg-card font-medium text-fg hover:bg-bg"
+                        }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          <span
+                            aria-hidden
+                            className={`text-[11px] font-extrabold uppercase ${
+                              code === locale ? "text-accent" : "text-fg-faint"
+                            }`}
+                          >
+                            {code}
+                          </span>
+                          {dict.languageSwitcher[code]}
+                        </span>
+                        {code === locale && <CheckIcon size={16} />}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
+        )}
+    </>
   )
 }

@@ -6,11 +6,13 @@
   "languageSwitcher": {
     "ky": "Кыргызча",
     "ru": "Русский",
-    "en": "English"
+    "en": "English",
+    "title": "Choose language"
   },
   "header": {
     "nav": {
-      "about": "About us"
+      "about": "About us",
+      "home": "Home"
     },
     "startChat": "Start chat",
     "logoAria": "ibo — home page",
@@ -23,7 +25,11 @@
     "subtitle": "AGRO IBO AI analyzes symptom descriptions and plant photos, identifies the likely cause and builds clear recommendations: what to check, what to do now and how to prevent it from happening again.",
     "ctaChat": "Open chat",
     "ctaAbout": "About the company",
-    "trust": ["Text or photo", "Clear answer", "Weather and region aware"],
+    "trust": [
+      "Text or photo",
+      "Clear answer",
+      "Weather and region aware"
+    ],
     "visual": {
       "label": "AI plant analysis",
       "status": "System ready",
@@ -115,9 +121,18 @@
     "titleAccent": "efficient and eco-friendly agriculture",
     "subtitle": "AGRO IBO is a domestic company founded in Kyrgyzstan. Our goal is to increase crop yields and preserve soil fertility with high-quality, ecologically safe organic solutions.",
     "stats": [
-      { "value": "Kyrgyzstan", "label": "local production" },
-      { "value": "All crops", "label": "wide application" },
-      { "value": "Export", "label": "international market" }
+      {
+        "value": "Kyrgyzstan",
+        "label": "local production"
+      },
+      {
+        "value": "All crops",
+        "label": "wide application"
+      },
+      {
+        "value": "Export",
+        "label": "international market"
+      }
     ],
     "bottle": {
       "overline": "ORGANIC FERTILIZER",
@@ -145,7 +160,12 @@
         "Natural nutrients"
       ],
       "volumesTitle": "Available volumes",
-      "sizes": ["1 kg", "5 kg", "10 kg", "20 kg"],
+      "sizes": [
+        "1 kg",
+        "5 kg",
+        "10 kg",
+        "20 kg"
+      ],
       "bulk": "1000 kg · IBC"
     },
     "benefits": {
@@ -153,14 +173,46 @@
       "title": "Support for the plant at every growth stage",
       "tapHint": "tap to browse",
       "items": [
-        { "icon": "roots", "title": "Strengthens roots", "description": "Helps the plant develop and use nutrition more efficiently." },
-        { "icon": "growth", "title": "Stimulates growth", "description": "Promotes active plant development and yield formation." },
-        { "icon": "resilience", "title": "Increases resilience", "description": "Helps withstand heat, cold, drought and other stresses." },
-        { "icon": "bloom", "title": "Improves flowering", "description": "Supports flowering, fruit setting and crop quality." },
-        { "icon": "harvest", "title": "Increases yield", "description": "Helps increase the volume and quality of the harvest." },
-        { "icon": "star", "title": "Improves fruit quality", "description": "Improves the taste, color and shelf life of fruits." },
-        { "icon": "renew", "title": "Restores the soil", "description": "Supports the biological activity and fertility of the soil." },
-        { "icon": "shield", "title": "Practical and eco-friendly", "description": "Easy to apply and reduces the chemical load." }
+        {
+          "icon": "roots",
+          "title": "Strengthens roots",
+          "description": "Helps the plant develop and use nutrition more efficiently."
+        },
+        {
+          "icon": "growth",
+          "title": "Stimulates growth",
+          "description": "Promotes active plant development and yield formation."
+        },
+        {
+          "icon": "resilience",
+          "title": "Increases resilience",
+          "description": "Helps withstand heat, cold, drought and other stresses."
+        },
+        {
+          "icon": "bloom",
+          "title": "Improves flowering",
+          "description": "Supports flowering, fruit setting and crop quality."
+        },
+        {
+          "icon": "harvest",
+          "title": "Increases yield",
+          "description": "Helps increase the volume and quality of the harvest."
+        },
+        {
+          "icon": "star",
+          "title": "Improves fruit quality",
+          "description": "Improves the taste, color and shelf life of fruits."
+        },
+        {
+          "icon": "renew",
+          "title": "Restores the soil",
+          "description": "Supports the biological activity and fertility of the soil."
+        },
+        {
+          "icon": "shield",
+          "title": "Practical and eco-friendly",
+          "description": "Easy to apply and reduces the chemical load."
+        }
       ]
     },
     "mission": {

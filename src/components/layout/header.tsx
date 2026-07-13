@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useI18n } from "@/src/i18n/client"
 import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
-import { LanguageMenuList, LanguageSwitcher } from "./language-switcher"
+import { LanguageSwitcher } from "./language-switcher"
 import { LogoMark } from "./logo"
 
 export function Header() {
@@ -41,6 +41,7 @@ export function Header() {
   }, [menuOpen])
 
   const close = () => setMenuOpen(false)
+  const onAbout = pathname === "/about"
 
   return (
     <header
@@ -68,14 +69,10 @@ export function Header() {
         <nav className="hidden items-center gap-5 sm:flex">
           <LanguageSwitcher />
           <Link
-            href="/about"
-            className={`text-sm transition-colors hover:text-fg ${
-              pathname === "/about"
-                ? "font-bold text-fg"
-                : "font-medium text-fg-muted"
-            }`}
+            href={onAbout ? "/" : "/about"}
+            className="text-sm font-medium text-fg-muted transition-colors hover:text-fg"
           >
-            {ru.header.nav.about}
+            {onAbout ? ru.header.nav.home : ru.header.nav.about}
           </Link>
           <Link
             href="/chat"
@@ -120,15 +117,11 @@ export function Header() {
             className="border-t border-edge px-4 pb-5 pt-3 sm:hidden"
           >
             <Link
-              href="/about"
+              href={onAbout ? "/" : "/about"}
               onClick={close}
-              className={`block rounded-xl px-3 py-3 text-[15px] transition-colors ${
-                pathname === "/about"
-                  ? "bg-mint-soft font-bold text-accent"
-                  : "font-medium text-fg hover:bg-mint-soft"
-              }`}
+              className="block rounded-xl px-3 py-3 text-[15px] font-medium text-fg transition-colors hover:bg-mint-soft"
             >
-              {ru.header.nav.about}
+              {onAbout ? ru.header.nav.home : ru.header.nav.about}
             </Link>
             <Link
               href="/chat"
@@ -138,7 +131,7 @@ export function Header() {
               {ru.header.startChat}
             </Link>
             <div className="mt-4 border-t border-edge pt-4">
-              <LanguageMenuList onDone={close} />
+              <LanguageSwitcher variant="row" onDone={close} />
             </div>
           </motion.nav>
         )}
