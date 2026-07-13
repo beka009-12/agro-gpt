@@ -1,22 +1,40 @@
 "use client"
 
 import { motion, useReducedMotion } from "motion/react"
-
-const DOT_DELAYS = [0, 0.15, 0.3]
+import { useI18n } from "@/src/i18n/client"
+import { PlantIcon } from "@/src/components/ui/icons"
 
 export function TypingIndicator() {
+  const { dict: ru } = useI18n()
   const reduced = useReducedMotion()
 
   return (
-    <span className="flex items-center gap-1.5 rounded-[16px_16px_16px_4px] bg-mint-soft px-4.5 py-4">
-      {DOT_DELAYS.map((delay) => (
-        <motion.span
-          key={delay}
-          className="size-1.5 rounded-full bg-accent"
-          animate={reduced ? undefined : { opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", delay }}
-        />
-      ))}
-    </span>
+    <div className="flex max-w-[400px] items-center gap-3 rounded-[18px] border border-[#dfeddf] bg-[#f4faf3] p-4">
+      <motion.span
+        aria-hidden
+        className="grid size-[42px] flex-none place-items-center rounded-[14px] bg-[#dcfce7] text-accent"
+        animate={
+          reduced
+            ? undefined
+            : {
+                scale: [1, 1.06, 1],
+                boxShadow: [
+                  "0 0 0 0 rgba(22,163,74,0.1)",
+                  "0 0 0 9px rgba(22,163,74,0.06)",
+                  "0 0 0 0 rgba(22,163,74,0.1)",
+                ],
+              }
+        }
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <PlantIcon size={22} strokeWidth={1.8} />
+      </motion.span>
+      <div>
+        <p className="text-[13px] font-extrabold text-[#214434]">
+          {ru.chat.typingTitle}
+        </p>
+        <p className="mt-0.5 text-[11px] text-fg-muted">{ru.chat.typingSubtitle}</p>
+      </div>
+    </div>
   )
 }
