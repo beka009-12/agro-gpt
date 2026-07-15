@@ -23,5 +23,5 @@ export function proxy(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ["/chat", ...GUEST_ONLY_PATHS],
+  matcher: ["/chat", "/login", "/register", "/forgot-password", "/reset-password"],
 }
