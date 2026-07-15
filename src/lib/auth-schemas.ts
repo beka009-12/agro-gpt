@@ -3,44 +3,77 @@ import type { Dictionary } from "@/src/i18n/dictionaries"
 
 const PHONE_REGEX = /^\+?\d{9,15}$/
 
+export function isPhoneLike(value: string): boolean {
+  return PHONE_REGEX.test(value.trim())
+}
+
+export function splitIdentifier(value: string): { phone?: string; email?: string } {
+  const trimmed = value.trim()
+  return isPhoneLike(trimmed) ? { phone: trimmed } : { email: trimmed }
+}
+
 export function makeRegisterFormSchema(dict: Dictionary) {
   const e = dict.auth.errors
-  return z.object({
-    full_name: z.string().trim().min(2, e.nameMin),
-    phone: z.string().trim().regex(PHONE_REGEX, e.phoneFormat),
-    email: z.union([z.email(e.emailFormat), z.literal("")]),
-    region: z.string().trim(),
-    language: z.enum(["ky", "ru", "en"]),
-  })
+  return z
+    .object({
+      full_name: z.string().trim().min(2, e.nameMin),
+      phone: z.string().trim().regex(PHONE_REGEX, e.phoneFormat),
+      email: z.union([z.email(e.emailFormat), z.literal("")]),
+      password: z.string().min(8, e.passwordMin),
+      confirm_password: z.string().min(1, e.passwordRequired),
+      language: z.enum(["ky", "ru", "en"]),
+    })
+    .refine((data) => data.password === data.confirm_password, {
+      message: e.passwordMismatch,
+      path: ["confirm_password"],
+    })
 }
 
 export type RegisterFormValues = z.infer<
   ReturnType<typeof makeRegisterFormSchema>
 >
 
-export function makeEmailFormSchema(dict: Dictionary) {
+export function makeLoginFormSchema(dict: Dictionary) {
+  const e = dict.auth.errors
   return z.object({
-    email: z.email(dict.auth.errors.emailFormat),
+    identifier: z.string().trim().min(1, e.identifierRequired),
+    password: z.string().min(1, e.passwordRequired),
   })
 }
 
-export type EmailFormValues = z.infer<ReturnType<typeof makeEmailFormSchema>>
+export type LoginFormValues = z.infer<ReturnType<typeof makeLoginFormSchema>>
 
-export function makeOtpFormSchema(dict: Dictionary) {
+export function makeForgotPasswordFormSchema(dict: Dictionary) {
   return z.object({
-    otp_code: z.string().trim().regex(/^\d{4,8}$/, dict.auth.errors.otpFormat),
+    identifier: z.string().trim().min(1, dict.auth.errors.identifierRequired),
   })
 }
 
-export type OtpFormValues = z.infer<ReturnType<typeof makeOtpFormSchema>>
+export type ForgotPasswordFormValues = z.infer<
+  ReturnType<typeof makeForgotPasswordFormSchema>
+>
 
-export const otpVerifyDtoSchema = z.object({
-  email: z.email(),
-  otp_code: z.string().min(1),
-})
+export function makeResetPasswordFormSchema(dict: Dictionary) {
+  const e = dict.auth.errors
+  return z
+    .object({
+      identifier: z.string().trim().min(1, e.identifierRequired),
+      reset_code: z.string().trim().min(1, e.resetCodeRequired),
+      new_password: z.string().min(8, e.passwordMin),
+      confirm_password: z.string().min(1, e.passwordRequired),
+    })
+    .refine((data) => data.new_password === data.confirm_password, {
+      message: e.passwordMismatch,
+      path: ["confirm_password"],
+    })
+}
 
-// Ответ POST /user/ не типизирован в OpenAPI — парсим защитно:
-// обязателен только access_token, остальное добираем из данных формы
+export type ResetPasswordFormValues = z.infer<
+  ReturnType<typeof makeResetPasswordFormSchema>
+>
+
+// Ответ /api/auth/register и /api/auth/login не типизирован в OpenAPI —
+// парсим защитно: обязателен только access_token
 export const loginResponseSchema = z.object({
   access_token: z.string().min(1),
   expires_at: z.string().optional(),

@@ -3,12 +3,10 @@ import type { Dictionary } from "@/src/i18n/dictionaries"
 
 const PHONE_REGEX = /^\+?\d{9,15}$/
 
-// подмножество UserOutSchema, которое нужно фронту
 export const userProfileSchema = z.object({
   id: z.string(),
   full_name: z.string(),
   phone: z.string(),
-  region: z.string().nullable(),
   email: z.string().nullable(),
   language: z.string(),
   latitude: z.number().nullable(),
@@ -24,7 +22,6 @@ export function makeProfileFormSchema(dict: Dictionary) {
     full_name: z.string().trim().min(2, e.nameMin),
     phone: z.string().trim().regex(PHONE_REGEX, e.phoneFormat),
     email: z.union([z.email(e.emailFormat), z.literal("")]),
-    region: z.string().trim(),
   })
 }
 
