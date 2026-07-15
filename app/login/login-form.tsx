@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -44,7 +44,7 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
@@ -52,7 +52,7 @@ export function LoginForm() {
     defaultValues: { identifier: initialIdentifier, password: "" },
   })
 
-  const identifier = watch("identifier")
+  const identifier = useWatch({ control, name: "identifier" })
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null)
