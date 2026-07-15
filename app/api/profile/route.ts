@@ -52,7 +52,7 @@ export async function GET(): Promise<NextResponse> {
       )
     }
     const data = await apiFetch(
-      "/user/me",
+      "/api/profile",
       { headers: { Authorization: `Bearer ${token}` } },
       apiMsgs
     )
@@ -95,9 +95,9 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { full_name, phone, email, region } = parsed.data
+    const { full_name, phone, email } = parsed.data
     const data = await apiFetch(
-      "/user/me/profile",
+      "/api/profile",
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
@@ -105,7 +105,6 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
           full_name,
           phone,
           email: email || null,
-          region: region || null,
         }),
       },
       apiMsgs

@@ -91,7 +91,6 @@ function toFormValues(profile: UserProfile): ProfileFormValues {
     full_name: profile.full_name,
     phone: profile.phone,
     email: profile.email ?? "",
-    region: profile.region ?? "",
   }
 }
 
@@ -395,14 +394,6 @@ export function ProfileMenu({
                       error={errors.email?.message}
                       {...register("email")}
                     />
-                    <Input
-                      id="profile_region"
-                      label={dict.auth.register.regionLabel}
-                      placeholder={dict.auth.register.regionPlaceholder}
-                      error={errors.region?.message}
-                      {...register("region")}
-                    />
-
                     <div className="rounded-2xl border border-edge bg-bg p-4">
                       <div className="flex items-center justify-between gap-3">
                         <span className="flex items-center gap-2 text-sm font-extrabold text-fg">

@@ -9,7 +9,7 @@ export async function POST(): Promise<NextResponse> {
 
   if (token) {
     try {
-      await apiFetch(`/user/logout`, {
+      await apiFetch(`/api/auth/logout`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       })

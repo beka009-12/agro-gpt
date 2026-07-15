@@ -1,7 +1,6 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import type { UserInputSchema } from "@/src/api/generated/models/userInputSchema"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
@@ -26,20 +25,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { full_name, phone, email, region, language } = parsed.data
-    const payload: UserInputSchema = {
-      full_name,
-      phone,
-      language,
-      email: email || null,
-      region: region || null,
-    }
-
+    const { full_name, phone, email, password, language } = parsed.data
     const data = await apiFetch(
-      "/user/",
+      "/api/auth/register",
       {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          full_name,
+          phone,
+          email: email || null,
+          password,
+          device_info: request.headers.get("user-agent"),
+        }),
       },
       apiMsgs
     )
@@ -60,6 +57,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       userId: login.data.user_id,
     })
     setLocaleCookie(store, language)
+
+    // бэк не принимает language при регистрации — сохраняем отдельным
+    // вызовом; ошибка здесь не должна ронять регистрацию
+    try {
+      await apiFetch(
+        "/api/profile",
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${login.data.access_token}` },
+          body: JSON.stringify({ language }),
+        },
+        apiMsgs
+      )
+    } catch (error) {
+      console.error(
+        "[auth/register] language patch failed (non-blocking):",
+        error
+      )
+    }
 
     return NextResponse.json({ ok: true })
   } catch (error) {
