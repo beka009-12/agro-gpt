@@ -352,6 +352,25 @@ const AUDIENCE_ICONS: Record<
   gardener: PlantIcon,
 }
 
+export function EyeIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M2.5 12S5.5 5.5 12 5.5 21.5 12 21.5 12 18.5 18.5 12 18.5 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </IconBase>
+  )
+}
+
+export function EyeOffIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M3 3l18 18" />
+      <path d="M10.6 5.63A9.53 9.53 0 0 1 12 5.5c6.5 0 9.5 6.5 9.5 6.5a14.5 14.5 0 0 1-3.1 3.9M6.6 6.6C4 8.3 2.5 12 2.5 12S5.5 18.5 12 18.5c1.3 0 2.5-.24 3.55-.66" />
+      <path d="M9.9 10.1a3 3 0 0 0 4 4" />
+    </IconBase>
+  )
+}
+
 export function AudienceIcon({
   id,
   ...props
