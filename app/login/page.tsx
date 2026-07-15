@@ -7,7 +7,7 @@ import { LoginForm } from "./login-form"
 
 export const metadata: Metadata = {
   title: "ibo — вход",
-  description: "Войдите в ibo по коду из email.",
+  description: "Войдите в ibo по номеру телефона или email и паролю.",
 }
 
 export default async function LoginPage() {

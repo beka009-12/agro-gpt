@@ -1,17 +1,24 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getDict, getLocale } from "@/src/i18n/server"
+import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { isLocale } from "@/src/i18n/config"
-import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
-import { loginResponseSchema, otpVerifyDtoSchema } from "@/src/lib/auth-schemas"
+import { setAuthCookies } from "@/src/lib/auth-cookies"
+import {
+  loginResponseSchema,
+  makeLoginFormSchema,
+  splitIdentifier,
+} from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ru = await getDict()
+  const apiMsgs = {
+    unavailable: ru.auth.errors.unavailable,
+    checkData: ru.auth.errors.checkData,
+  }
   try {
     const body: unknown = await request.json().catch(() => null)
-    const parsed = otpVerifyDtoSchema.safeParse(body)
+    const parsed = makeLoginFormSchema(ru).safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
         { message: ru.auth.errors.checkData },
@@ -19,27 +26,23 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const locale = await getLocale()
+    const { identifier, password } = parsed.data
     const data = await apiFetch(
-      "/user/login/verify",
+      "/api/auth/login",
       {
         method: "POST",
         body: JSON.stringify({
-          email: parsed.data.email,
-          otp_code: parsed.data.otp_code,
-          language: locale,
+          ...splitIdentifier(identifier),
+          password,
           device_info: request.headers.get("user-agent"),
         }),
       },
-      {
-        unavailable: ru.auth.errors.unavailable,
-        checkData: ru.auth.errors.checkData,
-      }
+      apiMsgs
     )
 
     const login = loginResponseSchema.safeParse(data)
     if (!login.success) {
-      console.error("[auth/otp-verify] unexpected API response:", data)
+      console.error("[auth/login] unexpected API response:", data)
       return NextResponse.json(
         { message: ru.auth.errors.unexpectedResponse },
         { status: 502 }
@@ -52,9 +55,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       expiresAt: login.data.expires_at,
       userId: login.data.user_id,
     })
-    if (isLocale(login.data.language)) {
-      setLocaleCookie(store, login.data.language)
-    }
 
     return NextResponse.json({ ok: true })
   } catch (error) {
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: error.status }
       )
     }
-    console.error("[auth/otp-verify]", error)
+    console.error("[auth/login]", error)
     return NextResponse.json(
       { message: ru.auth.errors.unavailable },
       { status: 500 }

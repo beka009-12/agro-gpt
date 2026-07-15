@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -9,13 +10,9 @@ import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { useI18n } from "@/src/i18n/client"
 import {
-  makeEmailFormSchema,
-  makeOtpFormSchema,
-  type EmailFormValues,
-  type OtpFormValues,
+  makeLoginFormSchema,
+  type LoginFormValues,
 } from "@/src/lib/auth-schemas"
-
-type LoginStep = "email" | "otp"
 
 interface ErrorBody {
   message: string
@@ -36,78 +33,48 @@ async function readErrorBody(res: Response, fallback: string): Promise<ErrorBody
   return { message: fallback }
 }
 
-async function requestOtp(
-  email: string,
-  fallback: string
-): Promise<ErrorBody | null> {
-  const res = await fetch("/api/auth/otp-request", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  })
-  return res.ok ? null : readErrorBody(res, fallback)
-}
-
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
-  const initialEmail = searchParams.get("email") ?? ""
-  const [step, setStep] = useState<LoginStep>("email")
-  const [email, setEmail] = useState("")
+  const initialIdentifier = searchParams.get("identifier") ?? ""
   const [serverError, setServerError] = useState<string | null>(null)
-  const [resending, setResending] = useState(false)
 
-  const emailFormSchema = useMemo(() => makeEmailFormSchema(ru), [ru])
-  const otpFormSchema = useMemo(() => makeOtpFormSchema(ru), [ru])
-
-  const emailForm = useForm<EmailFormValues>({
-    resolver: zodResolver(emailFormSchema),
-    defaultValues: { email: initialEmail },
+  const loginFormSchema = useMemo(() => makeLoginFormSchema(ru), [ru])
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: { identifier: initialIdentifier, password: "" },
   })
 
-  const otpForm = useForm<OtpFormValues>({
-    resolver: zodResolver(otpFormSchema),
-    defaultValues: { otp_code: "" },
-  })
+  const identifier = watch("identifier")
 
-  const onEmailSubmit = emailForm.handleSubmit(async (values) => {
+  const onSubmit = handleSubmit(async (values) => {
     setServerError(null)
     try {
-      const error = await requestOtp(values.email, ru.auth.errors.unavailable)
-      if (error) {
-        if (error.errors?.email) {
-          emailForm.setError("email", { message: error.errors.email })
-        } else {
-          setServerError(error.message)
-        }
-        return
-      }
-      setEmail(values.email)
-      setStep("otp")
-    } catch {
-      toast.error(ru.auth.errors.network)
-    }
-  })
-
-  const onOtpSubmit = otpForm.handleSubmit(async (values) => {
-    setServerError(null)
-    try {
-      const res = await fetch("/api/auth/otp-verify", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp_code: values.otp_code }),
+        body: JSON.stringify(values),
       })
       if (!res.ok) {
-        const { message, errors } = await readErrorBody(
+        const { message, errors: fieldErrors } = await readErrorBody(
           res,
           ru.auth.errors.unavailable
         )
-        if (errors?.otp_code) {
-          otpForm.setError("otp_code", { message: errors.otp_code })
-        } else {
-          setServerError(message)
+        let matched = false
+        for (const [field, fieldMessage] of Object.entries(fieldErrors ?? {})) {
+          if (field in values) {
+            setError(field as keyof LoginFormValues, { message: fieldMessage })
+            matched = true
+          }
         }
+        setServerError(matched ? null : message)
         return
       }
       router.push("/chat")
@@ -116,104 +83,41 @@ export function LoginForm() {
     }
   })
 
-  const onResend = async () => {
-    setServerError(null)
-    setResending(true)
-    try {
-      const error = await requestOtp(email, ru.auth.errors.unavailable)
-      if (error) {
-        setServerError(error.message)
-      } else {
-        toast.success(ru.auth.login.resendDone)
-      }
-    } catch {
-      toast.error(ru.auth.errors.network)
-    } finally {
-      setResending(false)
-    }
-  }
-
-  const onChangeEmail = () => {
-    setServerError(null)
-    otpForm.reset()
-    setStep("email")
-  }
-
-  const serverErrorBlock = serverError && (
-    <p
-      className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-      role="alert"
-    >
-      {serverError}
-    </p>
-  )
-
-  if (step === "email") {
-    return (
-      <form onSubmit={onEmailSubmit} noValidate className="flex flex-col gap-4">
-        <Input
-          id="email"
-          type="email"
-          label={ru.auth.login.emailLabel}
-          placeholder={ru.auth.login.emailPlaceholder}
-          autoComplete="email"
-          error={emailForm.formState.errors.email?.message}
-          {...emailForm.register("email")}
-        />
-        {serverErrorBlock}
-        <Button
-          type="submit"
-          loading={emailForm.formState.isSubmitting}
-          className="mt-1"
-        >
-          {ru.auth.login.submitEmail}
-        </Button>
-      </form>
-    )
-  }
-
   return (
-    <form onSubmit={onOtpSubmit} noValidate className="flex flex-col gap-4">
-      <p className="text-sm text-fg-muted">
-        {ru.auth.login.otpSentPrefix}{" "}
-        <span className="font-medium text-fg">{email}</span>
-      </p>
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <Input
-        id="otp_code"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        autoFocus
-        label={ru.auth.login.otpLabel}
-        placeholder={ru.auth.login.otpPlaceholder}
-        className="tracking-[0.3em]"
-        error={otpForm.formState.errors.otp_code?.message}
-        {...otpForm.register("otp_code")}
+        id="identifier"
+        label={ru.auth.login.identifierLabel}
+        placeholder={ru.auth.login.identifierPlaceholder}
+        autoComplete="username"
+        error={errors.identifier?.message}
+        {...register("identifier")}
       />
-      {serverErrorBlock}
-      <Button
-        type="submit"
-        loading={otpForm.formState.isSubmitting}
-        className="mt-1"
-      >
-        {ru.auth.login.submitOtp}
+      <Input
+        id="password"
+        type="password"
+        label={ru.auth.login.passwordLabel}
+        autoComplete="current-password"
+        error={errors.password?.message}
+        {...register("password")}
+      />
+      {serverError && (
+        <p
+          className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
+          role="alert"
+        >
+          {serverError}
+        </p>
+      )}
+      <Button type="submit" loading={isSubmitting} className="mt-1">
+        {ru.auth.login.submit}
       </Button>
-      <div className="flex items-center justify-between text-sm">
-        <button
-          type="button"
-          onClick={onResend}
-          disabled={resending}
-          className="text-fg-muted transition-colors hover:text-fg disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {ru.auth.login.resend}
-        </button>
-        <button
-          type="button"
-          onClick={onChangeEmail}
-          className="font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-        >
-          {ru.auth.login.changeEmail}
-        </button>
-      </div>
+      <Link
+        href={`/forgot-password${identifier ? `?identifier=${encodeURIComponent(identifier)}` : ""}`}
+        className="text-center text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+      >
+        {ru.auth.login.forgotPassword}
+      </Link>
     </form>
   )
 }
