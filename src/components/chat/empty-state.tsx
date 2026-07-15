@@ -1,7 +1,7 @@
 "use client"
 
 import { useI18n } from "@/src/i18n/client"
-import { SproutIcon } from "@/src/components/ui/icons"
+import { PlantIcon } from "@/src/components/ui/icons"
 
 interface EmptyStateProps {
   onSuggestion: (text: string) => void
@@ -10,24 +10,26 @@ interface EmptyStateProps {
 export function EmptyState({ onSuggestion }: EmptyStateProps) {
   const { dict: ru } = useI18n()
   return (
-    <div className="m-auto flex flex-col items-center gap-2 px-5 text-center">
+    <div className="m-auto w-full max-w-[640px] px-5 py-8 text-center">
       <span
         aria-hidden
-        className="flex size-14 origin-bottom animate-sprout-sway items-center justify-center rounded-full bg-mint-soft text-accent motion-reduce:animate-none"
+        className="mx-auto grid size-[82px] place-items-center rounded-[26px] bg-[linear-gradient(145deg,#e8f8ea,#d5f0d9)] text-accent"
       >
-        <SproutIcon size={30} />
+        <PlantIcon size={39} strokeWidth={1.7} />
       </span>
-      <h2 className="mt-2.5 text-xl font-bold text-fg">{ru.chat.emptyTitle}</h2>
-      <p className="max-w-[340px] text-sm text-fg-muted">
+      <h2 className="mt-5 text-[26px] font-extrabold tracking-tight text-fg md:text-[30px]">
+        {ru.chat.emptyTitle}
+      </h2>
+      <p className="mx-auto mt-2.5 max-w-[540px] text-sm leading-relaxed text-fg-muted">
         {ru.chat.emptySubtitle}
       </p>
-      <div className="mt-5 flex max-w-[480px] flex-wrap justify-center gap-2.5">
+      <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
         {ru.chat.suggestions.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => onSuggestion(s)}
-            className="rounded-full bg-mint-soft px-4 py-2.5 text-[13.5px] font-medium text-accent transition-colors hover:bg-mint hover:text-fg"
+            className="rounded-[15px] border border-edge bg-card p-3.5 text-left text-[13px] font-medium leading-snug text-[#46584f] transition-[border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-[#9fd3a8] hover:bg-[#f8fcf8] motion-reduce:transform-none"
           >
             {s}
           </button>

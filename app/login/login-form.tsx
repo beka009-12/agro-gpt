@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
@@ -17,37 +17,42 @@ import {
 
 type LoginStep = "email" | "otp"
 
-async function readErrorMessage(
-  res: Response,
-  fallback: string
-): Promise<string> {
+interface ErrorBody {
+  message: string
+  errors?: Record<string, string>
+}
+
+async function readErrorBody(res: Response, fallback: string): Promise<ErrorBody> {
   const data: unknown = await res.json().catch(() => null)
-  if (
-    data !== null &&
-    typeof data === "object" &&
-    "message" in data &&
-    typeof data.message === "string"
-  ) {
-    return data.message
+  if (data !== null && typeof data === "object" && "message" in data) {
+    const message =
+      typeof data.message === "string" ? data.message : fallback
+    const errors =
+      "errors" in data && data.errors !== null && typeof data.errors === "object"
+        ? (data.errors as Record<string, string>)
+        : undefined
+    return { message, errors }
   }
-  return fallback
+  return { message: fallback }
 }
 
 async function requestOtp(
   email: string,
   fallback: string
-): Promise<string | null> {
+): Promise<ErrorBody | null> {
   const res = await fetch("/api/auth/otp-request", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   })
-  return res.ok ? null : readErrorMessage(res, fallback)
+  return res.ok ? null : readErrorBody(res, fallback)
 }
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
+  const initialEmail = searchParams.get("email") ?? ""
   const [step, setStep] = useState<LoginStep>("email")
   const [email, setEmail] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
@@ -58,7 +63,7 @@ export function LoginForm() {
 
   const emailForm = useForm<EmailFormValues>({
     resolver: zodResolver(emailFormSchema),
-    defaultValues: { email: "" },
+    defaultValues: { email: initialEmail },
   })
 
   const otpForm = useForm<OtpFormValues>({
@@ -71,7 +76,11 @@ export function LoginForm() {
     try {
       const error = await requestOtp(values.email, ru.auth.errors.unavailable)
       if (error) {
-        setServerError(error)
+        if (error.errors?.email) {
+          emailForm.setError("email", { message: error.errors.email })
+        } else {
+          setServerError(error.message)
+        }
         return
       }
       setEmail(values.email)
@@ -90,7 +99,15 @@ export function LoginForm() {
         body: JSON.stringify({ email, otp_code: values.otp_code }),
       })
       if (!res.ok) {
-        setServerError(await readErrorMessage(res, ru.auth.errors.unavailable))
+        const { message, errors } = await readErrorBody(
+          res,
+          ru.auth.errors.unavailable
+        )
+        if (errors?.otp_code) {
+          otpForm.setError("otp_code", { message: errors.otp_code })
+        } else {
+          setServerError(message)
+        }
         return
       }
       router.push("/chat")
@@ -105,7 +122,7 @@ export function LoginForm() {
     try {
       const error = await requestOtp(email, ru.auth.errors.unavailable)
       if (error) {
-        setServerError(error)
+        setServerError(error.message)
       } else {
         toast.success(ru.auth.login.resendDone)
       }

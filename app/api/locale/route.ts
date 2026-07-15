@@ -4,11 +4,7 @@ import type { NextRequest } from "next/server"
 import { isLocale } from "@/src/i18n/config"
 import { getDict } from "@/src/i18n/server"
 import { apiFetch } from "@/src/lib/api-server"
-import {
-  setLocaleCookie,
-  TOKEN_COOKIE,
-  USER_ID_COOKIE,
-} from "@/src/lib/auth-cookies"
+import { setLocaleCookie, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const dict = await getDict()
@@ -27,12 +23,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const store = await cookies()
   setLocaleCookie(store, language)
 
-  // залогинен и знаем user_id — синкаем язык ответов ИИ (не блокируя UI)
+  // залогинен — синкаем язык ответов ИИ (не блокируя UI)
   const token = store.get(TOKEN_COOKIE)?.value
-  const userId = store.get(USER_ID_COOKIE)?.value
-  if (token && userId) {
+  if (token) {
     try {
-      await apiFetch(`/user/${encodeURIComponent(userId)}/language`, {
+      await apiFetch("/user/me/language", {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ language }),

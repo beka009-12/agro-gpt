@@ -277,6 +277,89 @@ export function ShieldCheckIcon(props: IconProps) {
   )
 }
 
+export function PlantIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 21V9" />
+      <path d="M12 13C7 13 4 10 4 5c5 0 8 3 8 8Z" />
+      <path d="M12 17c5 0 8-3 8-8-5 0-8 3-8 8Z" />
+    </IconBase>
+  )
+}
+
+export function FarmerIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M4 21v-8a8 8 0 0 1 16 0v8" />
+      <path d="M9 21v-5h6v5" />
+      <path d="M7 8c2-4 8-4 10 0" />
+    </IconBase>
+  )
+}
+
+export function AgronomistIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
+      <path d="M18 4v4M16 6h4" />
+    </IconBase>
+  )
+}
+
+export function CloudIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M8 19a4 4 0 1 1 0-8 6 6 0 0 1 11.5 2A3.5 3.5 0 1 1 19 20H8Z" />
+    </IconBase>
+  )
+}
+
+export function SendIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m22 2-7 20-4-9-9-4Z" />
+      <path d="M22 2 11 13" />
+    </IconBase>
+  )
+}
+
+export function MapPinIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M19.5 10.2c0 5.3-7.5 11.3-7.5 11.3s-7.5-6-7.5-11.3a7.5 7.5 0 0 1 15 0Z" />
+      <circle cx="12" cy="10" r="2.75" />
+    </IconBase>
+  )
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="m9 18 6-6-6-6" />
+    </IconBase>
+  )
+}
+
+export type AudienceIconId = "farmer" | "agronomist" | "gardener"
+
+const AUDIENCE_ICONS: Record<
+  AudienceIconId,
+  (props: IconProps) => ReactElement
+> = {
+  farmer: FarmerIcon,
+  agronomist: AgronomistIcon,
+  gardener: PlantIcon,
+}
+
+export function AudienceIcon({
+  id,
+  ...props
+}: { id: AudienceIconId } & IconProps) {
+  const Component = AUDIENCE_ICONS[id]
+  return <Component {...props} />
+}
+
 export type LandingIconId =
   | "chat-question"
   | "leaf-search"

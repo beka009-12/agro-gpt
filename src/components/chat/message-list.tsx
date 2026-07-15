@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
-import { LogoMark } from "@/src/components/layout/logo"
 import { PaperclipIcon } from "@/src/components/ui/icons"
 import { EmptyState } from "./empty-state"
 import { TypingIndicator } from "./typing-indicator"
@@ -13,10 +12,6 @@ interface MessageListProps {
   messages: ChatMessage[]
   pending: boolean
   onSuggestion: (text: string) => void
-}
-
-function BotAvatar() {
-  return <LogoMark size={32} className="flex-none" />
 }
 
 export function MessageList({ messages, pending, onSuggestion }: MessageListProps) {
@@ -45,15 +40,14 @@ export function MessageList({ messages, pending, onSuggestion }: MessageListProp
           transition={{ duration: DURATION.base, ease: EASE_OUT }}
         >
           {m.role === "bot" ? (
-            <div className="flex justify-start gap-2.5 pr-[15%]">
-              <BotAvatar />
-              <p className="rounded-[16px_16px_16px_4px] bg-mint-soft px-4 py-3 text-[14.5px] leading-relaxed text-fg">
+            <div className="flex justify-start pr-[12%]">
+              <p className="rounded-[18px_18px_18px_6px] bg-[#f0f6ef] px-4 py-3 text-[14px] leading-relaxed text-[#34483d]">
                 {m.text}
               </p>
             </div>
           ) : (
-            <div className="flex justify-end pl-[15%]">
-              <div className="flex flex-col items-end gap-2 rounded-[16px_16px_4px_16px] bg-accent px-4 py-3 text-[14.5px] leading-relaxed text-white">
+            <div className="flex justify-end pl-[12%]">
+              <div className="flex flex-col items-end gap-2 rounded-[18px_18px_6px_18px] bg-accent px-4 py-3 text-[14px] leading-relaxed text-white">
                 {m.imageUrl && (
                   /* eslint-disable-next-line @next/next/no-img-element --
                      blob-превью локального файла, next/image неприменим */
@@ -80,9 +74,7 @@ export function MessageList({ messages, pending, onSuggestion }: MessageListProp
           initial={reduced ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.fast }}
-          className="flex justify-start gap-2.5"
         >
-          <BotAvatar />
           <TypingIndicator />
         </motion.div>
       )}

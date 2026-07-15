@@ -1,22 +1,49 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #fafaf5;
+  --color-bg: #f6f2e7;
   --color-card: #ffffff;
-  --color-section-alt: #f5f4ec;
-  --color-accent: #2d6a4f;
-  --color-accent-strong: #1f4e39;
-  --color-mint: #95d5b2;
-  --color-mint-soft: #e8f3ec;
-  --color-fg: #1b2e24;
-  --color-fg-muted: #4b5a4e;
-  --color-fg-faint: #7c8a7f;
-  --color-edge: #e5e4da;
+  --color-section-alt: #fbf9f3;
+  --color-accent: #1f9153;
+  --color-accent-strong: #167a41;
+  --color-deep: #16382a;
+  --color-mint: #d3e6cd;
+  --color-mint-soft: #eaf3e5;
+  --color-tan-soft: #f1ece0;
+  --color-tan-strong: #8a6f2e;
+  --color-lime: #cbe86b;
+  --color-fg: #142a1f;
+  --color-fg-muted: #5c6b60;
+  --color-fg-faint: #8a9285;
+  --color-edge: #e4ddc9;
   --color-danger: #b3391f;
 
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  /* хедер закреплён на прежней палитре — см. header.tsx */
+  --color-header-bg: #f6faf4;
+  --color-header-edge: #dcebdc;
+  --color-header-fg: #103626;
+  --color-header-fg-muted: #667085;
+  --color-header-accent: #16a34a;
+  --color-header-accent-strong: #15803d;
+  --color-header-mint-soft: #e8f7eb;
+
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-header: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
   --animate-sprout-sway: sprout-sway 4s ease-in-out infinite;
+  --animate-floaty: floaty 4s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.25s ease both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   @keyframes sprout-sway {
     0%,
@@ -25,6 +52,16 @@
     }
     50% {
       transform: rotate(2deg);
+    }
+  }
+
+  @keyframes floaty {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
     }
   }
 }
@@ -40,7 +77,7 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-fg);
 }
 

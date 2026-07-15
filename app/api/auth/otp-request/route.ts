@@ -32,7 +32,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } catch (error) {
     if (error instanceof ApiError) {
       return NextResponse.json(
-        { message: error.message },
+        { message: error.message, errors: error.fieldErrors },
         { status: error.status }
       )
     }

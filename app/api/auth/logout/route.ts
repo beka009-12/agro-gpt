@@ -9,8 +9,9 @@ export async function POST(): Promise<NextResponse> {
 
   if (token) {
     try {
-      await apiFetch(`/user/logout?token=${encodeURIComponent(token)}`, {
+      await apiFetch(`/user/logout`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
       })
     } catch (error) {
       console.error("[auth/logout] API error ignored:", error)

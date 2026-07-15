@@ -3,7 +3,7 @@
 import { useRef, useState } from "react"
 import type { FormEvent } from "react"
 import { useI18n } from "@/src/i18n/client"
-import { ArrowUpIcon, PaperclipIcon } from "@/src/components/ui/icons"
+import { CameraIcon, SendIcon } from "@/src/components/ui/icons"
 
 interface ChatInputProps {
   pending: boolean
@@ -13,25 +13,27 @@ interface ChatInputProps {
 export function ChatInput({ pending, onSend }: ChatInputProps) {
   const { dict: ru } = useI18n()
   const [value, setValue] = useState("")
+  const [image, setImage] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (pending || !value.trim()) return
-    onSend(value)
+    if (pending || (!value.trim() && !image)) return
+    onSend(value, image ?? undefined)
     setValue("")
+    setImage(null)
   }
 
   const onFileChange = () => {
     const file = fileRef.current?.files?.[0]
-    if (file && !pending) onSend("", file)
+    if (file && !pending) setImage(file)
     if (fileRef.current) fileRef.current.value = ""
   }
 
   return (
     <form
       onSubmit={submit}
-      className="flex items-center gap-2.5 px-4 pb-5 pt-4 shadow-[0_-4px_20px_rgba(45,106,79,0.06)] sm:px-6"
+      className="border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(247,251,246,0.98))] px-4 pb-5 pt-4 sm:px-6"
     >
       <input
         ref={fileRef}
@@ -42,29 +44,61 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         tabIndex={-1}
         aria-hidden
       />
-      <button
-        type="button"
-        onClick={() => fileRef.current?.click()}
-        disabled={pending}
-        aria-label={ru.chat.attachLabel}
-        className="flex size-11 flex-none items-center justify-center rounded-full border border-edge bg-card text-fg-muted transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <PaperclipIcon size={18} />
-      </button>
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={ru.chat.inputPlaceholder}
-        className="h-12 min-w-0 flex-1 rounded-full border border-edge bg-card px-5 text-[14.5px] text-fg shadow-[0_2px_8px_rgba(45,106,79,0.05)] outline-none transition-colors placeholder:text-fg-faint focus:border-accent"
-      />
-      <button
-        type="submit"
-        disabled={pending || !value.trim()}
-        aria-label={ru.chat.sendLabel}
-        className="flex size-11 flex-none items-center justify-center rounded-full bg-accent text-white transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent"
-      >
-        <ArrowUpIcon size={18} />
-      </button>
+      {image && (
+        <div className="mb-2.5 flex animate-fade-up items-center justify-between gap-3 rounded-[15px] border border-[#cfe7d3] bg-[linear-gradient(135deg,rgba(235,249,238,0.96),rgba(246,252,246,0.96))] px-3 py-2.5 motion-reduce:animate-none">
+          <span className="flex min-w-0 items-center gap-2.5">
+            <span
+              aria-hidden
+              className="grid size-9 flex-none place-items-center rounded-[11px] bg-card text-accent shadow-[0_5px_13px_rgba(6,78,59,0.07)]"
+            >
+              <CameraIcon size={16} strokeWidth={2} />
+            </span>
+            <span className="min-w-0">
+              <strong className="block truncate text-[12px] font-extrabold text-[#234637]">
+                {ru.chat.imageChipTitle}
+              </strong>
+              <small className="block truncate text-[10px] text-fg-faint">
+                {image.name || ru.chat.imageChipNote}
+              </small>
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={() => setImage(null)}
+            aria-label={ru.chat.removeImageLabel}
+            className="grid size-7 flex-none place-items-center rounded-lg bg-white/80 text-fg-faint transition-colors hover:bg-white hover:text-danger"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      <div className="rounded-[22px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_13px_34px_rgba(6,78,59,0.09)]">
+        <div className="flex items-center gap-2.5 rounded-[21px] bg-white/[0.97] px-3 py-2.5">
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            disabled={pending}
+            aria-label={ru.chat.attachLabel}
+            className="grid size-11 flex-none place-items-center rounded-[14px] border border-[#d0e5d3] bg-[linear-gradient(180deg,#fff,#f8fbf8)] text-[#52675d] transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-[#9ed2a8] hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <CameraIcon size={19} strokeWidth={2} />
+          </button>
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={ru.chat.inputPlaceholder}
+            className="h-11 min-w-0 flex-1 border-none bg-transparent px-1.5 text-[14px] text-fg outline-none placeholder:text-fg-faint"
+          />
+          <button
+            type="submit"
+            disabled={pending || (!value.trim() && !image)}
+            aria-label={ru.chat.sendLabel}
+            className="grid size-11 flex-none place-items-center rounded-[14px] bg-[linear-gradient(145deg,#1bb052,#12853d)] text-white shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
+          >
+            <SendIcon size={18} strokeWidth={2} />
+          </button>
+        </div>
+      </div>
     </form>
   )
 }

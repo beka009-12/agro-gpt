@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getDict } from "@/src/i18n/server"
+import { getDict, getLocale } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { isLocale } from "@/src/i18n/config"
 import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
@@ -19,6 +19,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    const locale = await getLocale()
     const data = await apiFetch(
       "/user/login/verify",
       {
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         body: JSON.stringify({
           email: parsed.data.email,
           otp_code: parsed.data.otp_code,
+          language: locale,
           device_info: request.headers.get("user-agent"),
         }),
       },
@@ -58,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } catch (error) {
     if (error instanceof ApiError) {
       return NextResponse.json(
-        { message: error.message },
+        { message: error.message, errors: error.fieldErrors },
         { status: error.status }
       )
     }
