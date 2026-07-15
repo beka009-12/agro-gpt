@@ -56,7 +56,8 @@ export function RegisterForm() {
       full_name: "",
       phone: "",
       email: "",
-      region: "",
+      password: "",
+      confirm_password: "",
       language: "ky",
     },
   })
@@ -78,7 +79,7 @@ export function RegisterForm() {
         )
         if (res.status === 409) {
           toast(ru.auth.register.alreadyRegistered)
-          router.push(`/login?email=${encodeURIComponent(values.email)}`)
+          router.push(`/login?identifier=${encodeURIComponent(values.phone)}`)
           return
         }
         let matched = false
@@ -130,11 +131,21 @@ export function RegisterForm() {
         {...register("email")}
       />
       <Input
-        id="region"
-        label={ru.auth.register.regionLabel}
-        placeholder={ru.auth.register.regionPlaceholder}
-        error={errors.region?.message}
-        {...register("region")}
+        id="password"
+        type="password"
+        label={ru.auth.register.passwordLabel}
+        placeholder={ru.auth.register.passwordPlaceholder}
+        autoComplete="new-password"
+        error={errors.password?.message}
+        {...register("password")}
+      />
+      <Input
+        id="confirm_password"
+        type="password"
+        label={ru.auth.register.confirmPasswordLabel}
+        autoComplete="new-password"
+        error={errors.confirm_password?.message}
+        {...register("confirm_password")}
       />
       <Select
         id="language"
