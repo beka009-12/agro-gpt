@@ -1,24 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #f6faf4;
+  --color-bg: #f6f2e7;
   --color-card: #ffffff;
-  --color-section-alt: #f0f9f1;
-  --color-accent: #16a34a;
-  --color-accent-strong: #15803d;
-  --color-deep: #064e3b;
-  --color-mint: #cae8cf;
-  --color-mint-soft: #e8f7eb;
-  --color-fg: #103626;
-  --color-fg-muted: #667085;
-  --color-fg-faint: #7d9184;
-  --color-edge: #dcebdc;
+  --color-section-alt: #fbf9f3;
+  --color-accent: #1f9153;
+  --color-accent-strong: #167a41;
+  --color-deep: #16382a;
+  --color-mint: #d3e6cd;
+  --color-mint-soft: #eaf3e5;
+  --color-tan-soft: #f1ece0;
+  --color-tan-strong: #8a6f2e;
+  --color-lime: #cbe86b;
+  --color-fg: #142a1f;
+  --color-fg-muted: #5c6b60;
+  --color-fg-faint: #8a9285;
+  --color-edge: #e4ddc9;
   --color-danger: #b3391f;
 
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  /* хедер закреплён на прежней палитре — см. header.tsx */
+  --color-header-bg: #f6faf4;
+  --color-header-edge: #dcebdc;
+  --color-header-fg: #103626;
+  --color-header-fg-muted: #667085;
+  --color-header-accent: #16a34a;
+  --color-header-accent-strong: #15803d;
+  --color-header-mint-soft: #e8f7eb;
+
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-header: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
   --animate-sprout-sway: sprout-sway 4s ease-in-out infinite;
-  --animate-scan: scan 3s ease-in-out infinite;
   --animate-floaty: floaty 4s ease-in-out infinite;
   --animate-fade-up: fade-up 0.25s ease both;
 
@@ -40,18 +52,6 @@
     }
     50% {
       transform: rotate(2deg);
-    }
-  }
-
-  @keyframes scan {
-    0%,
-    100% {
-      transform: translateY(0);
-      opacity: 0.45;
-    }
-    50% {
-      transform: translateY(180px);
-      opacity: 1;
     }
   }
 
@@ -77,10 +77,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(520px 520px at 100% 0%, rgba(132, 204, 22, 0.14), transparent 66%),
-    radial-gradient(470px 470px at 0% 100%, rgba(34, 197, 94, 0.1), transparent 67%),
-    var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-fg);
 }
 

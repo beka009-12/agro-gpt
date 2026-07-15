@@ -5,26 +5,28 @@ import { SectionReveal } from "@/src/components/landing/section-reveal"
 export async function Mission() {
   const ru = await getDict()
   return (
-    <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-      <SectionReveal>
-        <div className="grid items-center gap-8 rounded-[34px] border border-[#cfe7d2] bg-[linear-gradient(135deg,#edf9ef,#e0f3e3)] p-8 md:grid-cols-[1fr_auto] md:p-12">
-          <div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-fg md:text-[33px]">
-              {ru.about.mission.title}
-            </h2>
-            <p className="mt-3 max-w-[780px] text-[15px] leading-relaxed text-[#5d6c65]">
-              {ru.about.mission.text}
-            </p>
-            <p className="mt-3.5 max-w-[780px] text-sm leading-relaxed text-fg-faint">
-              {ru.about.mission.note}
-            </p>
-          </div>
+    <section className="bg-card px-4 py-14 md:py-16">
+      <SectionReveal className="mx-auto block max-w-6xl">
+        <div className="relative overflow-hidden rounded-[26px] bg-[linear-gradient(170deg,#123625,#1a5c3c)] px-6 py-12 text-center md:rounded-[32px] md:px-10 md:py-20">
+          {/* горизонт поля на рассвете — свет поднимается из-за кромки */}
           <span
             aria-hidden
-            className="hidden size-[105px] place-items-center rounded-[30px] bg-[linear-gradient(145deg,#16a34a,#064e3b)] text-white shadow-[0_18px_30px_rgba(22,163,74,0.2)] md:grid"
-          >
-            <PlantIcon size={53} strokeWidth={1.6} />
-          </span>
+            className="absolute left-1/2 top-full h-[480px] w-[150%] min-w-[620px] -translate-x-1/2 -translate-y-[64px] rounded-[100%] border-t border-lime/30 bg-[radial-gradient(ellipse_at_top,rgba(203,232,107,0.16),transparent_55%)] md:-translate-y-[92px]"
+          />
+          <div className="relative">
+            <span
+              aria-hidden
+              className="mx-auto grid size-12 place-items-center rounded-full bg-lime text-deep"
+            >
+              <PlantIcon size={22} strokeWidth={1.8} />
+            </span>
+            <h2 className="mt-5 text-[12px] font-extrabold uppercase tracking-[0.22em] text-lime">
+              {ru.about.mission.title}
+            </h2>
+            <p className="mx-auto mt-4 max-w-[860px] text-balance text-[19px] font-bold leading-snug tracking-tight text-white sm:text-[22px] md:text-[28px] md:leading-[1.4]">
+              {ru.about.mission.text}
+            </p>
+          </div>
         </div>
       </SectionReveal>
     </section>

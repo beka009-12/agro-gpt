@@ -130,10 +130,15 @@ export function LanguageSwitcher({
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={open}
-          className="flex w-full items-center justify-between rounded-xl border border-edge bg-card px-3.5 py-3 text-[15px] font-medium text-fg transition-colors hover:bg-mint-soft disabled:opacity-60"
+          className="flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors hover:bg-header-mint-soft disabled:opacity-60"
         >
-          <span className="flex items-center gap-2.5">
-            <GlobeIcon size={17} className="text-accent" />
+          <span
+            aria-hidden
+            className="grid size-8 shrink-0 place-items-center rounded-lg bg-header-mint-soft text-header-accent"
+          >
+            <GlobeIcon size={16} />
+          </span>
+          <span className="flex-1 text-[15px] font-medium text-header-fg">
             {dict.languageSwitcher[locale]}
           </span>
           <ChevronDownIcon size={15} className="text-fg-faint" />

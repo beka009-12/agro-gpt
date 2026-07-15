@@ -324,6 +324,15 @@ export function SendIcon(props: IconProps) {
   )
 }
 
+export function MapPinIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M19.5 10.2c0 5.3-7.5 11.3-7.5 11.3s-7.5-6-7.5-11.3a7.5 7.5 0 0 1 15 0Z" />
+      <circle cx="12" cy="10" r="2.75" />
+    </IconBase>
+  )
+}
+
 export function ChevronRightIcon(props: IconProps) {
   return (
     <IconBase {...props}>

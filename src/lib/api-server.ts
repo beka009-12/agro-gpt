@@ -2,12 +2,37 @@ import ru from "@/src/i18n/ru.json"
 
 export class ApiError extends Error {
   readonly status: number
+  readonly fieldErrors?: Record<string, string>
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, fieldErrors?: Record<string, string>) {
     super(message)
     this.name = "ApiError"
     this.status = status
+    this.fieldErrors = fieldErrors
   }
+}
+
+interface ValidationErrorItem {
+  loc: (string | number)[]
+  msg: string
+}
+
+function parseFieldErrors(detail: unknown): Record<string, string> | undefined {
+  if (!Array.isArray(detail)) return undefined
+  const fields: Record<string, string> = {}
+  for (const item of detail as ValidationErrorItem[]) {
+    if (
+      item === null ||
+      typeof item !== "object" ||
+      !Array.isArray(item.loc) ||
+      typeof item.msg !== "string"
+    ) {
+      continue
+    }
+    const field = item.loc[item.loc.length - 1]
+    if (typeof field === "string") fields[field] = item.msg
+  }
+  return Object.keys(fields).length > 0 ? fields : undefined
 }
 
 export interface ApiMessages {
@@ -50,24 +75,24 @@ export async function apiFetch(
 
   if (!res.ok) {
     let detail: string | undefined
+    let fieldErrors: Record<string, string> | undefined
     try {
       const body: unknown = await res.json()
-      if (
-        body !== null &&
-        typeof body === "object" &&
-        "detail" in body &&
-        typeof body.detail === "string"
-      ) {
-        detail = body.detail
+      if (body !== null && typeof body === "object" && "detail" in body) {
+        if (typeof body.detail === "string") {
+          detail = body.detail
+        } else {
+          fieldErrors = parseFieldErrors(body.detail)
+        }
       }
     } catch {
       // тело не JSON — оставляем detail пустым
     }
     console.error(
       `[api-server] ${init?.method ?? "GET"} ${path} -> ${res.status}`,
-      detail ?? ""
+      detail ?? fieldErrors ?? ""
     )
-    if (res.status === 422) throw new ApiError(m.checkData, 422)
+    if (res.status === 422) throw new ApiError(m.checkData, 422, fieldErrors)
     if (res.status >= 500) throw new ApiError(m.unavailable, 502)
     throw new ApiError(detail ?? m.checkData, res.status)
   }

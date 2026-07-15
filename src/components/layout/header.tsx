@@ -6,8 +6,14 @@ import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useI18n } from "@/src/i18n/client"
 import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
+import {
+  ChevronRightIcon,
+  HomeIcon,
+  LeafIcon,
+} from "@/src/components/ui/icons"
 import { LanguageSwitcher } from "./language-switcher"
 import { LogoMark } from "./logo"
+import { ProfileMenu, useProfile } from "./profile-menu"
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
@@ -16,6 +22,7 @@ export function Header() {
   const { dict: ru } = useI18n()
   const reduced = useReducedMotion()
   const rootRef = useRef<HTMLElement>(null)
+  const { profile, setProfile } = useProfile()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -46,9 +53,10 @@ export function Header() {
   return (
     <header
       ref={rootRef}
+      style={{ fontFamily: "var(--font-header)" }}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         scrolled || menuOpen
-          ? "border-b border-edge bg-bg/90 backdrop-blur-md"
+          ? "border-b border-header-edge bg-header-bg/90 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -60,7 +68,7 @@ export function Header() {
           className="flex items-center gap-2.5"
         >
           <LogoMark size={30} />
-          <span className="text-[19px] font-bold tracking-tight text-fg">
+          <span className="text-[19px] font-bold tracking-tight text-header-fg">
             ibo
           </span>
         </Link>
@@ -70,16 +78,19 @@ export function Header() {
           <LanguageSwitcher />
           <Link
             href={onAbout ? "/" : "/about"}
-            className="text-sm font-medium text-fg-muted transition-colors hover:text-fg"
+            className="text-sm font-medium text-header-fg-muted transition-colors hover:text-header-fg"
           >
             {onAbout ? ru.header.nav.home : ru.header.nav.about}
           </Link>
           <Link
             href="/chat"
-            className="rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-accent-strong"
+            className="rounded-full bg-header-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-header-accent-strong"
           >
             {ru.header.startChat}
           </Link>
+          {profile && (
+            <ProfileMenu profile={profile} onProfileChange={setProfile} />
+          )}
         </nav>
 
         {/* мобильный бургер */}
@@ -94,13 +105,13 @@ export function Header() {
             aria-hidden
             animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
             transition={{ duration: reduced ? 0.1 : DURATION.fast, ease: EASE_OUT }}
-            className="h-[2px] w-5 rounded-full bg-fg"
+            className="h-[2px] w-5 rounded-full bg-header-fg"
           />
           <motion.span
             aria-hidden
             animate={menuOpen ? { rotate: -45, y: -2 } : { rotate: 0, y: 0 }}
             transition={{ duration: reduced ? 0.1 : DURATION.fast, ease: EASE_OUT }}
-            className="h-[2px] w-5 rounded-full bg-fg"
+            className="h-[2px] w-5 rounded-full bg-header-fg"
           />
         </button>
       </div>
@@ -114,25 +125,64 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: reduced ? 0 : -8 }}
             transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-            className="border-t border-edge px-4 pb-5 pt-3 sm:hidden"
+            className="border-t border-header-edge px-4 pb-5 pt-4 sm:hidden"
           >
-            <Link
-              href={onAbout ? "/" : "/about"}
-              onClick={close}
-              className="block rounded-xl px-3 py-3 text-[15px] font-medium text-fg transition-colors hover:bg-mint-soft"
-            >
-              {onAbout ? ru.header.nav.home : ru.header.nav.about}
-            </Link>
+            {profile && (
+              <div className="mb-3 overflow-hidden rounded-2xl border border-header-edge bg-card">
+                <ProfileMenu
+                  profile={profile}
+                  onProfileChange={setProfile}
+                  variant="row"
+                  onDone={close}
+                />
+              </div>
+            )}
+            <div className="divide-y divide-header-edge overflow-hidden rounded-2xl border border-header-edge bg-card">
+              {[
+                { href: "/", label: ru.header.nav.home, Icon: HomeIcon },
+                { href: "/about", label: ru.header.nav.about, Icon: LeafIcon },
+              ].map(({ href, label, Icon }) => {
+                const active = pathname === href
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={close}
+                    aria-current={active ? "page" : undefined}
+                    className="flex items-center gap-3 px-3.5 py-3 transition-colors hover:bg-header-mint-soft"
+                  >
+                    <span
+                      aria-hidden
+                      className={`grid size-8 shrink-0 place-items-center rounded-lg ${
+                        active
+                          ? "bg-header-accent text-white"
+                          : "bg-header-mint-soft text-header-accent"
+                      }`}
+                    >
+                      <Icon size={16} />
+                    </span>
+                    <span
+                      className={`flex-1 text-[15px] ${
+                        active
+                          ? "font-bold text-header-accent-strong"
+                          : "font-medium text-header-fg"
+                      }`}
+                    >
+                      {label}
+                    </span>
+                    <ChevronRightIcon size={15} className="text-fg-faint" />
+                  </Link>
+                )
+              })}
+              <LanguageSwitcher variant="row" onDone={close} />
+            </div>
             <Link
               href="/chat"
               onClick={close}
-              className="mt-2 block rounded-full bg-accent px-5 py-3 text-center text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
+              className="mt-3 block rounded-full bg-header-accent px-5 py-3 text-center text-[15px] font-bold text-white transition-colors hover:bg-header-accent-strong"
             >
               {ru.header.startChat}
             </Link>
-            <div className="mt-4 border-t border-edge pt-4">
-              <LanguageSwitcher variant="row" onDone={close} />
-            </div>
           </motion.nav>
         )}
       </AnimatePresence>

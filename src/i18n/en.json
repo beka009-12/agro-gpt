@@ -9,6 +9,26 @@
     "en": "English",
     "title": "Choose language"
   },
+  "profile": {
+    "open": "Profile",
+    "title": "Profile",
+    "menuHint": "Contacts, region and location",
+    "save": "Save",
+    "saved": "Profile updated",
+    "location": {
+      "title": "Field location",
+      "on": "Added",
+      "off": "Not added",
+      "hint": "Helps the AI factor your local weather and climate into its advice.",
+      "detect": "Detect my location",
+      "detecting": "Detecting…",
+      "saved": "Location updated",
+      "denied": "Location access is blocked — allow it in your browser settings",
+      "failed": "Could not detect your location",
+      "unsupported": "Your browser does not support geolocation"
+    },
+    "logout": "Log out"
+  },
   "header": {
     "nav": {
       "about": "About us",
@@ -21,8 +41,8 @@
   "hero": {
     "badge": "Digital assistant for farmers and agronomists",
     "titleStart": "Show your plant — ",
-    "titleAccent": "AI helps you understand the problem",
-    "subtitle": "AGRO IBO AI analyzes symptom descriptions and plant photos, identifies the likely cause and builds clear recommendations: what to check, what to do now and how to prevent it from happening again.",
+    "titleAccent": "AI helps you understand what's wrong",
+    "subtitle": "ibo analyzes symptom descriptions and plant photos, identifies the likely cause and builds clear recommendations: what to check, what to do now and how to prevent it from happening again.",
     "ctaChat": "Open chat",
     "ctaAbout": "About the company",
     "trust": [
@@ -31,12 +51,35 @@
       "Weather and region aware"
     ],
     "visual": {
-      "label": "AI plant analysis",
-      "status": "System ready",
-      "resultTitle": "Likely water stress",
-      "resultNote": "Tomato · recommendations ready",
-      "chipPhoto": "Photo analysis",
-      "chipWeather": "Weather aware"
+      "label": "Plant diagnostics",
+      "status": "ready",
+      "chipWeather": "Weather aware",
+      "cases": [
+        {
+          "crop": "Tomato",
+          "title": "Likely nitrogen deficiency",
+          "note": "recommendations ready",
+          "confidence": "92%"
+        },
+        {
+          "crop": "Cucumber",
+          "title": "Powdery mildew, early stage",
+          "note": "treatment plan ready",
+          "confidence": "87%"
+        },
+        {
+          "crop": "Wheat",
+          "title": "Brown leaf rust",
+          "note": "protection steps ready",
+          "confidence": "89%"
+        },
+        {
+          "crop": "Apple tree",
+          "title": "Apple scab, spread risk",
+          "note": "care advice ready",
+          "confidence": "84%"
+        }
+      ]
     }
   },
   "audience": {
@@ -61,7 +104,7 @@
     ]
   },
   "features": {
-    "eyebrow": "What AGRO IBO AI can do",
+    "eyebrow": "What ibo can do",
     "title": "From a photo to a clear recommendation",
     "panel": {
       "title": "One chat for all plant questions",
@@ -69,8 +112,7 @@
       "points": [
         "Recognizes the crop from text or an image.",
         "Identifies disease, nutrient deficiency, pests or stress.",
-        "Builds recommendations for care, treatment and prevention.",
-        "Takes region, language and weather context into account."
+        "Builds recommendations for care and prevention."
       ]
     },
     "cards": [
@@ -119,20 +161,11 @@
     "badge": "A Kyrgyz company with international goals",
     "titleStart": "We are building ",
     "titleAccent": "efficient and eco-friendly agriculture",
-    "subtitle": "AGRO IBO is a domestic company founded in Kyrgyzstan. Our goal is to increase crop yields and preserve soil fertility with high-quality, ecologically safe organic solutions.",
+    "subtitle": "ibo is a domestic company founded in Kyrgyzstan. Our goal is to increase crop yields and preserve soil fertility with high-quality, ecologically safe organic solutions.",
     "stats": [
-      {
-        "value": "Kyrgyzstan",
-        "label": "local production"
-      },
-      {
-        "value": "All crops",
-        "label": "wide application"
-      },
-      {
-        "value": "Export",
-        "label": "international market"
-      }
+      "Kyrgyzstan · local production",
+      "All crops",
+      "Export to the international market"
     ],
     "bottle": {
       "overline": "ORGANIC FERTILIZER",
@@ -140,7 +173,7 @@
       "note": "Liquid organic fertilizer based on hydrolyzed sheep wool"
     },
     "company": {
-      "title": "What AGRO IBO does",
+      "title": "What ibo does",
       "description": "The company creates practical solutions for farmers and helps adopt modern eco-friendly growing methods.",
       "points": [
         "Production of liquid organic fertilizers.",
@@ -217,8 +250,7 @@
     },
     "mission": {
       "title": "Our mission",
-      "text": "To bring organic products manufactured in Kyrgyzstan to the global market, increase farmers' income, reduce dependence on chemical fertilizers, and preserve fertile, clean soil for future generations.",
-      "note": "Today, AGRO IBO cooperates with farmers across various regions of Kyrgyzstan and is actively working towards entering the international market, offering modern, effective and environmentally safe agricultural solutions."
+      "text": "To bring Kyrgyzstan-made organic products to the global market, raise farmers' income, reduce dependence on chemical fertilizers, and preserve fertile, clean soil for future generations."
     }
   },
   "floatingNav": {
@@ -273,7 +305,8 @@
       "languageLabel": "Answer language",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "loginLink": "Sign in"
+      "loginLink": "Sign in",
+      "alreadyRegistered": "This number is already registered. Taking you to sign in with a code."
     },
     "login": {
       "title": "Sign in to ibo",

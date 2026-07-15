@@ -66,7 +66,7 @@ export function BenefitsCarousel({ items, tapHint }: BenefitsCarouselProps) {
               key={item.title}
               aria-hidden={position !== 0}
               style={cardStyle(position, total, reduced)}
-              className="absolute inset-x-0 top-0 rounded-[22px] border border-edge bg-card p-5 shadow-[0_10px_28px_rgba(6,78,59,0.08)]"
+              className="absolute inset-x-0 top-0 rounded-[22px] border border-edge bg-card p-5 shadow-[0_10px_28px_rgba(20,42,31,0.08)]"
             >
               <div className="flex items-center gap-3">
                 <span className="grid size-10 flex-none place-items-center rounded-[13px] bg-mint-soft text-[13px] font-extrabold text-accent">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Suspense } from "react"
 import { AuthCard } from "@/src/components/auth/auth-card"
 import { getDict } from "@/src/i18n/server"
 import { LoginForm } from "./login-form"
@@ -27,7 +28,9 @@ export default async function LoginPage() {
         </>
       }
     >
-      <LoginForm />
+      <Suspense fallback={null}>
+        <LoginForm />
+      </Suspense>
     </AuthCard>
   )
 }

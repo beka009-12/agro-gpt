@@ -20,20 +20,23 @@ const LANGUAGE_OPTIONS = [
   { value: "en", label: "English" },
 ] as const
 
-async function readErrorMessage(
-  res: Response,
-  fallback: string
-): Promise<string> {
+interface ErrorBody {
+  message: string
+  errors?: Record<string, string>
+}
+
+async function readErrorBody(res: Response, fallback: string): Promise<ErrorBody> {
   const data: unknown = await res.json().catch(() => null)
-  if (
-    data !== null &&
-    typeof data === "object" &&
-    "message" in data &&
-    typeof data.message === "string"
-  ) {
-    return data.message
+  if (data !== null && typeof data === "object" && "message" in data) {
+    const message =
+      typeof data.message === "string" ? data.message : fallback
+    const errors =
+      "errors" in data && data.errors !== null && typeof data.errors === "object"
+        ? (data.errors as Record<string, string>)
+        : undefined
+    return { message, errors }
   }
-  return fallback
+  return { message: fallback }
 }
 
 export function RegisterForm() {
@@ -45,6 +48,7 @@ export function RegisterForm() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
@@ -68,7 +72,23 @@ export function RegisterForm() {
         body: JSON.stringify(values),
       })
       if (!res.ok) {
-        setServerError(await readErrorMessage(res, ru.auth.errors.unavailable))
+        const { message, errors: fieldErrors } = await readErrorBody(
+          res,
+          ru.auth.errors.unavailable
+        )
+        if (res.status === 409) {
+          toast(ru.auth.register.alreadyRegistered)
+          router.push(`/login?email=${encodeURIComponent(values.email)}`)
+          return
+        }
+        let matched = false
+        for (const [field, fieldMessage] of Object.entries(fieldErrors ?? {})) {
+          if (field in values) {
+            setError(field as keyof RegisterFormValues, { message: fieldMessage })
+            matched = true
+          }
+        }
+        setServerError(matched ? null : message)
         return
       }
       router.push("/chat")
