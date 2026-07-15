@@ -292,6 +292,7 @@
     "register": {
       "title": "Создайте аккаунт",
       "subtitle": "Пара полей — и AI-агроном уже работает на вас.",
+      "steps": ["Контакты", "Пароль", "Язык"],
       "nameLabel": "Имя",
       "namePlaceholder": "Асан Асанов",
       "phoneLabel": "Телефон",
@@ -312,6 +313,7 @@
     "login": {
       "title": "Вход в ibo",
       "subtitle": "Введите телефон или email и пароль.",
+      "steps": ["Телефон или email", "Пароль"],
       "identifierLabel": "Телефон или email",
       "identifierPlaceholder": "+996700123456 или you@example.com",
       "passwordLabel": "Пароль",
@@ -341,6 +343,12 @@
       "submit": "Сохранить пароль",
       "success": "Пароль обновлён — теперь войдите с новым паролем",
       "backToLogin": "Вернуться ко входу"
+    },
+    "common": {
+      "back": "Назад",
+      "next": "Далее",
+      "showPassword": "Показать пароль",
+      "hidePassword": "Скрыть пароль"
     },
     "errors": {
       "nameMin": "Имя — минимум 2 символа",

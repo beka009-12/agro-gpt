@@ -292,6 +292,7 @@
     "register": {
       "title": "Create an account",
       "subtitle": "A couple of fields — and the AI agronomist is working for you.",
+      "steps": ["Contacts", "Password", "Language"],
       "nameLabel": "Name",
       "namePlaceholder": "Asan Asanov",
       "phoneLabel": "Phone",
@@ -312,6 +313,7 @@
     "login": {
       "title": "Sign in to ibo",
       "subtitle": "Enter your phone or email and password.",
+      "steps": ["Phone or email", "Password"],
       "identifierLabel": "Phone or email",
       "identifierPlaceholder": "+996700123456 or you@example.com",
       "passwordLabel": "Password",
@@ -341,6 +343,12 @@
       "submit": "Save password",
       "success": "Password updated — sign in with your new password",
       "backToLogin": "Back to sign in"
+    },
+    "common": {
+      "back": "Back",
+      "next": "Next",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "errors": {
       "nameMin": "Name must be at least 2 characters",
