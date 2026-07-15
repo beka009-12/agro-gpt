@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ibo — AI-помощник агронома
 
-## Getting Started
+Фронтенд продукта **ibo**: лендинг, страница «О нас», регистрация/вход и чат с ИИ-диагностикой растений. Пользователь описывает симптомы или загружает фото — AI Agro API (FastAPI + Dify) определяет возможную причину и даёт рекомендации. Компания также производит органическое удобрение HYDROWOOLKS, лендинг рассказывает о продукте.
 
-First, run the development server:
+Интерфейс на трёх языках: кыргызский, русский, английский.
+
+## Стек
+
+| Слой | Технология |
+|---|---|
+| Фреймворк | Next.js 16 (App Router, Server Components), React 19 |
+| Язык | TypeScript (strict) |
+| Стили | Tailwind CSS 4 — токены темы в `app/globals.css` (`@theme`) |
+| Анимации | `motion/react` + общие токены `src/lib/motion-tokens.ts` |
+| Формы и валидация | react-hook-form + zod (`@hookform/resolvers`) |
+| Уведомления | react-hot-toast |
+| Данные | fetch через Route Handlers; настроен `@tanstack/react-query` (провайдер в `app/providers.tsx`) |
+| Типы API | orval — генерация из OpenAPI бэкенда (`npm run generate-api`) |
+| Шрифты | Plus Jakarta Sans (основной), Manrope (хедер) через `next/font` |
+
+## Быстрый старт
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local   # указать API_URL бэкенда
+bun install                  # или npm install
+bun dev                      # или npm run dev → http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Переменные окружения:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `API_URL` — адрес AI Agro API (используется только на сервере, в Route Handlers).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Скрипты: `dev`, `build`, `start`, `lint`, `generate-api` (перегенерация типов из OpenAPI).
 
-## Learn More
+## Архитектура
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                    # App Router: страницы и API-роуты
+  page.tsx              # лендинг
+  about/                # о компании и продукте
+  login/, register/     # авторизация (формы — клиентские компоненты)
+  chat/                 # чат с ИИ (защищён гардом)
+  api/                  # BFF-слой (Route Handlers):
+    auth/               #   register, otp-request, otp-verify, logout
+    chat/message        #   создание чата + диагностика (текст/фото)
+    profile/            #   GET/PATCH профиль, PATCH локация
+    locale/             #   смена языка + синк с профилем
+proxy.ts                # гард маршрутов (в Next 16 заменяет middleware.ts)
+src/
+  components/           # по доменам: landing, about, chat, auth, layout, ui
+  i18n/                 # словари ru/en/ky.json, server (getDict) и client (useI18n)
+  lib/                  # zod-схемы, apiFetch, auth-cookies, motion-tokens
+  api/generated/        # типы, сгенерированные orval из OpenAPI
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Ключевые решения
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**BFF вместо прямых запросов.** Браузер никогда не ходит на бэкенд напрямую и не видит токен. Все запросы идут через Route Handlers (`app/api/*`): токен лежит в httpOnly-cookie (`ibo_token`), роут читает его и добавляет `Authorization: Bearer` к запросу на `API_URL`. Ошибки FastAPI (`detail`, массив 422) нормализуются в `src/lib/api-server.ts` и возвращаются форме как ошибки конкретных полей.
 
-## Deploy on Vercel
+**Авторизация.** Регистрация (`POST /user/`) сразу выдаёт сессию — без подтверждения email/телефона. OTP по email нужен только для входа с нового устройства (мультисессии). `proxy.ts` редиректит: гость с `/chat` → `/login`, авторизованный с `/login`/`/register` → `/chat`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Локализация.** Локаль хранится в cookie `ibo_locale` (ky/ru/en, по умолчанию ru), поэтому все страницы рендерятся динамически. Серверные компоненты берут словарь через `getDict()`, клиентские — через `useI18n()`. Смена языка дополнительно синкает язык ответов ИИ в профиле пользователя.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Дизайн-система.** Все цвета — семантические токены в `@theme` (`--color-accent`, `--color-deep`, `--color-edge`…), компоненты не используют сырые hex. Анимации уважают `prefers-reduced-motion`; модалки и шторки (язык, профиль) — порталы в `body` с focus-trap и скролл-локом.
+
+## Проверка
+
+Тест-раннера в проекте нет. Перед коммитом:
+
+```bash
+npx tsc --noEmit && npm run lint && npm run build
+```
+
+плюс smoke-прогон против реального бэкенда (страницы отвечают 200, `/chat` без токена — 307).
