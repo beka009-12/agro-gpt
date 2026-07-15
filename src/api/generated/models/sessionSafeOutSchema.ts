@@ -6,17 +6,14 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface UserOutSchema {
+/**
+ * Сессия без поля token — клиент и так его знает, наружу не отдаём.
+ */
+export interface SessionSafeOutSchema {
   id: string;
-  full_name: string;
-  phone: string;
-  region: string | null;
-  email: string | null;
-  is_active: boolean;
-  language: string;
-  latitude: number | null;
-  longitude: number | null;
-  location_available?: boolean;
+  user_id: string;
+  device_info: string | null;
   created_at: string;
-  updated_at: string;
+  expires_at: string;
+  is_valid: boolean;
 }

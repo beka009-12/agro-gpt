@@ -6,7 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListUsersUserGetParams = {
-skip?: number;
-limit?: number;
-};
+export interface ResetPasswordRequest {
+  phone?: string | null;
+  email?: string | null;
+  reset_code: string;
+  new_password: string;
+}

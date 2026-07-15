@@ -9,6 +9,6 @@
 export interface UpdateProfileRequest {
   full_name?: string | null;
   phone?: string | null;
-  region?: string | null;
   email?: string | null;
+  language?: string | null;
 }

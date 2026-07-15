@@ -26,7 +26,7 @@ import type {
 
 import type {
   HTTPValidationError,
-  SessionOutSchema
+  SessionSafeOutSchema
 } from '../../models';
 
 import { customInstance } from '../../../index';
@@ -50,6 +50,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
+ * Активные сессии пользователя. Только свои.
  * @summary Get User Sessions
  */
 export const getUserSessionsSessionsUserUserIdGet = (
@@ -58,7 +59,7 @@ export const getUserSessionsSessionsUserUserIdGet = (
 ) => {
 
 
-      return customInstance<SessionOutSchema[]>(
+      return customInstance<SessionSafeOutSchema[]>(
       {url: `/sessions/user/${userId}`, method: 'GET', signal
     },
       );
@@ -150,7 +151,7 @@ export const getSessionSessionsSessionIdGet = (
 ) => {
 
 
-      return customInstance<SessionOutSchema>(
+      return customInstance<SessionSafeOutSchema>(
       {url: `/sessions/${sessionId}`, method: 'GET', signal
     },
       );

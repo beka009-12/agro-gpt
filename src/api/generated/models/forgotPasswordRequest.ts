@@ -5,8 +5,8 @@
  * API для AI Agro: регистрация, авторизация, создание чата и диагностика растений.
  * OpenAPI spec version: 1.0.0
  */
-import type { Language } from './language';
 
-export interface UpdateLanguageRequest {
-  language: Language;
+export interface ForgotPasswordRequest {
+  phone?: string | null;
+  email?: string | null;
 }

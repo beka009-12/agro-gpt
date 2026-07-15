@@ -6,6 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface EmailLoginRequest {
-  email: string;
+export interface RegisterRequest {
+  full_name: string;
+  password: string;
+  phone?: string | null;
+  email?: string | null;
+  device_info?: string | null;
 }

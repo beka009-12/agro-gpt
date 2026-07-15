@@ -5,11 +5,10 @@
  * API для AI Agro: регистрация, авторизация, создание чата и диагностика растений.
  * OpenAPI spec version: 1.0.0
  */
-import type { Language } from './language';
 
-export interface OTPVerifyRequest {
-  email: string;
-  otp_code: string;
-  language?: Language;
+export interface LoginRequest {
+  password: string;
+  phone?: string | null;
+  email?: string | null;
   device_info?: string | null;
 }
