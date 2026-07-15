@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
@@ -83,13 +83,7 @@ export function RegisterForm() {
     setStep(next)
   }
 
-  const onSubmit = handleSubmit(async (values) => {
-    if (step < LAST_STEP) {
-      const ok = await trigger(STEP_FIELDS[step])
-      if (ok) goToStep(step + 1)
-      return
-    }
-
+  const submitRegistration = async (values: RegisterFormValues) => {
     setServerError(null)
     try {
       const res = await fetch("/api/auth/register", {
@@ -121,10 +115,20 @@ export function RegisterForm() {
     } catch {
       toast.error(ru.auth.errors.network)
     }
-  })
+  }
+
+  const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (step < LAST_STEP) {
+      const ok = await trigger(STEP_FIELDS[step])
+      if (ok) goToStep(step + 1)
+      return
+    }
+    await handleSubmit(submitRegistration)()
+  }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <form onSubmit={onFormSubmit} noValidate className="flex flex-col gap-4">
       <StepIndicator steps={ru.auth.register.steps} current={step} />
       <StepTransition stepKey={step} direction={direction}>
         <div className="flex flex-col gap-4">
