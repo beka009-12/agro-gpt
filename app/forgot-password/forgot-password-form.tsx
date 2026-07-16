@@ -17,7 +17,7 @@ export function ForgotPasswordForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
-  const initialIdentifier = searchParams.get("identifier") ?? ""
+  const initialEmail = searchParams.get("email") ?? ""
   const [sent, setSent] = useState(false)
 
   const schema = useMemo(() => makeForgotPasswordFormSchema(ru), [ru])
@@ -28,7 +28,7 @@ export function ForgotPasswordForm() {
     formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { identifier: initialIdentifier },
+    defaultValues: { email: initialEmail },
   })
 
   const onSubmit = handleSubmit(async (values) => {
@@ -47,16 +47,14 @@ export function ForgotPasswordForm() {
   })
 
   if (sent) {
-    const identifier = getValues("identifier")
+    const email = getValues("email")
     return (
       <div className="flex flex-col gap-4">
         <p className="text-sm text-fg-muted">{ru.auth.forgotPassword.sent}</p>
         <Button
           type="button"
           onClick={() =>
-            router.push(
-              `/reset-password?identifier=${encodeURIComponent(identifier)}`
-            )
+            router.push(`/reset-password?email=${encodeURIComponent(email)}`)
           }
         >
           {ru.auth.resetPassword.title}
@@ -68,12 +66,13 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <Input
-        id="identifier"
-        label={ru.auth.forgotPassword.identifierLabel}
-        placeholder={ru.auth.forgotPassword.identifierPlaceholder}
-        autoComplete="username"
-        error={errors.identifier?.message}
-        {...register("identifier")}
+        id="email"
+        type="email"
+        label={ru.auth.forgotPassword.emailLabel}
+        placeholder={ru.auth.forgotPassword.emailPlaceholder}
+        autoComplete="email"
+        error={errors.email?.message}
+        {...register("email")}
       />
       <Button type="submit" loading={isSubmitting} className="mt-1">
         {ru.auth.forgotPassword.submit}

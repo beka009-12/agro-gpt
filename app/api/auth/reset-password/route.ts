@@ -2,10 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import {
-  makeResetPasswordFormSchema,
-  splitIdentifier,
-} from "@/src/lib/auth-schemas"
+import { makeResetPasswordFormSchema } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ru = await getDict()
@@ -19,13 +16,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { identifier, reset_code, new_password } = parsed.data
+    const { email, reset_code, new_password } = parsed.data
     await apiFetch(
       "/api/auth/reset-password",
       {
         method: "POST",
         body: JSON.stringify({
-          ...splitIdentifier(identifier),
+          email,
           reset_code,
           new_password,
         }),

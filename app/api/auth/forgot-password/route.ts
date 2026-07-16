@@ -2,10 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import {
-  makeForgotPasswordFormSchema,
-  splitIdentifier,
-} from "@/src/lib/auth-schemas"
+import { makeForgotPasswordFormSchema } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ru = await getDict()
@@ -23,7 +20,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       "/api/auth/forgot-password",
       {
         method: "POST",
-        body: JSON.stringify(splitIdentifier(parsed.data.identifier)),
+        body: JSON.stringify({ email: parsed.data.email }),
       },
       {
         unavailable: ru.auth.errors.unavailable,

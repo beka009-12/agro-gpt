@@ -47,9 +47,7 @@ export function makeLoginFormSchema(dict: Dictionary) {
 export type LoginFormValues = z.infer<ReturnType<typeof makeLoginFormSchema>>
 
 export function makeForgotPasswordFormSchema(dict: Dictionary) {
-  return z.object({
-    identifier: z.string().trim().min(1, dict.auth.errors.identifierRequired),
-  })
+  return z.object({ email: makeEmailField(dict.auth.errors) })
 }
 
 export type ForgotPasswordFormValues = z.infer<
@@ -60,7 +58,7 @@ export function makeResetPasswordFormSchema(dict: Dictionary) {
   const e = dict.auth.errors
   return z
     .object({
-      identifier: z.string().trim().min(1, e.identifierRequired),
+      email: makeEmailField(e),
       reset_code: z.string().trim().min(1, e.resetCodeRequired),
       new_password: z.string().min(8, e.passwordMin),
       confirm_password: z.string().min(1, e.passwordRequired),

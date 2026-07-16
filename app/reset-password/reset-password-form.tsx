@@ -37,7 +37,7 @@ export function ResetPasswordForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
-  const initialIdentifier = searchParams.get("identifier") ?? ""
+  const initialEmail = searchParams.get("email") ?? ""
   const [serverError, setServerError] = useState<string | null>(null)
 
   const schema = useMemo(() => makeResetPasswordFormSchema(ru), [ru])
@@ -49,7 +49,7 @@ export function ResetPasswordForm() {
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      identifier: initialIdentifier,
+      email: initialEmail,
       reset_code: "",
       new_password: "",
       confirm_password: "",
@@ -91,12 +91,13 @@ export function ResetPasswordForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       <Input
-        id="identifier"
-        label={ru.auth.resetPassword.identifierLabel}
-        placeholder={ru.auth.resetPassword.identifierPlaceholder}
-        autoComplete="username"
-        error={errors.identifier?.message}
-        {...register("identifier")}
+        id="email"
+        type="email"
+        label={ru.auth.resetPassword.emailLabel}
+        placeholder={ru.auth.resetPassword.emailPlaceholder}
+        autoComplete="email"
+        error={errors.email?.message}
+        {...register("email")}
       />
       <Input
         id="reset_code"
