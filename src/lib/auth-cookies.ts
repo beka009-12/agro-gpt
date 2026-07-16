@@ -2,7 +2,7 @@ import type { cookies } from "next/headers"
 import { LOCALE_COOKIE, type Locale } from "@/src/i18n/config"
 
 export const TOKEN_COOKIE = "ibo_token"
-export const USER_ID_COOKIE = "ibo_uid"
+const USER_ID_COOKIE = "ibo_uid"
 
 // ibo_user больше не пишется; удаляем при logout, пока живы старые cookie
 const LEGACY_USER_COOKIE = "ibo_user"
