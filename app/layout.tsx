@@ -17,9 +17,29 @@ const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "cyrillic-ext"],
 });
 
+const OG_LOCALES: Record<string, string> = {
+  ru: "ru_RU",
+  ky: "ky_KG",
+  en: "en_US",
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDict();
-  return { title: dict.meta.title, description: dict.meta.description };
+  const locale = await getLocale();
+  return {
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+    ),
+    title: dict.meta.title,
+    description: dict.meta.description,
+    openGraph: {
+      title: dict.meta.title,
+      description: dict.meta.description,
+      siteName: "ibo",
+      type: "website",
+      locale: OG_LOCALES[locale] ?? "ru_RU",
+    },
+  };
 }
 
 export default async function RootLayout({

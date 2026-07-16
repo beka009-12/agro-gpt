@@ -1,21 +1,25 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
+import { PasswordInput } from "@/src/components/ui/password-input"
+import { StepIndicator } from "@/src/components/auth/step-indicator"
+import { StepTransition } from "@/src/components/auth/step-transition"
 import { useI18n } from "@/src/i18n/client"
 import {
-  makeEmailFormSchema,
-  makeOtpFormSchema,
-  type EmailFormValues,
-  type OtpFormValues,
+  makeLoginFormSchema,
+  type LoginFormValues,
 } from "@/src/lib/auth-schemas"
 
-type LoginStep = "email" | "otp"
+const STEP_FIELDS: (keyof LoginFormValues)[][] = [["email"], ["password"]]
+
+const LAST_STEP = STEP_FIELDS.length - 1
 
 interface ErrorBody {
   message: string
@@ -36,184 +40,136 @@ async function readErrorBody(res: Response, fallback: string): Promise<ErrorBody
   return { message: fallback }
 }
 
-async function requestOtp(
-  email: string,
-  fallback: string
-): Promise<ErrorBody | null> {
-  const res = await fetch("/api/auth/otp-request", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  })
-  return res.ok ? null : readErrorBody(res, fallback)
-}
-
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
   const initialEmail = searchParams.get("email") ?? ""
-  const [step, setStep] = useState<LoginStep>("email")
-  const [email, setEmail] = useState("")
   const [serverError, setServerError] = useState<string | null>(null)
-  const [resending, setResending] = useState(false)
+  const [step, setStep] = useState(0)
+  const [direction, setDirection] = useState<1 | -1>(1)
 
-  const emailFormSchema = useMemo(() => makeEmailFormSchema(ru), [ru])
-  const otpFormSchema = useMemo(() => makeOtpFormSchema(ru), [ru])
-
-  const emailForm = useForm<EmailFormValues>({
-    resolver: zodResolver(emailFormSchema),
-    defaultValues: { email: initialEmail },
+  const loginFormSchema = useMemo(() => makeLoginFormSchema(ru), [ru])
+  const {
+    register,
+    handleSubmit,
+    control,
+    trigger,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: { email: initialEmail, password: "" },
   })
 
-  const otpForm = useForm<OtpFormValues>({
-    resolver: zodResolver(otpFormSchema),
-    defaultValues: { otp_code: "" },
-  })
+  const email = useWatch({ control, name: "email" })
 
-  const onEmailSubmit = emailForm.handleSubmit(async (values) => {
+  const goToStep = (next: number) => {
+    setDirection(next > step ? 1 : -1)
+    setStep(next)
+  }
+
+  const submitLogin = async (values: LoginFormValues) => {
     setServerError(null)
     try {
-      const error = await requestOtp(values.email, ru.auth.errors.unavailable)
-      if (error) {
-        if (error.errors?.email) {
-          emailForm.setError("email", { message: error.errors.email })
-        } else {
-          setServerError(error.message)
-        }
-        return
-      }
-      setEmail(values.email)
-      setStep("otp")
-    } catch {
-      toast.error(ru.auth.errors.network)
-    }
-  })
-
-  const onOtpSubmit = otpForm.handleSubmit(async (values) => {
-    setServerError(null)
-    try {
-      const res = await fetch("/api/auth/otp-verify", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp_code: values.otp_code }),
+        body: JSON.stringify(values),
       })
       if (!res.ok) {
-        const { message, errors } = await readErrorBody(
+        const { message, errors: fieldErrors } = await readErrorBody(
           res,
           ru.auth.errors.unavailable
         )
-        if (errors?.otp_code) {
-          otpForm.setError("otp_code", { message: errors.otp_code })
-        } else {
-          setServerError(message)
+        let matched = false
+        for (const [field, fieldMessage] of Object.entries(fieldErrors ?? {})) {
+          if (field in values) {
+            setError(field as keyof LoginFormValues, { message: fieldMessage })
+            matched = true
+          }
         }
+        setServerError(matched ? null : message)
         return
       }
       router.push("/chat")
     } catch {
       toast.error(ru.auth.errors.network)
     }
-  })
+  }
 
-  const onResend = async () => {
-    setServerError(null)
-    setResending(true)
-    try {
-      const error = await requestOtp(email, ru.auth.errors.unavailable)
-      if (error) {
-        setServerError(error.message)
-      } else {
-        toast.success(ru.auth.login.resendDone)
-      }
-    } catch {
-      toast.error(ru.auth.errors.network)
-    } finally {
-      setResending(false)
+  // react-hook-form's handleSubmit() always validates the FULL zod schema
+  // (both steps' fields) before invoking its callback — so on step 0 it
+  // would block on step 1's still-empty password field and never call our
+  // step-branching logic. Branch BEFORE touching handleSubmit; only the
+  // true final step needs (and gets) full-schema validation.
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (step < LAST_STEP) {
+      const ok = await trigger(STEP_FIELDS[step])
+      if (ok) goToStep(step + 1)
+      return
     }
-  }
-
-  const onChangeEmail = () => {
-    setServerError(null)
-    otpForm.reset()
-    setStep("email")
-  }
-
-  const serverErrorBlock = serverError && (
-    <p
-      className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-      role="alert"
-    >
-      {serverError}
-    </p>
-  )
-
-  if (step === "email") {
-    return (
-      <form onSubmit={onEmailSubmit} noValidate className="flex flex-col gap-4">
-        <Input
-          id="email"
-          type="email"
-          label={ru.auth.login.emailLabel}
-          placeholder={ru.auth.login.emailPlaceholder}
-          autoComplete="email"
-          error={emailForm.formState.errors.email?.message}
-          {...emailForm.register("email")}
-        />
-        {serverErrorBlock}
-        <Button
-          type="submit"
-          loading={emailForm.formState.isSubmitting}
-          className="mt-1"
-        >
-          {ru.auth.login.submitEmail}
-        </Button>
-      </form>
-    )
+    await handleSubmit(submitLogin)()
   }
 
   return (
-    <form onSubmit={onOtpSubmit} noValidate className="flex flex-col gap-4">
-      <p className="text-sm text-fg-muted">
-        {ru.auth.login.otpSentPrefix}{" "}
-        <span className="font-medium text-fg">{email}</span>
-      </p>
-      <Input
-        id="otp_code"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        autoFocus
-        label={ru.auth.login.otpLabel}
-        placeholder={ru.auth.login.otpPlaceholder}
-        className="tracking-[0.3em]"
-        error={otpForm.formState.errors.otp_code?.message}
-        {...otpForm.register("otp_code")}
-      />
-      {serverErrorBlock}
-      <Button
-        type="submit"
-        loading={otpForm.formState.isSubmitting}
-        className="mt-1"
-      >
-        {ru.auth.login.submitOtp}
-      </Button>
-      <div className="flex items-center justify-between text-sm">
-        <button
-          type="button"
-          onClick={onResend}
-          disabled={resending}
-          className="text-fg-muted transition-colors hover:text-fg disabled:cursor-not-allowed disabled:opacity-60"
+    <form onSubmit={onFormSubmit} noValidate className="flex flex-col gap-4">
+      <StepIndicator steps={ru.auth.login.steps} current={step} />
+      <StepTransition stepKey={step} direction={direction}>
+        <div className="flex flex-col gap-4">
+          {step === 0 && (
+            <Input
+              id="email"
+              type="email"
+              label={ru.auth.login.emailLabel}
+              placeholder={ru.auth.login.emailPlaceholder}
+              autoComplete="email"
+              autoFocus
+              error={errors.email?.message}
+              {...register("email")}
+            />
+          )}
+          {step === 1 && (
+            <PasswordInput
+              id="password"
+              label={ru.auth.login.passwordLabel}
+              autoComplete="current-password"
+              autoFocus
+              showLabel={ru.auth.common.showPassword}
+              hideLabel={ru.auth.common.hidePassword}
+              error={errors.password?.message}
+              {...register("password")}
+            />
+          )}
+        </div>
+      </StepTransition>
+      {serverError && (
+        <p
+          className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
+          role="alert"
         >
-          {ru.auth.login.resend}
-        </button>
-        <button
-          type="button"
-          onClick={onChangeEmail}
-          className="font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-        >
-          {ru.auth.login.changeEmail}
-        </button>
+          {serverError}
+        </p>
+      )}
+      <div className="mt-1 flex items-center gap-3">
+        {step > 0 && (
+          <Button type="button" variant="ghost" onClick={() => goToStep(step - 1)}>
+            {ru.auth.common.back}
+          </Button>
+        )}
+        <Button type="submit" loading={isSubmitting} className="flex-1">
+          {step < LAST_STEP ? ru.auth.common.next : ru.auth.login.submit}
+        </Button>
       </div>
+      {step === LAST_STEP && (
+        <Link
+          href={`/forgot-password${email ? `?email=${encodeURIComponent(email)}` : ""}`}
+          className="text-center text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+        >
+          {ru.auth.login.forgotPassword}
+        </Link>
+      )}
     </form>
   )
 }

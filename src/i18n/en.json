@@ -1,7 +1,27 @@
 {
   "meta": {
     "title": "ibo — AI agronomist in your pocket",
-    "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English."
+    "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English.",
+    "login": {
+      "title": "ibo — sign in",
+      "description": "Sign in to ibo with your email and password."
+    },
+    "register": {
+      "title": "ibo — sign up",
+      "description": "Create an ibo account — an AI agronomist in your pocket."
+    },
+    "forgotPassword": {
+      "title": "ibo — forgot password",
+      "description": "Regain access to your ibo account."
+    },
+    "resetPassword": {
+      "title": "ibo — new password",
+      "description": "Set a new password for your ibo account."
+    },
+    "chat": {
+      "title": "ibo — chat",
+      "description": "Chat with the ibo AI agronomist."
+    }
   },
   "languageSwitcher": {
     "ky": "Кыргызча",
@@ -282,7 +302,7 @@
     "imageChipNote": "Image ready to send",
     "removeImageLabel": "Remove photo",
     "sendLabel": "Send",
-    "logout": "Log out",
+    "newChat": "New chat",
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
       "imageTooLarge": "File is too large — attach a photo up to 10 MB"
@@ -292,43 +312,75 @@
     "register": {
       "title": "Create an account",
       "subtitle": "A couple of fields — and the AI agronomist is working for you.",
+      "steps": [
+        "Contacts",
+        "Password",
+        "Language"
+      ],
       "nameLabel": "Name",
       "namePlaceholder": "Asan Asanov",
-      "phoneLabel": "Phone",
-      "phonePlaceholder": "+996700123456",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "emailHint": "Needed to sign in again with a code",
-      "emailWarning": "Without an email you won't be able to sign in from another device",
-      "regionLabel": "Region",
-      "regionPlaceholder": "Chüy region",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPasswordLabel": "Confirm password",
       "languageLabel": "Answer language",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
       "loginLink": "Sign in",
-      "alreadyRegistered": "This number is already registered. Taking you to sign in with a code."
+      "alreadyRegistered": "This email is already registered. Taking you to sign in."
     },
     "login": {
       "title": "Sign in to ibo",
-      "subtitle": "No password needed — we'll email you a code.",
+      "subtitle": "Enter your email and password.",
+      "steps": [
+        "Email",
+        "Password"
+      ],
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "submitEmail": "Send code",
-      "otpSentPrefix": "Code sent to",
-      "otpLabel": "Code from the email",
-      "otpPlaceholder": "123456",
-      "submitOtp": "Sign in",
-      "resend": "Send the code again",
-      "resendDone": "Code sent again",
-      "changeEmail": "Change email",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "forgotPassword": "Forgot password?",
       "noAccount": "No account?",
       "registerLink": "Create account"
     },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email — we'll send a reset code.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Send code",
+      "sent": "If an account exists, a code has been sent",
+      "backToLogin": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "subtitle": "Enter the code from the email and a new password.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "codeLabel": "Reset code",
+      "codePlaceholder": "123456",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "submit": "Save password",
+      "success": "Password updated — sign in with your new password",
+      "backToLogin": "Back to sign in"
+    },
+    "common": {
+      "back": "Back",
+      "next": "Next",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
     "errors": {
       "nameMin": "Name must be at least 2 characters",
-      "phoneFormat": "Phone: 9–15 digits, may start with +",
       "emailFormat": "Check the email format",
-      "otpFormat": "The code must contain digits only",
+      "emailRequired": "Enter your email",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordMismatch": "Passwords do not match",
+      "passwordRequired": "Enter your password",
+      "resetCodeRequired": "Enter the code from the email",
       "network": "No connection. Check your internet",
       "unavailable": "Service is temporarily unavailable",
       "checkData": "Please check your data",

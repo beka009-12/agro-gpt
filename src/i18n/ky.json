@@ -1,7 +1,27 @@
 {
   "meta": {
     "title": "ibo — чөнтөгүңүздөгү AI-агроном",
-    "description": "Өсүмдүк ооруларын сүрөт аркылуу аныктоо жана AI-агрономдун кеңештери. Кыргызча, орусча жана англисче."
+    "description": "Өсүмдүк ооруларын сүрөт аркылуу аныктоо жана AI-агрономдун кеңештери. Кыргызча, орусча жана англисче.",
+    "login": {
+      "title": "ibo — кирүү",
+      "description": "ibo'го email жана сырсөз менен кириңиз."
+    },
+    "register": {
+      "title": "ibo — каттоо",
+      "description": "ibo аккаунтун түзүңүз — чөнтөгүңүздөгү AI-агроном."
+    },
+    "forgotPassword": {
+      "title": "ibo — сырсөздү унуттуңуз",
+      "description": "ibo аккаунтуна кирүүнү калыбына келтириңиз."
+    },
+    "resetPassword": {
+      "title": "ibo — жаңы сырсөз",
+      "description": "ibo аккаунту үчүн жаңы сырсөз коюңуз."
+    },
+    "chat": {
+      "title": "ibo — чат",
+      "description": "ibo AI-агроному менен чат."
+    }
   },
   "languageSwitcher": {
     "ky": "Кыргызча",
@@ -282,7 +302,7 @@
     "imageChipNote": "Сүрөт жөнөтүүгө даяр",
     "removeImageLabel": "Сүрөттү өчүрүү",
     "sendLabel": "Жөнөтүү",
-    "logout": "Чыгуу",
+    "newChat": "Жаңы чат",
     "errors": {
       "failed": "Жооп алуу мүмкүн болгон жок. Кайра аракет кылыңыз.",
       "imageTooLarge": "Файл өтө чоң — 10 МБга чейинки сүрөт тиркеңиз"
@@ -292,43 +312,75 @@
     "register": {
       "title": "Аккаунт түзүңүз",
       "subtitle": "Бир-эки талаа — жана AI-агроном сиз үчүн иштеп баштайт.",
+      "steps": [
+        "Байланыш",
+        "Сырсөз",
+        "Тил"
+      ],
       "nameLabel": "Аты-жөнү",
       "namePlaceholder": "Асан Асанов",
-      "phoneLabel": "Телефон",
-      "phonePlaceholder": "+996700123456",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "emailHint": "Код менен кайра кирүү үчүн керек",
-      "emailWarning": "Email жок болсо, башка түзмөктөн аккаунтуңузга кире албайсыз",
-      "regionLabel": "Аймак",
-      "regionPlaceholder": "Чүй облусу",
+      "passwordLabel": "Сырсөз",
+      "passwordPlaceholder": "Кеминде 8 белги",
+      "confirmPasswordLabel": "Сырсөздү кайталаңыз",
       "languageLabel": "Жооп тили",
       "submit": "Аккаунт түзүү",
       "haveAccount": "Аккаунтуңуз барбы?",
       "loginLink": "Кирүү",
-      "alreadyRegistered": "Бул номер мурунтан катталган. Код менен кирүүгө өтөбүз."
+      "alreadyRegistered": "Бул email мурунтан катталган. Кирүүгө өтөбүз."
     },
     "login": {
       "title": "ibo'го кирүү",
-      "subtitle": "Сырсөздүн кереги жок — кодду email аркылуу жөнөтөбүз.",
+      "subtitle": "Email жана сырсөздү киргизиңиз.",
+      "steps": [
+        "Email",
+        "Сырсөз"
+      ],
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "submitEmail": "Код жөнөтүү",
-      "otpSentPrefix": "Код жөнөтүлдү:",
-      "otpLabel": "Каттагы код",
-      "otpPlaceholder": "123456",
-      "submitOtp": "Кирүү",
-      "resend": "Кодду кайра жөнөтүү",
-      "resendDone": "Код кайра жөнөтүлдү",
-      "changeEmail": "Email'ди өзгөртүү",
+      "passwordLabel": "Сырсөз",
+      "submit": "Кирүү",
+      "forgotPassword": "Сырсөздү унуттуңузбу?",
       "noAccount": "Аккаунт жокпу?",
       "registerLink": "Аккаунт түзүү"
     },
+    "forgotPassword": {
+      "title": "Сырсөздү унуттуңуз",
+      "subtitle": "Email көрсөтүңүз — сброс кодун жөнөтөбүз.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Код жөнөтүү",
+      "sent": "Эгер аккаунт бар болсо, код жөнөтүлдү",
+      "backToLogin": "Кирүүгө кайтуу"
+    },
+    "resetPassword": {
+      "title": "Жаңы сырсөз",
+      "subtitle": "Каттагы кодду жана жаңы сырсөздү киргизиңиз.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "codeLabel": "Сброс коду",
+      "codePlaceholder": "123456",
+      "newPasswordLabel": "Жаңы сырсөз",
+      "confirmPasswordLabel": "Сырсөздү кайталаңыз",
+      "submit": "Сырсөздү сактоо",
+      "success": "Сырсөз жаңыртылды — жаңы сырсөз менен кириңиз",
+      "backToLogin": "Кирүүгө кайтуу"
+    },
+    "common": {
+      "back": "Артка",
+      "next": "Кийинки",
+      "showPassword": "Сырсөздү көрсөтүү",
+      "hidePassword": "Сырсөздү жашыруу"
+    },
     "errors": {
       "nameMin": "Аты-жөнү — кеминде 2 белги",
-      "phoneFormat": "Телефон: 9–15 цифра, + менен болушу мүмкүн",
       "emailFormat": "Email форматын текшериңиз",
-      "otpFormat": "Код — сандар гана",
+      "emailRequired": "Email киргизиңиз",
+      "passwordMin": "Сырсөз — кеминде 8 белги",
+      "passwordMismatch": "Сырсөздөр дал келген жок",
+      "passwordRequired": "Сырсөздү киргизиңиз",
+      "resetCodeRequired": "Каттагы кодду киргизиңиз",
       "network": "Байланыш жок. Интернетти текшериңиз",
       "unavailable": "Кызмат убактылуу жеткиликсиз",
       "checkData": "Маалыматтардын тууралыгын текшериңиз",

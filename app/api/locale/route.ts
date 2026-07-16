@@ -27,7 +27,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const token = store.get(TOKEN_COOKIE)?.value
   if (token) {
     try {
-      await apiFetch("/user/me/language", {
+      await apiFetch("/api/profile", {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ language }),

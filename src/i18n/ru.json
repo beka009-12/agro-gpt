@@ -1,7 +1,27 @@
 {
   "meta": {
     "title": "ibo — AI-агроном в вашем кармане",
-    "description": "Диагностика болезней растений по фото и советы агронома от AI. На кыргызском, русском и английском."
+    "description": "Диагностика болезней растений по фото и советы агронома от AI. На кыргызском, русском и английском.",
+    "login": {
+      "title": "ibo — вход",
+      "description": "Войдите в ibo по email и паролю."
+    },
+    "register": {
+      "title": "ibo — регистрация",
+      "description": "Создайте аккаунт ibo — AI-агроном в вашем кармане."
+    },
+    "forgotPassword": {
+      "title": "ibo — забыли пароль",
+      "description": "Восстановите доступ к аккаунту ibo."
+    },
+    "resetPassword": {
+      "title": "ibo — новый пароль",
+      "description": "Задайте новый пароль для аккаунта ibo."
+    },
+    "chat": {
+      "title": "ibo — чат",
+      "description": "Чат с AI-агрономом ibo."
+    }
   },
   "languageSwitcher": {
     "ky": "Кыргызча",
@@ -282,7 +302,7 @@
     "imageChipNote": "Изображение готово к отправке",
     "removeImageLabel": "Удалить фото",
     "sendLabel": "Отправить",
-    "logout": "Выйти",
+    "newChat": "Новый чат",
     "errors": {
       "failed": "Не получилось получить ответ. Попробуйте ещё раз.",
       "imageTooLarge": "Файл слишком большой — приложите фото до 10 МБ"
@@ -292,43 +312,75 @@
     "register": {
       "title": "Создайте аккаунт",
       "subtitle": "Пара полей — и AI-агроном уже работает на вас.",
+      "steps": [
+        "Контакты",
+        "Пароль",
+        "Язык"
+      ],
       "nameLabel": "Имя",
       "namePlaceholder": "Асан Асанов",
-      "phoneLabel": "Телефон",
-      "phonePlaceholder": "+996700123456",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "emailHint": "Нужен для повторного входа по коду",
-      "emailWarning": "Без email вы не сможете войти в аккаунт с другого устройства",
-      "regionLabel": "Регион",
-      "regionPlaceholder": "Чуйская область",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Минимум 8 символов",
+      "confirmPasswordLabel": "Повторите пароль",
       "languageLabel": "Язык ответов",
       "submit": "Создать аккаунт",
       "haveAccount": "Уже есть аккаунт?",
       "loginLink": "Войти",
-      "alreadyRegistered": "Этот номер уже зарегистрирован. Переходим ко входу по коду."
+      "alreadyRegistered": "Эта почта уже зарегистрирована. Переходим ко входу."
     },
     "login": {
       "title": "Вход в ibo",
-      "subtitle": "Пароль не нужен — пришлём код на email.",
+      "subtitle": "Введите email и пароль.",
+      "steps": [
+        "Email",
+        "Пароль"
+      ],
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
-      "submitEmail": "Отправить код",
-      "otpSentPrefix": "Код отправлен на",
-      "otpLabel": "Код из письма",
-      "otpPlaceholder": "123456",
-      "submitOtp": "Войти",
-      "resend": "Отправить код ещё раз",
-      "resendDone": "Код отправлен повторно",
-      "changeEmail": "Изменить email",
+      "passwordLabel": "Пароль",
+      "submit": "Войти",
+      "forgotPassword": "Забыли пароль?",
       "noAccount": "Нет аккаунта?",
       "registerLink": "Создать аккаунт"
     },
+    "forgotPassword": {
+      "title": "Забыли пароль",
+      "subtitle": "Укажите email — отправим код для сброса пароля.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Отправить код",
+      "sent": "Если аккаунт существует, код отправлен",
+      "backToLogin": "Вернуться ко входу"
+    },
+    "resetPassword": {
+      "title": "Новый пароль",
+      "subtitle": "Введите код из письма и новый пароль.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "codeLabel": "Код сброса",
+      "codePlaceholder": "123456",
+      "newPasswordLabel": "Новый пароль",
+      "confirmPasswordLabel": "Повторите пароль",
+      "submit": "Сохранить пароль",
+      "success": "Пароль обновлён — теперь войдите с новым паролем",
+      "backToLogin": "Вернуться ко входу"
+    },
+    "common": {
+      "back": "Назад",
+      "next": "Далее",
+      "showPassword": "Показать пароль",
+      "hidePassword": "Скрыть пароль"
+    },
     "errors": {
       "nameMin": "Имя — минимум 2 символа",
-      "phoneFormat": "Телефон: 9–15 цифр, можно с +",
       "emailFormat": "Проверьте формат email",
-      "otpFormat": "Код — только цифры",
+      "emailRequired": "Введите email",
+      "passwordMin": "Пароль — минимум 8 символов",
+      "passwordMismatch": "Пароли не совпадают",
+      "passwordRequired": "Введите пароль",
+      "resetCodeRequired": "Введите код из письма",
       "network": "Нет соединения. Проверьте интернет",
       "unavailable": "Сервис временно недоступен",
       "checkData": "Проверьте правильность данных",

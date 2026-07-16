@@ -89,9 +89,7 @@ function useMounted(): boolean {
 function toFormValues(profile: UserProfile): ProfileFormValues {
   return {
     full_name: profile.full_name,
-    phone: profile.phone,
     email: profile.email ?? "",
-    region: profile.region ?? "",
   }
 }
 
@@ -314,7 +312,7 @@ export function ProfileMenu({
               {profile.full_name}
             </strong>
             <small className="block truncate text-[12px] text-header-fg-muted">
-              {profile.phone || p.menuHint}
+              {profile.email || p.menuHint}
             </small>
           </span>
           <ChevronRightIcon size={16} className="shrink-0 text-fg-faint" />
@@ -379,30 +377,13 @@ export function ProfileMenu({
                       {...register("full_name")}
                     />
                     <Input
-                      id="profile_phone"
-                      type="tel"
-                      label={dict.auth.register.phoneLabel}
-                      autoComplete="tel"
-                      error={errors.phone?.message}
-                      {...register("phone")}
-                    />
-                    <Input
                       id="profile_email"
                       type="email"
                       label={dict.auth.register.emailLabel}
                       autoComplete="email"
-                      hint={dict.auth.register.emailHint}
                       error={errors.email?.message}
                       {...register("email")}
                     />
-                    <Input
-                      id="profile_region"
-                      label={dict.auth.register.regionLabel}
-                      placeholder={dict.auth.register.regionPlaceholder}
-                      error={errors.region?.message}
-                      {...register("region")}
-                    />
-
                     <div className="rounded-2xl border border-edge bg-bg p-4">
                       <div className="flex items-center justify-between gap-3">
                         <span className="flex items-center gap-2 text-sm font-extrabold text-fg">

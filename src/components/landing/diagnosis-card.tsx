@@ -10,7 +10,7 @@ import {
   type IconProps,
 } from "@/src/components/ui/icons"
 
-export interface DiagnosisCase {
+interface DiagnosisCase {
   crop: string
   title: string
   note: string

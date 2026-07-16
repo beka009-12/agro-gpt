@@ -3,10 +3,10 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
+import { setAuthCookies } from "@/src/lib/auth-cookies"
 import {
   loginResponseSchema,
-  makeRegisterFormSchema,
+  makeLoginFormSchema,
 } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
   try {
     const body: unknown = await request.json().catch(() => null)
-    const parsed = makeRegisterFormSchema(ru).safeParse(body)
+    const parsed = makeLoginFormSchema(ru).safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
         { message: ru.auth.errors.checkData },
@@ -25,13 +25,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { full_name, email, password, language } = parsed.data
+    const { email, password } = parsed.data
     const data = await apiFetch(
-      "/api/auth/register",
+      "/api/auth/login",
       {
         method: "POST",
         body: JSON.stringify({
-          full_name,
           email,
           password,
           device_info: request.headers.get("user-agent"),
@@ -42,7 +41,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const login = loginResponseSchema.safeParse(data)
     if (!login.success) {
-      console.error("[auth/register] unexpected API response:", data)
+      console.error("[auth/login] unexpected API response:", data)
       return NextResponse.json(
         { message: ru.auth.errors.unexpectedResponse },
         { status: 502 }
@@ -55,26 +54,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       expiresAt: login.data.expires_at,
       userId: login.data.user_id,
     })
-    setLocaleCookie(store, language)
-
-    // бэк не принимает language при регистрации — сохраняем отдельным
-    // вызовом; ошибка здесь не должна ронять регистрацию
-    try {
-      await apiFetch(
-        "/api/profile",
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${login.data.access_token}` },
-          body: JSON.stringify({ language }),
-        },
-        apiMsgs
-      )
-    } catch (error) {
-      console.error(
-        "[auth/register] language patch failed (non-blocking):",
-        error
-      )
-    }
 
     return NextResponse.json({ ok: true })
   } catch (error) {
@@ -84,7 +63,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: error.status }
       )
     }
-    console.error("[auth/register]", error)
+    console.error("[auth/login]", error)
     return NextResponse.json(
       { message: ru.auth.errors.unavailable },
       { status: 500 }

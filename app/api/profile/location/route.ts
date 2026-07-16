@@ -35,7 +35,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     }
 
     const data = await apiFetch(
-      "/user/me/location",
+      "/api/profile/location",
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
