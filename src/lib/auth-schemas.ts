@@ -1,17 +1,6 @@
 import { z } from "zod"
 import type { Dictionary } from "@/src/i18n/dictionaries"
 
-const PHONE_REGEX = /^\+?\d{9,15}$/
-
-export function isPhoneLike(value: string): boolean {
-  return PHONE_REGEX.test(value.trim())
-}
-
-export function splitIdentifier(value: string): { phone?: string; email?: string } {
-  const trimmed = value.trim()
-  return isPhoneLike(trimmed) ? { phone: trimmed } : { email: trimmed }
-}
-
 export function makeEmailField(e: Dictionary["auth"]["errors"]) {
   return z.string().trim().min(1, e.emailRequired).pipe(z.email(e.emailFormat))
 }
