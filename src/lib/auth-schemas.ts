@@ -12,6 +12,10 @@ export function splitIdentifier(value: string): { phone?: string; email?: string
   return isPhoneLike(trimmed) ? { phone: trimmed } : { email: trimmed }
 }
 
+export function makeEmailField(e: Dictionary["auth"]["errors"]) {
+  return z.string().trim().min(1, e.emailRequired).pipe(z.email(e.emailFormat))
+}
+
 export function makeRegisterFormSchema(dict: Dictionary) {
   const e = dict.auth.errors
   return z
@@ -36,7 +40,7 @@ export type RegisterFormValues = z.infer<
 export function makeLoginFormSchema(dict: Dictionary) {
   const e = dict.auth.errors
   return z.object({
-    identifier: z.string().trim().min(1, e.identifierRequired),
+    email: makeEmailField(e),
     password: z.string().min(1, e.passwordRequired),
   })
 }

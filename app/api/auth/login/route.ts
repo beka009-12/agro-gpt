@@ -7,7 +7,6 @@ import { setAuthCookies } from "@/src/lib/auth-cookies"
 import {
   loginResponseSchema,
   makeLoginFormSchema,
-  splitIdentifier,
 } from "@/src/lib/auth-schemas"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -26,13 +25,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { identifier, password } = parsed.data
+    const { email, password } = parsed.data
     const data = await apiFetch(
       "/api/auth/login",
       {
         method: "POST",
         body: JSON.stringify({
-          ...splitIdentifier(identifier),
+          email,
           password,
           device_info: request.headers.get("user-agent"),
         }),

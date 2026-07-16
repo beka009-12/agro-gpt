@@ -17,7 +17,7 @@ import {
   type LoginFormValues,
 } from "@/src/lib/auth-schemas"
 
-const STEP_FIELDS: (keyof LoginFormValues)[][] = [["identifier"], ["password"]]
+const STEP_FIELDS: (keyof LoginFormValues)[][] = [["email"], ["password"]]
 
 const LAST_STEP = STEP_FIELDS.length - 1
 
@@ -44,7 +44,7 @@ export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dict: ru } = useI18n()
-  const initialIdentifier = searchParams.get("identifier") ?? ""
+  const initialEmail = searchParams.get("email") ?? ""
   const [serverError, setServerError] = useState<string | null>(null)
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
@@ -59,10 +59,10 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: { identifier: initialIdentifier, password: "" },
+    defaultValues: { email: initialEmail, password: "" },
   })
 
-  const identifier = useWatch({ control, name: "identifier" })
+  const email = useWatch({ control, name: "email" })
 
   const goToStep = (next: number) => {
     setDirection(next > step ? 1 : -1)
@@ -120,13 +120,14 @@ export function LoginForm() {
         <div className="flex flex-col gap-4">
           {step === 0 && (
             <Input
-              id="identifier"
-              label={ru.auth.login.identifierLabel}
-              placeholder={ru.auth.login.identifierPlaceholder}
-              autoComplete="username"
+              id="email"
+              type="email"
+              label={ru.auth.login.emailLabel}
+              placeholder={ru.auth.login.emailPlaceholder}
+              autoComplete="email"
               autoFocus
-              error={errors.identifier?.message}
-              {...register("identifier")}
+              error={errors.email?.message}
+              {...register("email")}
             />
           )}
           {step === 1 && (
@@ -163,7 +164,7 @@ export function LoginForm() {
       </div>
       {step === LAST_STEP && (
         <Link
-          href={`/forgot-password${identifier ? `?identifier=${encodeURIComponent(identifier)}` : ""}`}
+          href={`/forgot-password${email ? `?email=${encodeURIComponent(email)}` : ""}`}
           className="text-center text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
         >
           {ru.auth.login.forgotPassword}
