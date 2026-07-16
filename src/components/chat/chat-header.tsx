@@ -1,11 +1,15 @@
-import Link from "next/link"
-import { getDict } from "@/src/i18n/server"
-import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
-import { PlantIcon } from "@/src/components/ui/icons"
-import { LogoutButton } from "./logout-button"
+"use client"
 
-export async function ChatHeader() {
-  const ru = await getDict()
+import Link from "next/link"
+import { useI18n } from "@/src/i18n/client"
+import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
+import { ProfileMenu, useProfile } from "@/src/components/layout/profile-menu"
+import { PlantIcon } from "@/src/components/ui/icons"
+
+export function ChatHeader() {
+  const { dict: ru } = useI18n()
+  const { profile, setProfile } = useProfile()
+
   return (
     <header className="flex items-center gap-3 border-b border-edge bg-card px-4 py-3.5 sm:px-6">
       <Link
@@ -35,8 +39,12 @@ export async function ChatHeader() {
           {ru.chat.status}
         </p>
       </div>
-      <LanguageSwitcher />
-      <LogoutButton />
+      <div className="flex items-center gap-2 lg:hidden">
+        <LanguageSwitcher />
+        {profile && (
+          <ProfileMenu profile={profile} onProfileChange={setProfile} />
+        )}
+      </div>
     </header>
   )
 }
