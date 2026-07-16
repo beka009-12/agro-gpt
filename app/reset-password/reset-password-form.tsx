@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
+import { PasswordInput } from "@/src/components/ui/password-input"
 import { useI18n } from "@/src/i18n/client"
 import {
   makeResetPasswordFormSchema,
@@ -105,19 +106,21 @@ export function ResetPasswordForm() {
         error={errors.reset_code?.message}
         {...register("reset_code")}
       />
-      <Input
+      <PasswordInput
         id="new_password"
-        type="password"
         label={ru.auth.resetPassword.newPasswordLabel}
         autoComplete="new-password"
+        showLabel={ru.auth.common.showPassword}
+        hideLabel={ru.auth.common.hidePassword}
         error={errors.new_password?.message}
         {...register("new_password")}
       />
-      <Input
+      <PasswordInput
         id="confirm_password"
-        type="password"
         label={ru.auth.resetPassword.confirmPasswordLabel}
         autoComplete="new-password"
+        showLabel={ru.auth.common.showPassword}
+        hideLabel={ru.auth.common.hidePassword}
         error={errors.confirm_password?.message}
         {...register("confirm_password")}
       />
