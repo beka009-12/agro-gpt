@@ -488,13 +488,7 @@ export function RegisterForm() {
     setStep(next)
   }
 
-  const onSubmit = handleSubmit(async (values) => {
-    if (step < LAST_STEP) {
-      const ok = await trigger(STEP_FIELDS[step])
-      if (ok) goToStep(step + 1)
-      return
-    }
-
+  const submitRegistration = async (values: RegisterFormValues) => {
     setServerError(null)
     try {
       const res = await fetch("/api/auth/register", {
@@ -526,10 +520,25 @@ export function RegisterForm() {
     } catch {
       toast.error(ru.auth.errors.network)
     }
-  })
+  }
+
+  // react-hook-form's handleSubmit() always validates the FULL zod schema
+  // (all three steps' fields) before invoking its callback — so on step 0
+  // it would block on step 1/2's still-empty fields and never call our
+  // step-branching logic. Branch BEFORE touching handleSubmit; only the
+  // true final step needs (and gets) full-schema validation.
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (step < LAST_STEP) {
+      const ok = await trigger(STEP_FIELDS[step])
+      if (ok) goToStep(step + 1)
+      return
+    }
+    await handleSubmit(submitRegistration)()
+  }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <form onSubmit={onFormSubmit} noValidate className="flex flex-col gap-4">
       <StepIndicator steps={ru.auth.register.steps} current={step} />
       <StepTransition stepKey={step} direction={direction}>
         <div className="flex flex-col gap-4">
@@ -724,13 +733,7 @@ export function LoginForm() {
     setStep(next)
   }
 
-  const onSubmit = handleSubmit(async (values) => {
-    if (step < LAST_STEP) {
-      const ok = await trigger(STEP_FIELDS[step])
-      if (ok) goToStep(step + 1)
-      return
-    }
-
+  const submitLogin = async (values: LoginFormValues) => {
     setServerError(null)
     try {
       const res = await fetch("/api/auth/login", {
@@ -757,10 +760,25 @@ export function LoginForm() {
     } catch {
       toast.error(ru.auth.errors.network)
     }
-  })
+  }
+
+  // react-hook-form's handleSubmit() always validates the FULL zod schema
+  // (both steps' fields) before invoking its callback — so on step 0 it
+  // would block on step 1's still-empty password field and never call our
+  // step-branching logic. Branch BEFORE touching handleSubmit; only the
+  // true final step needs (and gets) full-schema validation.
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (step < LAST_STEP) {
+      const ok = await trigger(STEP_FIELDS[step])
+      if (ok) goToStep(step + 1)
+      return
+    }
+    await handleSubmit(submitLogin)()
+  }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <form onSubmit={onFormSubmit} noValidate className="flex flex-col gap-4">
       <StepIndicator steps={ru.auth.login.steps} current={step} />
       <StepTransition stepKey={step} direction={direction}>
         <div className="flex flex-col gap-4">
