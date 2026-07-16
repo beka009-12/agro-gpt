@@ -82,7 +82,7 @@ export function ResetPasswordForm() {
         return
       }
       toast.success(ru.auth.resetPassword.success)
-      router.push("/login")
+      router.push(`/login?email=${encodeURIComponent(values.email)}`)
     } catch {
       toast.error(ru.auth.errors.network)
     }
