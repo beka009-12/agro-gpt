@@ -95,17 +95,13 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { full_name, phone, email } = parsed.data
+    const { full_name, email } = parsed.data
     const data = await apiFetch(
       "/api/profile",
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          full_name,
-          phone,
-          email: email || null,
-        }),
+        body: JSON.stringify({ full_name, email }),
       },
       apiMsgs
     )
