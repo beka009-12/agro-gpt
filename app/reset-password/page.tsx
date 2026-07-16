@@ -5,9 +5,13 @@ import { AuthCard } from "@/src/components/auth/auth-card"
 import { getDict } from "@/src/i18n/server"
 import { ResetPasswordForm } from "./reset-password-form"
 
-export const metadata: Metadata = {
-  title: "ibo — новый пароль",
-  description: "Задайте новый пароль для аккаунта ibo.",
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDict()
+  return {
+    title: dict.meta.resetPassword.title,
+    description: dict.meta.resetPassword.description,
+    robots: { index: false },
+  }
 }
 
 export default async function ResetPasswordPage() {

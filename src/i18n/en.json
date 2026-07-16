@@ -1,7 +1,27 @@
 {
   "meta": {
     "title": "ibo — AI agronomist in your pocket",
-    "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English."
+    "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English.",
+    "login": {
+      "title": "ibo — sign in",
+      "description": "Sign in to ibo with your email and password."
+    },
+    "register": {
+      "title": "ibo — sign up",
+      "description": "Create an ibo account — an AI agronomist in your pocket."
+    },
+    "forgotPassword": {
+      "title": "ibo — forgot password",
+      "description": "Regain access to your ibo account."
+    },
+    "resetPassword": {
+      "title": "ibo — new password",
+      "description": "Set a new password for your ibo account."
+    },
+    "chat": {
+      "title": "ibo — chat",
+      "description": "Chat with the ibo AI agronomist."
+    }
   },
   "languageSwitcher": {
     "ky": "Кыргызча",

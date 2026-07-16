@@ -4,9 +4,13 @@ import { AuthCard } from "@/src/components/auth/auth-card"
 import { getDict } from "@/src/i18n/server"
 import { RegisterForm } from "./register-form"
 
-export const metadata: Metadata = {
-  title: "ibo — регистрация",
-  description: "Создайте аккаунт ibo — AI-агроном в вашем кармане.",
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDict()
+  return {
+    title: dict.meta.register.title,
+    description: dict.meta.register.description,
+    robots: { index: false },
+  }
 }
 
 export default async function RegisterPage() {

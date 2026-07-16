@@ -5,9 +5,13 @@ import { AuthCard } from "@/src/components/auth/auth-card"
 import { getDict } from "@/src/i18n/server"
 import { ForgotPasswordForm } from "./forgot-password-form"
 
-export const metadata: Metadata = {
-  title: "ibo — забыли пароль",
-  description: "Восстановите доступ к аккаунту ibo.",
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDict()
+  return {
+    title: dict.meta.forgotPassword.title,
+    description: dict.meta.forgotPassword.description,
+    robots: { index: false },
+  }
 }
 
 export default async function ForgotPasswordPage() {
