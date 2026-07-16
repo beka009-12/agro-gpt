@@ -3,12 +3,17 @@
 import Link from "next/link"
 import { useI18n } from "@/src/i18n/client"
 import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
-import { ProfileMenu, useProfile } from "@/src/components/layout/profile-menu"
+import { ProfileMenu } from "@/src/components/layout/profile-menu"
+import type { UserProfile } from "@/src/lib/profile-schemas"
 import { PlantIcon } from "@/src/components/ui/icons"
 
-export function ChatHeader() {
+interface ChatHeaderProps {
+  profile: UserProfile | null
+  onProfileChange: (profile: UserProfile | null) => void
+}
+
+export function ChatHeader({ profile, onProfileChange }: ChatHeaderProps) {
   const { dict: ru } = useI18n()
-  const { profile, setProfile } = useProfile()
 
   return (
     <header className="flex items-center gap-3 border-b border-edge bg-card px-4 py-3.5 sm:px-6">
@@ -42,7 +47,7 @@ export function ChatHeader() {
       <div className="flex items-center gap-2 lg:hidden">
         <LanguageSwitcher />
         {profile && (
-          <ProfileMenu profile={profile} onProfileChange={setProfile} />
+          <ProfileMenu profile={profile} onProfileChange={onProfileChange} />
         )}
       </div>
     </header>

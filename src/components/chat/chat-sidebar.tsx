@@ -5,16 +5,22 @@ import { useI18n } from "@/src/i18n/client"
 import { PlusIcon } from "@/src/components/ui/icons"
 import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
 import { LogoMark } from "@/src/components/layout/logo"
-import { ProfileMenu, useProfile } from "@/src/components/layout/profile-menu"
+import { ProfileMenu } from "@/src/components/layout/profile-menu"
+import type { UserProfile } from "@/src/lib/profile-schemas"
 
 interface ChatSidebarProps {
   onNewChat: () => void
+  profile: UserProfile | null
+  onProfileChange: (profile: UserProfile | null) => void
 }
 
 /** Левая панель чата: бренд, новый чат, язык + профиль. Видна только на lg+, на мобильных те же элементы живут в ChatHeader. */
-export function ChatSidebar({ onNewChat }: ChatSidebarProps) {
+export function ChatSidebar({
+  onNewChat,
+  profile,
+  onProfileChange,
+}: ChatSidebarProps) {
   const { dict: ru } = useI18n()
-  const { profile, setProfile } = useProfile()
 
   return (
     <aside className="hidden h-full w-72 flex-none flex-col border-r border-edge bg-bg lg:flex">
@@ -43,7 +49,7 @@ export function ChatSidebar({ onNewChat }: ChatSidebarProps) {
       <div className="flex items-center justify-between gap-2 border-t border-edge px-4 py-3.5">
         <LanguageSwitcher />
         {profile && (
-          <ProfileMenu profile={profile} onProfileChange={setProfile} />
+          <ProfileMenu profile={profile} onProfileChange={onProfileChange} />
         )}
       </div>
     </aside>
