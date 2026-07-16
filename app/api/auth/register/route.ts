@@ -25,15 +25,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { full_name, phone, email, password, language } = parsed.data
+    const { full_name, email, password, language } = parsed.data
     const data = await apiFetch(
       "/api/auth/register",
       {
         method: "POST",
         body: JSON.stringify({
           full_name,
-          phone,
-          email: email || null,
+          email,
           password,
           device_info: request.headers.get("user-agent"),
         }),

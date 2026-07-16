@@ -3,7 +3,7 @@
 import { useMemo, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
@@ -24,7 +24,7 @@ const LANGUAGE_OPTIONS = [
 ] as const
 
 const STEP_FIELDS: (keyof RegisterFormValues)[][] = [
-  ["full_name", "phone", "email"],
+  ["full_name", "email"],
   ["password", "confirm_password"],
   ["language"],
 ]
@@ -60,7 +60,6 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
-    control,
     trigger,
     setError,
     formState: { errors, isSubmitting },
@@ -68,15 +67,12 @@ export function RegisterForm() {
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       full_name: "",
-      phone: "",
       email: "",
       password: "",
       confirm_password: "",
       language: "ky",
     },
   })
-
-  const emailValue = useWatch({ control, name: "email" })
 
   const goToStep = (next: number) => {
     setDirection(next > step ? 1 : -1)
@@ -98,7 +94,7 @@ export function RegisterForm() {
         )
         if (res.status === 409) {
           toast(ru.auth.register.alreadyRegistered)
-          router.push(`/login?identifier=${encodeURIComponent(values.phone)}`)
+          router.push(`/login?email=${encodeURIComponent(values.email)}`)
           return
         }
         let matched = false
@@ -144,24 +140,11 @@ export function RegisterForm() {
                 {...register("full_name")}
               />
               <Input
-                id="phone"
-                type="tel"
-                label={ru.auth.register.phoneLabel}
-                placeholder={ru.auth.register.phonePlaceholder}
-                autoComplete="tel"
-                error={errors.phone?.message}
-                {...register("phone")}
-              />
-              <Input
                 id="email"
                 type="email"
                 label={ru.auth.register.emailLabel}
                 placeholder={ru.auth.register.emailPlaceholder}
                 autoComplete="email"
-                hint={ru.auth.register.emailHint}
-                warning={
-                  emailValue.trim() === "" ? ru.auth.register.emailWarning : undefined
-                }
                 error={errors.email?.message}
                 {...register("email")}
               />

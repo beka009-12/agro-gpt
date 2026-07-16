@@ -21,8 +21,7 @@ export function makeRegisterFormSchema(dict: Dictionary) {
   return z
     .object({
       full_name: z.string().trim().min(2, e.nameMin),
-      phone: z.string().trim().regex(PHONE_REGEX, e.phoneFormat),
-      email: z.union([z.email(e.emailFormat), z.literal("")]),
+      email: makeEmailField(e),
       password: z.string().min(8, e.passwordMin),
       confirm_password: z.string().min(1, e.passwordRequired),
       language: z.enum(["ky", "ru", "en"]),
