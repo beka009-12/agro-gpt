@@ -292,7 +292,11 @@
     "register": {
       "title": "Создайте аккаунт",
       "subtitle": "Пара полей — и AI-агроном уже работает на вас.",
-      "steps": ["Контакты", "Пароль", "Язык"],
+      "steps": [
+        "Контакты",
+        "Пароль",
+        "Язык"
+      ],
       "nameLabel": "Имя",
       "namePlaceholder": "Асан Асанов",
       "phoneLabel": "Телефон",
@@ -308,14 +312,19 @@
       "submit": "Создать аккаунт",
       "haveAccount": "Уже есть аккаунт?",
       "loginLink": "Войти",
-      "alreadyRegistered": "Этот номер уже зарегистрирован. Переходим ко входу."
+      "alreadyRegistered": "Эта почта уже зарегистрирована. Переходим ко входу."
     },
     "login": {
       "title": "Вход в ibo",
-      "subtitle": "Введите телефон или email и пароль.",
-      "steps": ["Телефон или email", "Пароль"],
+      "subtitle": "Введите email и пароль.",
+      "steps": [
+        "Email",
+        "Пароль"
+      ],
       "identifierLabel": "Телефон или email",
       "identifierPlaceholder": "+996700123456 или you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "passwordLabel": "Пароль",
       "submit": "Войти",
       "forgotPassword": "Забыли пароль?",
@@ -324,18 +333,22 @@
     },
     "forgotPassword": {
       "title": "Забыли пароль",
-      "subtitle": "Укажите телефон или email — отправим код для сброса пароля.",
+      "subtitle": "Укажите email — отправим код для сброса пароля.",
       "identifierLabel": "Телефон или email",
       "identifierPlaceholder": "+996700123456 или you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "submit": "Отправить код",
       "sent": "Если аккаунт существует, код отправлен",
       "backToLogin": "Вернуться ко входу"
     },
     "resetPassword": {
       "title": "Новый пароль",
-      "subtitle": "Введите код из письма/SMS и новый пароль.",
+      "subtitle": "Введите код из письма и новый пароль.",
       "identifierLabel": "Телефон или email",
       "identifierPlaceholder": "+996700123456 или you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "codeLabel": "Код сброса",
       "codePlaceholder": "123456",
       "newPasswordLabel": "Новый пароль",
@@ -354,11 +367,12 @@
       "nameMin": "Имя — минимум 2 символа",
       "phoneFormat": "Телефон: 9–15 цифр, можно с +",
       "emailFormat": "Проверьте формат email",
+      "emailRequired": "Введите email",
       "passwordMin": "Пароль — минимум 8 символов",
       "passwordMismatch": "Пароли не совпадают",
       "passwordRequired": "Введите пароль",
       "identifierRequired": "Введите телефон или email",
-      "resetCodeRequired": "Введите код из письма/SMS",
+      "resetCodeRequired": "Введите код из письма",
       "network": "Нет соединения. Проверьте интернет",
       "unavailable": "Сервис временно недоступен",
       "checkData": "Проверьте правильность данных",

@@ -292,7 +292,11 @@
     "register": {
       "title": "Аккаунт түзүңүз",
       "subtitle": "Бир-эки талаа — жана AI-агроном сиз үчүн иштеп баштайт.",
-      "steps": ["Байланыш", "Сырсөз", "Тил"],
+      "steps": [
+        "Байланыш",
+        "Сырсөз",
+        "Тил"
+      ],
       "nameLabel": "Аты-жөнү",
       "namePlaceholder": "Асан Асанов",
       "phoneLabel": "Телефон",
@@ -308,14 +312,19 @@
       "submit": "Аккаунт түзүү",
       "haveAccount": "Аккаунтуңуз барбы?",
       "loginLink": "Кирүү",
-      "alreadyRegistered": "Бул номер мурунтан катталган. Кирүүгө өтөбүз."
+      "alreadyRegistered": "Бул email мурунтан катталган. Кирүүгө өтөбүз."
     },
     "login": {
       "title": "ibo'го кирүү",
-      "subtitle": "Телефон же email жана сырсөздү киргизиңиз.",
-      "steps": ["Телефон же email", "Сырсөз"],
+      "subtitle": "Email жана сырсөздү киргизиңиз.",
+      "steps": [
+        "Email",
+        "Сырсөз"
+      ],
       "identifierLabel": "Телефон же email",
       "identifierPlaceholder": "+996700123456 же you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "passwordLabel": "Сырсөз",
       "submit": "Кирүү",
       "forgotPassword": "Сырсөздү унуттуңузбу?",
@@ -324,18 +333,22 @@
     },
     "forgotPassword": {
       "title": "Сырсөздү унуттуңуз",
-      "subtitle": "Телефон же email көрсөтүңүз — сброс коду жөнөтөбүз.",
+      "subtitle": "Email көрсөтүңүз — сброс кодун жөнөтөбүз.",
       "identifierLabel": "Телефон же email",
       "identifierPlaceholder": "+996700123456 же you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "submit": "Код жөнөтүү",
       "sent": "Эгер аккаунт бар болсо, код жөнөтүлдү",
       "backToLogin": "Кирүүгө кайтуу"
     },
     "resetPassword": {
       "title": "Жаңы сырсөз",
-      "subtitle": "Каттагы/SMS'теги кодду жана жаңы сырсөздү киргизиңиз.",
+      "subtitle": "Каттагы кодду жана жаңы сырсөздү киргизиңиз.",
       "identifierLabel": "Телефон же email",
       "identifierPlaceholder": "+996700123456 же you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "codeLabel": "Сброс коду",
       "codePlaceholder": "123456",
       "newPasswordLabel": "Жаңы сырсөз",
@@ -354,11 +367,12 @@
       "nameMin": "Аты-жөнү — кеминде 2 белги",
       "phoneFormat": "Телефон: 9–15 цифра, + менен болушу мүмкүн",
       "emailFormat": "Email форматын текшериңиз",
+      "emailRequired": "Email киргизиңиз",
       "passwordMin": "Сырсөз — кеминде 8 белги",
       "passwordMismatch": "Сырсөздөр дал келген жок",
       "passwordRequired": "Сырсөздү киргизиңиз",
       "identifierRequired": "Телефон же email киргизиңиз",
-      "resetCodeRequired": "Каттагы/SMS'теги кодду киргизиңиз",
+      "resetCodeRequired": "Каттагы кодду киргизиңиз",
       "network": "Байланыш жок. Интернетти текшериңиз",
       "unavailable": "Кызмат убактылуу жеткиликсиз",
       "checkData": "Маалыматтардын тууралыгын текшериңиз",

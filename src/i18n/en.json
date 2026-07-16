@@ -292,7 +292,11 @@
     "register": {
       "title": "Create an account",
       "subtitle": "A couple of fields — and the AI agronomist is working for you.",
-      "steps": ["Contacts", "Password", "Language"],
+      "steps": [
+        "Contacts",
+        "Password",
+        "Language"
+      ],
       "nameLabel": "Name",
       "namePlaceholder": "Asan Asanov",
       "phoneLabel": "Phone",
@@ -308,14 +312,19 @@
       "submit": "Create account",
       "haveAccount": "Already have an account?",
       "loginLink": "Sign in",
-      "alreadyRegistered": "This number is already registered. Taking you to sign in."
+      "alreadyRegistered": "This email is already registered. Taking you to sign in."
     },
     "login": {
       "title": "Sign in to ibo",
-      "subtitle": "Enter your phone or email and password.",
-      "steps": ["Phone or email", "Password"],
+      "subtitle": "Enter your email and password.",
+      "steps": [
+        "Email",
+        "Password"
+      ],
       "identifierLabel": "Phone or email",
       "identifierPlaceholder": "+996700123456 or you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
       "submit": "Sign in",
       "forgotPassword": "Forgot password?",
@@ -324,18 +333,22 @@
     },
     "forgotPassword": {
       "title": "Forgot password",
-      "subtitle": "Enter your phone or email — we'll send a reset code.",
+      "subtitle": "Enter your email — we'll send a reset code.",
       "identifierLabel": "Phone or email",
       "identifierPlaceholder": "+996700123456 or you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "submit": "Send code",
       "sent": "If an account exists, a code has been sent",
       "backToLogin": "Back to sign in"
     },
     "resetPassword": {
       "title": "New password",
-      "subtitle": "Enter the code from the email/SMS and a new password.",
+      "subtitle": "Enter the code from the email and a new password.",
       "identifierLabel": "Phone or email",
       "identifierPlaceholder": "+996700123456 or you@example.com",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
       "codeLabel": "Reset code",
       "codePlaceholder": "123456",
       "newPasswordLabel": "New password",
@@ -354,11 +367,12 @@
       "nameMin": "Name must be at least 2 characters",
       "phoneFormat": "Phone: 9–15 digits, may start with +",
       "emailFormat": "Check the email format",
+      "emailRequired": "Enter your email",
       "passwordMin": "Password must be at least 8 characters",
       "passwordMismatch": "Passwords do not match",
       "passwordRequired": "Enter your password",
       "identifierRequired": "Enter your phone or email",
-      "resetCodeRequired": "Enter the code from the email/SMS",
+      "resetCodeRequired": "Enter the code from the email",
       "network": "No connection. Check your internet",
       "unavailable": "Service is temporarily unavailable",
       "checkData": "Please check your data",
