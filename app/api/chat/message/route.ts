@@ -5,6 +5,7 @@ import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 import {
+  chatCoordsSchema,
   chatCreateResponseSchema,
   chatIdSchema,
   diagnosisResponseSchema,
@@ -91,10 +92,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       chatId = parsed.data.id
     }
 
+    const latitudeRaw = form.get("latitude")
+    const longitudeRaw = form.get("longitude")
+    const coords =
+      latitudeRaw !== null && longitudeRaw !== null
+        ? chatCoordsSchema.safeParse({
+            latitude: latitudeRaw,
+            longitude: longitudeRaw,
+          })
+        : null
+
     const backendForm = new FormData()
     backendForm.set("chat_id", chatId)
     if (trimmedText) backendForm.set("user_text", trimmedText)
     if (hasImage) backendForm.set("user_image", image)
+    if (coords?.success) {
+      backendForm.set("latitude", String(coords.data.latitude))
+      backendForm.set("longitude", String(coords.data.longitude))
+    }
 
     const data = await apiFetch(
       "/diagnosis/",
