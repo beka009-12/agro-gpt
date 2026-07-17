@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/src/i18n/client"
 import { ChatInput } from "./chat-input"
+import { GeoWarningBanner } from "./geo-warning-banner"
 import { MessageList } from "./message-list"
 import type { ChatMessage } from "./types"
+import { useChatGeo } from "./use-chat-geo"
 
 interface MessageResponse {
   chatId: string
@@ -38,9 +40,14 @@ function readErrorMessage(data: unknown): string | null {
   return null
 }
 
-export function ChatView() {
+interface ChatViewProps {
+  hasProfileLocation: boolean
+}
+
+export function ChatView({ hasProfileLocation }: ChatViewProps) {
   const router = useRouter()
   const { dict: ru } = useI18n()
+  const { status: geoStatus, getCoords } = useChatGeo()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
   const chatIdRef = useRef<string | null>(null)
@@ -73,10 +80,16 @@ export function ChatView() {
     setPending(true)
 
     try {
+      const coords = await getCoords()
+
       const form = new FormData()
       if (chatIdRef.current) form.set("chatId", chatIdRef.current)
       if (trimmed) form.set("text", trimmed)
       if (image) form.set("image", image)
+      if (coords) {
+        form.set("latitude", String(coords.latitude))
+        form.set("longitude", String(coords.longitude))
+      }
 
       const res = await fetch("/api/chat/message", { method: "POST", body: form })
       const data: unknown = await res.json().catch(() => null)
@@ -111,6 +124,7 @@ export function ChatView() {
 
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-[800px] flex-1 flex-col">
+      {geoStatus === "denied" && !hasProfileLocation && <GeoWarningBanner />}
       <MessageList
         messages={messages}
         pending={pending}

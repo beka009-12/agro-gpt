@@ -10,6 +10,11 @@ export function ChatShell() {
   const [sessionId, setSessionId] = useState(0)
   const { profile, setProfile } = useProfile()
 
+  const hasProfileLocation =
+    profile !== null &&
+    (profile.location_available ||
+      (profile.latitude !== null && profile.longitude !== null))
+
   return (
     <div className="flex h-dvh overflow-hidden">
       <ChatSidebar
@@ -19,7 +24,7 @@ export function ChatShell() {
       />
       <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-card">
         <ChatHeader profile={profile} onProfileChange={setProfile} />
-        <ChatView key={sessionId} />
+        <ChatView key={sessionId} hasProfileLocation={hasProfileLocation} />
       </main>
     </div>
   )
