@@ -32,7 +32,7 @@
 ### 2. Баннер `src/components/chat/geo-warning-banner.tsx`
 
 - Полоса вверху чата: рендерится в `ChatView` над `MessageList`, внутри колонки `max-w-[800px]`.
-- Вид: полукрасный — `bg-destructive/10`, `border border-destructive/30`, текст тёмно-красным (`text-destructive`), слева иконка предупреждения (треугольник, добавить в `src/components/ui/icons.tsx` по образцу существующих), справа крестик закрытия с aria-label.
+- Вид: полукрасный — `bg-danger/10`, `border border-danger/30`, текст тёмно-красным (`text-danger`; токен `--color-danger` уже в теме), слева иконка предупреждения (треугольник, добавить в `src/components/ui/icons.tsx` по образцу существующих), справа крестик закрытия с aria-label.
 - `role="alert"` для screen reader.
 - Появление — плавное (motion-токены проекта `DURATION`/`EASE_OUT`), с учётом `useReducedMotion` как в остальном UI.
 - Закрытие: крестик пишет флаг в `sessionStorage` (`ibo_geo_banner_dismissed=1`) — скрыт до конца сессии вкладки, при новом заходе появится снова, если разрешения так и нет. Чтение/запись `sessionStorage` в `try/catch` (privacy-режимы).
