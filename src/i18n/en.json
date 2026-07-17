@@ -303,6 +303,10 @@
     "removeImageLabel": "Remove photo",
     "sendLabel": "Send",
     "newChat": "New chat",
+    "geoWarning": {
+      "text": "You haven't allowed location access — diagnosis may be less accurate: without it we can't factor in your local weather.",
+      "dismissLabel": "Hide warning"
+    },
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
       "imageTooLarge": "File is too large — attach a photo up to 10 MB"
