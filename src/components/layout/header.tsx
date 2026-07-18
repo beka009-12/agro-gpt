@@ -34,7 +34,12 @@ export function Header() {
   useEffect(() => {
     if (!menuOpen) return
     const onPointerDown = (e: PointerEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setMenuOpen(false)
+      if (rootRef.current?.contains(e.target as Node)) return
+      // шторка профиля рендерится порталом в body (вне header) — тап в ней
+      // не должен закрывать бургер, иначе ProfileMenu размонтируется вместе с ним
+      if (e.target instanceof Element && e.target.closest("[data-profile-sheet]"))
+        return
+      setMenuOpen(false)
     }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false)
