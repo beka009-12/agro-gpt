@@ -78,26 +78,22 @@
         {
           "crop": "Tomato",
           "title": "Likely nitrogen deficiency",
-          "note": "recommendations ready",
-          "confidence": "92%"
+          "note": "recommendations ready"
         },
         {
           "crop": "Cucumber",
           "title": "Powdery mildew, early stage",
-          "note": "treatment plan ready",
-          "confidence": "87%"
+          "note": "treatment plan ready"
         },
         {
           "crop": "Wheat",
           "title": "Brown leaf rust",
-          "note": "protection steps ready",
-          "confidence": "89%"
+          "note": "protection steps ready"
         },
         {
           "crop": "Apple tree",
           "title": "Apple scab, spread risk",
-          "note": "care advice ready",
-          "confidence": "84%"
+          "note": "care advice ready"
         }
       ]
     }
@@ -295,7 +291,6 @@
       "Check my plant from a photo and give recommendations."
     ],
     "typingTitle": "AI is analyzing the plant…",
-    "typingSubtitle": "Checking symptoms and preparing recommendations",
     "inputPlaceholder": "e.g., my tomato's lower leaves are turning yellow…",
     "attachLabel": "Attach photo",
     "imageChipTitle": "Plant photo",
