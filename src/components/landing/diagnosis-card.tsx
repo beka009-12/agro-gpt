@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import type { ReactElement } from "react"
 import {
   BloomIcon,
@@ -14,7 +15,6 @@ interface DiagnosisCase {
   crop: string
   title: string
   note: string
-  confidence: string
 }
 
 interface DiagnosisCardProps {
@@ -32,22 +32,22 @@ interface CaseVisual {
 const CASE_VISUALS: CaseVisual[] = [
   {
     Icon: PlantIcon,
-    photo: "linear-gradient(140deg,#edf4e2,#d9e9cf)",
+    photo: "/images/nitrogen-deficiency.webp",
     ink: "#1f9153",
   },
   {
     Icon: LeafIcon,
-    photo: "linear-gradient(140deg,#e7f2ec,#d0e6d8)",
+    photo: "/images/powdery-mildew.jpg",
     ink: "#167a41",
   },
   {
     Icon: SproutIcon,
-    photo: "linear-gradient(140deg,#f5efdc,#e9dcba)",
+    photo: "/images/leaf-rust.jpg",
     ink: "#8a6f2e",
   },
   {
     Icon: BloomIcon,
-    photo: "linear-gradient(140deg,#f0f2df,#dde6c6)",
+    photo: "/images/apple-scab.jpg",
     ink: "#5a7d3a",
   },
 ]
@@ -88,39 +88,34 @@ export function DiagnosisCard({ label, status, cases }: DiagnosisCardProps) {
                   : "pointer-events-none opacity-0 translate-y-1.5"
               }`}
             >
-              <div
-                className="relative grid h-[190px] place-items-center overflow-hidden rounded-[20px] sm:h-[220px]"
-                style={{ background: photo, color: ink }}
-              >
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0)_0,rgba(255,255,255,0)_14px,rgba(255,255,255,0.25)_14px,rgba(255,255,255,0.25)_28px)]"
+              <div className="relative h-[190px] overflow-hidden rounded-[20px] sm:h-[220px]">
+                <Image
+                  src={photo}
+                  alt={item.title}
+                  fill
+                  sizes="(min-width: 640px) 480px, 100vw"
+                  className="object-cover"
+                  priority={i === 0}
                 />
-                <Icon size={116} strokeWidth={1.1} className="relative opacity-25" />
                 <span className="absolute bottom-3 left-3 rounded-full bg-white/75 px-3 py-1.5 text-[12px] font-extrabold text-deep backdrop-blur-sm">
                   {item.crop}
                 </span>
               </div>
-              <div className="mt-4 flex items-center justify-between gap-3 rounded-[18px] bg-bg p-3.5">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span
-                    className="grid size-10 shrink-0 place-items-center rounded-xl bg-card"
-                    style={{ color: ink }}
-                  >
-                    <Icon size={19} strokeWidth={1.8} />
-                  </span>
-                  <div className="min-w-0">
-                    <strong className="block text-[13.5px] leading-snug text-fg">
-                      {item.title}
-                    </strong>
-                    <small className="block truncate text-[11.5px] text-fg-faint">
-                      {item.crop} · {item.note}
-                    </small>
-                  </div>
-                </div>
-                <span className="shrink-0 rounded-full bg-mint-soft px-2.5 py-1.5 text-[11px] font-extrabold text-accent-strong">
-                  {item.confidence}
+              <div className="mt-4 flex items-center gap-2.5 rounded-[18px] bg-bg p-3.5">
+                <span
+                  className="grid size-10 shrink-0 place-items-center rounded-xl bg-card"
+                  style={{ color: ink }}
+                >
+                  <Icon size={19} strokeWidth={1.8} />
                 </span>
+                <div className="min-w-0">
+                  <strong className="block text-[13.5px] leading-snug text-fg">
+                    {item.title}
+                  </strong>
+                  <small className="block truncate text-[11.5px] text-fg-faint">
+                    {item.crop} · {item.note}
+                  </small>
+                </div>
               </div>
             </div>
           )
