@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
 import { PaperclipIcon } from "@/src/components/ui/icons"
+import { BotMarkdown } from "./bot-markdown"
 import { EmptyState } from "./empty-state"
 import { TypingIndicator } from "./typing-indicator"
 import type { ChatMessage } from "./types"
@@ -41,9 +42,9 @@ export function MessageList({ messages, pending, onSuggestion }: MessageListProp
         >
           {m.role === "bot" ? (
             <div className="flex justify-start pr-[12%]">
-              <p className="rounded-[18px_18px_18px_6px] bg-[#f0f6ef] px-4 py-3 text-[14px] leading-relaxed text-[#34483d]">
-                {m.text}
-              </p>
+              <div className="min-w-0 rounded-[18px_18px_18px_6px] bg-[#f0f6ef] px-4 py-3 text-[14px] text-[#34483d]">
+                <BotMarkdown text={m.text} />
+              </div>
             </div>
           ) : (
             <div className="flex justify-end pl-[12%]">
