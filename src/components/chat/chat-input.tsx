@@ -33,7 +33,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   return (
     <form
       onSubmit={submit}
-      className="border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(247,251,246,0.98))] px-4 pb-5 pt-4 sm:px-6"
+      className="border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(247,251,246,0.98))] px-4 pb-4 pt-3 sm:px-6"
     >
       <input
         ref={fileRef}
@@ -72,28 +72,28 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
           </button>
         </div>
       )}
-      <div className="rounded-[22px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_13px_34px_rgba(6,78,59,0.09)]">
-        <div className="flex items-center gap-2.5 rounded-[21px] bg-white/[0.97] px-3 py-2.5">
+      <div className="rounded-[18px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_13px_34px_rgba(6,78,59,0.09)] transition-shadow duration-200 focus-within:bg-[linear-gradient(120deg,rgba(22,163,74,0.55),rgba(132,204,22,0.3)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.45))] focus-within:shadow-[0_0_0_4px_rgba(31,145,83,0.14),0_13px_34px_rgba(6,78,59,0.12)]">
+        <div className="flex items-center gap-2 rounded-[17px] bg-white/[0.97] px-2 py-1.5">
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={pending}
             aria-label={ru.chat.attachLabel}
-            className="grid size-11 flex-none place-items-center rounded-[14px] border border-[#d0e5d3] bg-[linear-gradient(180deg,#fff,#f8fbf8)] text-[#52675d] transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-[#9ed2a8] hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
+            className="grid size-10 flex-none place-items-center rounded-[12px] border border-[#d0e5d3] bg-[linear-gradient(180deg,#fff,#f8fbf8)] text-[#52675d] transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-[#9ed2a8] hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <CameraIcon size={19} strokeWidth={2} />
+            <CameraIcon size={18} strokeWidth={2} />
           </button>
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={ru.chat.inputPlaceholder}
-            className="h-11 min-w-0 flex-1 border-none bg-transparent px-1.5 text-[14px] text-fg outline-none placeholder:text-fg-faint"
+            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-[14px] text-fg outline-none placeholder:text-fg-faint"
           />
           <button
             type="submit"
             disabled={pending || (!value.trim() && !image)}
             aria-label={ru.chat.sendLabel}
-            className="grid size-11 flex-none place-items-center rounded-[14px] bg-[linear-gradient(145deg,#1bb052,#12853d)] text-white shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
+            className="grid size-10 flex-none place-items-center rounded-[12px] bg-[linear-gradient(145deg,#1bb052,#12853d)] text-white shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
           >
             <SendIcon size={18} strokeWidth={2} />
           </button>

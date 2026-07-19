@@ -73,6 +73,15 @@ export function PaperclipIcon(props: IconProps) {
   )
 }
 
+export function ArrowLeftIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M19 12H5" />
+      <path d="m11.5 5.5-6.5 6.5 6.5 6.5" />
+    </IconBase>
+  )
+}
+
 export function ArrowUpIcon(props: IconProps) {
   return (
     <IconBase {...props}>

@@ -5,7 +5,7 @@ import { useI18n } from "@/src/i18n/client"
 import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
 import { ProfileMenu } from "@/src/components/layout/profile-menu"
 import type { UserProfile } from "@/src/lib/profile-schemas"
-import { PlantIcon } from "@/src/components/ui/icons"
+import { ArrowLeftIcon, PlantIcon } from "@/src/components/ui/icons"
 
 interface ChatHeaderProps {
   profile: UserProfile | null
@@ -20,10 +20,9 @@ export function ChatHeader({ profile, onProfileChange }: ChatHeaderProps) {
       <Link
         href="/"
         aria-label={ru.chat.back}
-        className="rounded-lg px-2.5 py-1.5 text-[13px] font-semibold text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg"
+        className="grid size-9 flex-none place-items-center rounded-xl text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg"
       >
-        <span aria-hidden className="sm:hidden">←</span>
-        <span className="hidden sm:inline">{ru.chat.back}</span>
+        <ArrowLeftIcon size={20} />
       </Link>
       <span aria-hidden className="h-5 w-px bg-edge" />
       <span
