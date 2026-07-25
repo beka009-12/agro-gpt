@@ -1,17 +1,27 @@
-import { getDict } from "@/src/i18n/server"
-import { AboutIcon, LeafIcon, type AboutIconId } from "@/src/components/ui/icons"
-import { SectionReveal } from "@/src/components/landing/section-reveal"
-import { VolumeLadder } from "@/src/components/about/volume-ladder"
+import { getDict } from "@/src/i18n/server";
+import {
+  AboutIcon,
+  LeafIcon,
+  type AboutIconId,
+} from "@/src/components/ui/icons";
+import { SectionReveal } from "@/src/components/landing/section-reveal";
+import { VolumeLadder } from "@/src/components/about/volume-ladder";
 
-const POINT_ICONS: AboutIconId[] = ["flask", "consult", "scheme", "globe", "leaf"]
-const COMPOSITION_ICONS: AboutIconId[] = ["leaf", "flask", "renew", "bloom"]
+const POINT_ICONS: AboutIconId[] = [
+  "flask",
+  "consult",
+  "scheme",
+  "globe",
+  "leaf",
+];
+const COMPOSITION_ICONS: AboutIconId[] = ["leaf", "flask", "renew", "bloom"];
 const COMPOSITION_TONES = [
   "bg-mint-soft text-accent-strong",
   "bg-tan-soft text-tan-strong",
-]
+];
 
 export async function CompanyProduct() {
-  const ru = await getDict()
+  const ru = await getDict();
   return (
     <section className="bg-card px-4 pb-16">
       <div className="mx-auto grid max-w-6xl lg:grid-cols-[0.92fr_1.08fr] lg:gap-5">
@@ -68,7 +78,7 @@ export async function CompanyProduct() {
             <p className="mt-3.5 text-[14.5px] leading-relaxed text-fg-muted">
               {ru.about.product.description}
             </p>
-            <ul className="mt-6 grid grid-cols-2 gap-2.5">
+            <ul className="mt-6 flex flex-col gap-2.5">
               {ru.about.product.composition.map((item, i) => (
                 <li
                   key={i}
@@ -101,5 +111,5 @@ export async function CompanyProduct() {
         </SectionReveal>
       </div>
     </section>
-  )
+  );
 }
