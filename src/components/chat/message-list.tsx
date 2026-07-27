@@ -47,7 +47,7 @@ export function MessageList({
       <div
         ref={scrollRef}
         aria-live="polite"
-        className="flex flex-1 flex-col gap-3.5 overflow-y-auto p-4 sm:p-6"
+        className="flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto overscroll-contain p-4 sm:p-6"
       >
         {isEmpty && <EmptyState onSuggestion={onSuggestion} />}
 

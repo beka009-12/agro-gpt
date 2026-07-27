@@ -5,8 +5,10 @@ import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
 import { ChatView } from "./chat-view";
+import { useViewportHeight } from "../hooks/useViewportHeight";
 
 export function ChatShell() {
+  useViewportHeight();
   const [sessionId, setSessionId] = useState(0);
   const { profile, setProfile } = useProfile();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -17,7 +19,10 @@ export function ChatShell() {
       (profile.latitude !== null && profile.longitude !== null));
 
   return (
-    <div className="flex h-dvh overflow-hidden">
+    <div
+      className="flex overflow-hidden"
+      style={{ height: "var(--app-height)" }}
+    >
       <ChatSidebar
         onNewChat={() => setSessionId((id) => id + 1)}
         profile={profile}

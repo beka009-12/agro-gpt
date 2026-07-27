@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import type { FormEvent } from "react"
-import { useI18n } from "@/src/i18n/client"
-import { CameraIcon, SendIcon } from "@/src/components/ui/icons"
+import { useRef, useState } from "react";
+import type { FormEvent } from "react";
+import { useI18n } from "@/src/i18n/client";
+import { CameraIcon, SendIcon } from "@/src/components/ui/icons";
 
 interface ChatInputProps {
-  pending: boolean
-  onSend: (text: string, image?: File) => void
+  pending: boolean;
+  onSend: (text: string, image?: File) => void;
 }
 
 export function ChatInput({ pending, onSend }: ChatInputProps) {
-  const { dict: ru } = useI18n()
-  const [value, setValue] = useState("")
-  const [image, setImage] = useState<File | null>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
+  const { dict: ru } = useI18n();
+  const [value, setValue] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (pending || (!value.trim() && !image)) return
-    onSend(value, image ?? undefined)
-    setValue("")
-    setImage(null)
-  }
+    e.preventDefault();
+    if (pending || (!value.trim() && !image)) return;
+    onSend(value, image ?? undefined);
+    setValue("");
+    setImage(null);
+  };
 
   const onFileChange = () => {
-    const file = fileRef.current?.files?.[0]
-    if (file && !pending) setImage(file)
-    if (fileRef.current) fileRef.current.value = ""
-  }
+    const file = fileRef.current?.files?.[0];
+    if (file && !pending) setImage(file);
+    if (fileRef.current) fileRef.current.value = "";
+  };
 
   return (
     <form
@@ -87,7 +87,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={ru.chat.inputPlaceholder}
-            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-[14px] text-fg outline-none placeholder:text-fg-faint"
+            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint"
           />
           <button
             type="submit"
@@ -100,5 +100,5 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         </div>
       </div>
     </form>
-  )
+  );
 }
