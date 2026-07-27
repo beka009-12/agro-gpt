@@ -1,37 +1,58 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useI18n } from "@/src/i18n/client"
-import { PlusIcon } from "@/src/components/ui/icons"
-import { LanguageSwitcher } from "@/src/components/layout/language-switcher"
-import { LogoMark } from "@/src/components/layout/logo"
-import { ProfileMenu } from "@/src/components/layout/profile-menu"
-import type { UserProfile } from "@/src/lib/profile-schemas"
+import Link from "next/link";
+import { useI18n } from "@/src/i18n/client";
+import { PlusIcon } from "@/src/components/ui/icons";
+import { LanguageSwitcher } from "@/src/components/layout/language-switcher";
+import { LogoMark } from "@/src/components/layout/logo";
+import { ProfileMenu } from "@/src/components/layout/profile-menu";
+import type { UserProfile } from "@/src/lib/profile-schemas";
 
 interface ChatSidebarProps {
-  onNewChat: () => void
-  profile: UserProfile | null
-  onProfileChange: (profile: UserProfile | null) => void
+  onNewChat: () => void;
+  profile: UserProfile | null;
+  onProfileChange: (profile: UserProfile | null) => void;
+
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
-/** Левая панель чата: бренд, новый чат, язык + профиль. Видна только на lg+, на мобильных те же элементы живут в ChatHeader. */
 export function ChatSidebar({
   onNewChat,
   profile,
   onProfileChange,
+  isOpen,
+  onToggle,
 }: ChatSidebarProps) {
-  const { dict: ru } = useI18n()
+  const { dict: ru } = useI18n();
 
   return (
-    <aside className="hidden h-full w-72 flex-none flex-col border-r border-edge bg-bg lg:flex">
-      <Link
-        href="/"
-        aria-label={ru.header.logoAria}
-        className="flex items-center gap-2.5 px-5 pt-6 pb-5"
-      >
-        <LogoMark size={30} />
-        <span className="text-[19px] font-bold tracking-tight text-fg">ibo</span>
-      </Link>
+    <aside
+      className={`hidden lg:flex h-full flex-col border-r border-edge bg-bg transition-all duration-300 overflow-hidden ${
+        isOpen ? "w-72" : "w-0 border-r-0"
+      }`}
+    >
+      <div className="flex items-center justify-between px-5 pt-6 pb-5">
+        <Link
+          href="/"
+          aria-label={ru.header.logoAria}
+          className="flex items-center gap-2.5"
+        >
+          <LogoMark size={30} />
+          <span className="text-[19px] font-bold tracking-tight text-fg">
+            ibo
+          </span>
+        </Link>
+
+        <button
+          type="button"
+          onClick={onToggle}
+          className="rounded-lg p-2 transition-colors cursor-pointer "
+          aria-label="Закрыть боковую панель"
+        >
+          ✕
+        </button>
+      </div>
 
       <div className="px-4">
         <button
@@ -53,5 +74,5 @@ export function ChatSidebar({
         )}
       </div>
     </aside>
-  )
+  );
 }
