@@ -19,7 +19,10 @@ export function ChatShell() {
       (profile.latitude !== null && profile.longitude !== null));
 
   return (
-    <div className="flex " style={{ height: "var(--app-height)" }}>
+    <div
+      className="flex overflow-hidden"
+      style={{ height: "var(--app-height)" }}
+    >
       <ChatSidebar
         onNewChat={() => setSessionId((id) => id + 1)}
         profile={profile}
