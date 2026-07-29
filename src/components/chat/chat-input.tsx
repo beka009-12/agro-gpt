@@ -33,7 +33,18 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   return (
     <form
       onSubmit={submit}
-      className="border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(247,251,246,0.98))] px-4 pb-4 pt-3 sm:px-6"
+      className="
+    sticky
+    bottom-0
+    z-20
+    border-t
+    border-[#e8efe8]
+    bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))]
+    px-4
+    pt-3
+    pb-4
+    sm:px-6
+  "
     >
       <input
         ref={fileRef}
