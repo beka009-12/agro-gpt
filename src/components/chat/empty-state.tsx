@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useI18n } from "@/src/i18n/client"
-import { PlantIcon } from "@/src/components/ui/icons"
+import { useI18n } from "@/src/i18n/client";
+import { PlantIcon } from "@/src/components/ui/icons";
 
 interface EmptyStateProps {
-  onSuggestion: (text: string) => void
+  onSuggestion: (text: string) => void;
 }
 
 export function EmptyState({ onSuggestion }: EmptyStateProps) {
-  const { dict: ru } = useI18n()
+  const { dict: ru } = useI18n();
   return (
-    <div className="m-auto w-full max-w-[640px] px-5 py-8 text-center">
+    <div className="mx-auto pt-16 pb-8 w-full max-w-[640px] px-5 text-center">
       <span
         aria-hidden
         className="mx-auto grid size-[82px] place-items-center rounded-[26px] bg-[linear-gradient(145deg,#e8f8ea,#d5f0d9)] text-accent"
@@ -36,5 +36,5 @@ export function EmptyState({ onSuggestion }: EmptyStateProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

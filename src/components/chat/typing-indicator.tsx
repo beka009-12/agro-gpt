@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { motion, useReducedMotion } from "motion/react"
-import { useI18n } from "@/src/i18n/client"
+import { motion, useReducedMotion } from "motion/react";
+import { useI18n } from "@/src/i18n/client";
 
-const DOTS = [0, 1, 2]
+const DOTS = [0, 1, 2];
 
 export function TypingIndicator() {
-  const { dict: ru } = useI18n()
-  const reduced = useReducedMotion()
+  const { dict: ru } = useI18n();
+  const reduced = useReducedMotion();
 
   return (
     <div className="flex justify-start pr-[12%]">
@@ -33,5 +33,5 @@ export function TypingIndicator() {
         ))}
       </div>
     </div>
-  )
+  );
 }
