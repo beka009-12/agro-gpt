@@ -10,7 +10,7 @@ interface EmptyStateProps {
 export function EmptyState({ onSuggestion }: EmptyStateProps) {
   const { dict: ru } = useI18n();
   return (
-    <div className="mx-auto pt-16 pb-8 w-full max-w-[640px] px-5 text-center">
+    <div className="w-full max-w-[640px] px-5 pb-8 text-center">
       <span
         aria-hidden
         className="mx-auto grid size-[82px] place-items-center rounded-[26px] bg-[linear-gradient(145deg,#e8f8ea,#d5f0d9)] text-accent"
