@@ -22,8 +22,9 @@ export function ChatShell() {
 
   return (
     <div
-      className="fixed inset-x-0 top-0 flex min-h-0 w-full overflow-hidden"
+      className="fixed inset-x-0 flex min-h-0 w-full overflow-hidden"
       style={{
+        top: "var(--app-offset-top, 0px)",
         height: "var(--app-height, 100dvh)",
       }}
     >

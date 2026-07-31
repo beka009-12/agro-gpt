@@ -66,7 +66,6 @@
   }
 }
 
-/* Reset some styles for consistency across browsers */
 input,
 textarea,
 button {
@@ -79,15 +78,10 @@ button {
   }
 }
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-
+html {
   scroll-behavior: smooth;
 }
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

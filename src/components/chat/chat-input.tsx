@@ -47,13 +47,20 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   "
     >
       <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        onChange={onFileChange}
-        tabIndex={-1}
-        aria-hidden
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onFocus={() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "instant",
+            });
+          });
+        }}
+        placeholder={ru.chat.inputPlaceholder}
+        enterKeyHint="send"
+        autoComplete="off"
+        className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint"
       />
       {image && (
         <div className="mb-2.5 flex animate-fade-up items-center justify-between gap-3 rounded-[15px] border border-[#cfe7d3] bg-[linear-gradient(135deg,rgba(235,249,238,0.96),rgba(246,252,246,0.96))] px-3 py-2.5 motion-reduce:animate-none">
