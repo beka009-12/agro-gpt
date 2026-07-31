@@ -1,24 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
 import { ChatView } from "./chat-view";
 import { useViewportHeight } from "../hooks/useViewportHeight";
 
+const DESKTOP_QUERY = "(min-width: 1024px)";
+
 export function ChatShell() {
   useViewportHeight();
 
   const [sessionId, setSessionId] = useState(0);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { profile, setProfile } = useProfile();
+
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_QUERY);
+
+    const syncSidebarWithViewport = () => {
+      setSidebarOpen(media.matches);
+    };
+
+    syncSidebarWithViewport();
+    media.addEventListener("change", syncSidebarWithViewport);
+
+    return () => {
+      media.removeEventListener("change", syncSidebarWithViewport);
+    };
+  }, []);
 
   const hasProfileLocation =
     profile !== null &&
     (profile.location_available ||
       (profile.latitude !== null && profile.longitude !== null));
+
+  const startNewChat = () => {
+    setSessionId((id) => id + 1);
+
+    // На телефоне после выбора действия закрываем drawer,
+    // как это делает мобильный интерфейс ChatGPT.
+    if (!window.matchMedia(DESKTOP_QUERY).matches) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
     <div
@@ -29,11 +56,12 @@ export function ChatShell() {
       }}
     >
       <ChatSidebar
-        onNewChat={() => setSessionId((id) => id + 1)}
+        onNewChat={startNewChat}
         profile={profile}
         onProfileChange={setProfile}
         isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(false)}
+        onToggle={() => setSidebarOpen((open) => !open)}
+        onClose={() => setSidebarOpen(false)}
       />
 
       <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-card">

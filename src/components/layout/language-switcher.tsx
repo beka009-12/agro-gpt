@@ -1,111 +1,124 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState, useSyncExternalStore } from "react"
-import { createPortal } from "react-dom"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useI18n } from "@/src/i18n/client"
-import { LOCALES, type Locale } from "@/src/i18n/config"
-import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useI18n } from "@/src/i18n/client";
+import { LOCALES, type Locale } from "@/src/i18n/config";
+import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens";
 import {
   CheckIcon,
   ChevronDownIcon,
   GlobeIcon,
-} from "@/src/components/ui/icons"
+  XIcon,
+} from "@/src/components/ui/icons";
 
 function useLocaleSwitch() {
-  const router = useRouter()
-  const { locale, dict } = useI18n()
-  const [pending, setPending] = useState(false)
+  const router = useRouter();
+  const { locale, dict } = useI18n();
+  const [pending, setPending] = useState(false);
 
   const switchTo = async (next: Locale) => {
-    if (pending || next === locale) return
-    setPending(true)
+    if (pending || next === locale) return;
+
+    setPending(true);
+
     try {
       await fetch("/api/locale", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ language: next }),
-      })
-      router.refresh()
-    } catch (error) {
-      console.error("[language-switcher]", error)
-    } finally {
-      setPending(false)
-    }
-  }
+      });
 
-  return { locale, dict, pending, switchTo }
+      router.refresh();
+    } catch (error) {
+      console.error("[language-switcher]", error);
+    } finally {
+      setPending(false);
+    }
+  };
+
+  return { locale, dict, pending, switchTo };
 }
 
-const noopSubscribe = () => () => {}
+const noopSubscribe = () => () => {};
 
 /** true после гидратации — портал в body нельзя рендерить на сервере */
 function useMounted(): boolean {
   return useSyncExternalStore(
     noopSubscribe,
     () => true,
-    () => false
-  )
+    () => false,
+  );
 }
 
 interface LanguageSwitcherProps {
-  /** compact — пилюля для хедера; row — широкая строка для бургер-меню */
-  variant?: "compact" | "row"
-  /** вызывается после выбора языка (например, закрыть бургер-меню) */
-  onDone?: () => void
+  /** compact — кнопка для хедера; row — строка для бокового меню */
+  variant?: "compact" | "row";
+  /** вызывается после выбора языка, например для закрытия меню */
+  onDone?: () => void;
 }
 
-/** Кнопка текущего языка; по нажатию снизу выезжает шторка выбора. */
 export function LanguageSwitcher({
   variant = "compact",
   onDone,
 }: LanguageSwitcherProps) {
-  const { locale, dict, pending, switchTo } = useLocaleSwitch()
-  const [open, setOpen] = useState(false)
-  // портал: у хедера есть backdrop-filter, он делает fixed-потомков
-  // относительными к себе — шторку рендерим в body
-  const mounted = useMounted()
-  const sheetRef = useRef<HTMLDivElement>(null)
-  const reduced = useReducedMotion()
+  const { locale, dict, pending, switchTo } = useLocaleSwitch();
+  const [open, setOpen] = useState(false);
+  const mounted = useMounted();
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
-  // Escape + скролл-лок, пока шторка открыта
   useEffect(() => {
-    if (!open) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false)
-      if (e.key === "Tab") {
-        const focusable =
-          sheetRef.current?.querySelectorAll<HTMLElement>("button")
-        if (!focusable?.length) return
-        const first = focusable[0]
-        const last = focusable[focusable.length - 1]
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault()
-          first.focus()
-        }
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
       }
-    }
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    document.addEventListener("keydown", onKeyDown)
-    sheetRef.current
-      ?.querySelector<HTMLElement>("button[aria-pressed='true']")
-      ?.focus()
+
+      if (event.key !== "Tab") return;
+
+      const focusable =
+        sheetRef.current?.querySelectorAll<HTMLElement>("button");
+
+      if (!focusable?.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKeyDown);
+
+    requestAnimationFrame(() => {
+      sheetRef.current
+        ?.querySelector<HTMLElement>("button[aria-pressed='true']")
+        ?.focus();
+    });
+
     return () => {
-      document.body.style.overflow = prevOverflow
-      document.removeEventListener("keydown", onKeyDown)
-    }
-  }, [open])
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   const choose = (code: Locale) => {
-    setOpen(false)
-    onDone?.()
-    void switchTo(code)
-  }
+    setOpen(false);
+    onDone?.();
+    void switchTo(code);
+  };
 
   return (
     <>
@@ -117,11 +130,18 @@ export function LanguageSwitcher({
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-label={dict.languageSwitcher.title}
-          className="flex items-center gap-1.5 rounded-full border border-edge bg-card px-3 py-1.5 text-xs font-bold uppercase text-fg transition-colors hover:border-mint hover:bg-mint-soft disabled:opacity-60"
+          className="group flex h-9 min-w-[70px] flex-none items-center justify-center gap-1.5 rounded-xl border border-edge bg-card px-2.5 text-[13px] font-semibold text-fg shadow-[0_2px_8px_rgba(6,78,59,0.04)] transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:border-[#b8d9bd] hover:bg-mint-soft hover:shadow-[0_5px_14px_rgba(6,78,59,0.08)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <GlobeIcon size={14} className="text-accent" />
-          {locale}
-          <ChevronDownIcon size={12} className="text-fg-faint" />
+          <GlobeIcon size={15} strokeWidth={1.9} className="text-accent" />
+
+          <span className="leading-none tracking-[0.02em]">
+            {locale.toUpperCase()}
+          </span>
+
+          <ChevronDownIcon
+            size={12}
+            className="text-fg-faint transition-transform duration-200 group-aria-expanded:rotate-180"
+          />
         </button>
       ) : (
         <button
@@ -130,18 +150,28 @@ export function LanguageSwitcher({
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={open}
-          className="flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors hover:bg-header-mint-soft disabled:opacity-60"
+          className="group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-left transition-[border-color,background-color] hover:border-edge hover:bg-card disabled:cursor-not-allowed disabled:opacity-60"
         >
           <span
             aria-hidden
-            className="grid size-8 shrink-0 place-items-center rounded-lg bg-header-mint-soft text-header-accent"
+            className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-mint-soft text-accent"
           >
-            <GlobeIcon size={16} />
+            <GlobeIcon size={17} strokeWidth={1.9} />
           </span>
-          <span className="flex-1 text-[15px] font-medium text-header-fg">
-            {dict.languageSwitcher[locale]}
+
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[14px] font-semibold leading-tight text-fg">
+              {dict.languageSwitcher[locale]}
+            </span>
+            <span className="mt-0.5 block text-[11px] font-medium uppercase tracking-[0.08em] text-fg-faint">
+              {locale}
+            </span>
           </span>
-          <ChevronDownIcon size={15} className="text-fg-faint" />
+
+          <ChevronDownIcon
+            size={15}
+            className="flex-none text-fg-faint transition-transform duration-200 group-aria-expanded:rotate-180"
+          />
         </button>
       )}
 
@@ -155,61 +185,132 @@ export function LanguageSwitcher({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: DURATION.fast }}
-                className="fixed inset-0 z-[70] flex items-end justify-center"
+                className="fixed inset-0 z-[70] flex items-end justify-center p-0 sm:items-center sm:p-5"
               >
                 <button
                   type="button"
                   aria-hidden
                   tabIndex={-1}
                   onClick={() => setOpen(false)}
-                  className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-[2px]"
+                  className="absolute inset-0 cursor-default bg-[#10261b]/40 backdrop-blur-[3px]"
                 />
+
                 <motion.div
                   ref={sheetRef}
                   role="dialog"
                   aria-modal="true"
                   aria-label={dict.languageSwitcher.title}
-                  initial={reduced ? { opacity: 0 } : { y: "100%" }}
-                  animate={reduced ? { opacity: 1 } : { y: 0 }}
-                  exit={reduced ? { opacity: 0 } : { y: "100%" }}
-                  transition={{ duration: DURATION.base * 0.7, ease: EASE_OUT }}
-                  className="relative w-full max-w-md rounded-t-[26px] border border-edge bg-card px-5 pb-[max(20px,env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_55px_rgba(6,78,59,0.18)] sm:mb-6 sm:rounded-[26px] sm:pb-5"
+                  initial={
+                    reduced
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: 32, scale: 0.985 }
+                  }
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={
+                    reduced
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: 28, scale: 0.985 }
+                  }
+                  transition={{
+                    duration: DURATION.base * 0.72,
+                    ease: EASE_OUT,
+                  }}
+                  className="relative w-full max-w-[420px] overflow-hidden rounded-t-[26px] border border-edge bg-card shadow-[0_-18px_55px_rgba(6,78,59,0.2)] sm:rounded-[24px] sm:shadow-[0_24px_70px_rgba(6,78,59,0.2)]"
                 >
                   <span
                     aria-hidden
-                    className="mx-auto block h-1 w-10 rounded-full bg-edge"
+                    className="mx-auto mt-2.5 block h-1 w-10 rounded-full bg-edge sm:hidden"
                   />
-                  <p className="mt-4 text-[15px] font-extrabold text-fg">
-                    {dict.languageSwitcher.title}
-                  </p>
-                  <div className="mt-3 grid gap-2">
-                    {LOCALES.map((code) => (
-                      <button
-                        key={code}
-                        type="button"
-                        disabled={pending}
-                        onClick={() => choose(code)}
-                        aria-pressed={code === locale}
-                        className={`flex w-full items-center justify-between rounded-[14px] border px-4 py-3.5 text-left text-[15px] transition-colors disabled:opacity-60 ${
-                          code === locale
-                            ? "border-mint bg-mint-soft font-bold text-accent"
-                            : "border-edge bg-card font-medium text-fg hover:bg-bg"
-                        }`}
-                      >
-                        <span className="flex items-center gap-3">
+
+                  <div className="flex items-center gap-3 border-b border-edge px-4 py-4 sm:px-5">
+                    <span
+                      aria-hidden
+                      className="grid size-10 flex-none place-items-center rounded-[13px] bg-[linear-gradient(145deg,#e9f8eb,#d9f0dc)] text-accent"
+                    >
+                      <GlobeIcon size={20} strokeWidth={1.9} />
+                    </span>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[16px] font-extrabold tracking-[-0.01em] text-fg">
+                        {dict.languageSwitcher.title}
+                      </p>
+                      <p className="mt-0.5 truncate text-[12px] font-medium text-fg-muted">
+                        {dict.languageSwitcher[locale]}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setOpen(false)}
+                      aria-label={`${dict.languageSwitcher.title}: close`}
+                      className="grid size-9 flex-none place-items-center rounded-xl text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg"
+                    >
+                      <XIcon size={18} />
+                    </button>
+                  </div>
+
+                  <div className="grid gap-2 p-3.5 pb-[max(14px,env(safe-area-inset-bottom))] sm:p-4">
+                    {LOCALES.map((code) => {
+                      const active = code === locale;
+
+                      return (
+                        <button
+                          key={code}
+                          type="button"
+                          disabled={pending}
+                          onClick={() => choose(code)}
+                          aria-pressed={active}
+                          className={`group flex w-full items-center gap-3 rounded-[15px] border px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] duration-200 motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 ${
+                            active
+                              ? "border-[#b8ddbf] bg-[linear-gradient(135deg,#f1faf2,#e9f6eb)] shadow-[0_5px_16px_rgba(22,163,74,0.07)]"
+                              : "border-transparent bg-bg/70 hover:-translate-y-px hover:border-edge hover:bg-card hover:shadow-[0_5px_16px_rgba(6,78,59,0.06)]"
+                          }`}
+                        >
                           <span
                             aria-hidden
-                            className={`text-[11px] font-extrabold uppercase ${
-                              code === locale ? "text-accent" : "text-fg-faint"
+                            className={`grid size-10 flex-none place-items-center rounded-[12px] text-[11px] font-extrabold uppercase tracking-[0.07em] ${
+                              active
+                                ? "bg-accent text-white shadow-[0_6px_15px_rgba(22,163,74,0.22)]"
+                                : "border border-edge bg-card text-fg-muted"
                             }`}
                           >
                             {code}
                           </span>
-                          {dict.languageSwitcher[code]}
-                        </span>
-                        {code === locale && <CheckIcon size={16} />}
-                      </button>
-                    ))}
+
+                          <span className="min-w-0 flex-1">
+                            <span
+                              className={`block truncate text-[14px] leading-tight ${
+                                active
+                                  ? "font-bold text-fg"
+                                  : "font-semibold text-fg"
+                              }`}
+                            >
+                              {dict.languageSwitcher[code]}
+                            </span>
+                            <span
+                              className={`mt-1 block text-[11px] font-medium uppercase tracking-[0.08em] ${
+                                active ? "text-accent" : "text-fg-faint"
+                              }`}
+                            >
+                              {code}
+                            </span>
+                          </span>
+
+                          <span
+                            aria-hidden
+                            className={`grid size-8 flex-none place-items-center rounded-full transition-colors ${
+                              active
+                                ? "bg-white text-accent shadow-[0_3px_10px_rgba(6,78,59,0.08)]"
+                                : "bg-transparent text-transparent group-hover:bg-mint-soft"
+                            }`}
+                          >
+                            {active && (
+                              <CheckIcon size={16} strokeWidth={2.2} />
+                            )}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </motion.div>
@@ -218,5 +319,5 @@ export function LanguageSwitcher({
           document.body,
         )}
     </>
-  )
+  );
 }

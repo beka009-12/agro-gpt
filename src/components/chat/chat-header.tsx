@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useI18n } from "@/src/i18n/client";
-import { LanguageSwitcher } from "@/src/components/layout/language-switcher";
 import { ProfileMenu } from "@/src/components/layout/profile-menu";
 import type { UserProfile } from "@/src/lib/profile-schemas";
 import { ArrowLeftIcon, PlantIcon, MenuIcon } from "@/src/components/ui/icons";
@@ -10,30 +9,31 @@ import { ArrowLeftIcon, PlantIcon, MenuIcon } from "@/src/components/ui/icons";
 interface ChatHeaderProps {
   profile: UserProfile | null;
   onProfileChange: (profile: UserProfile | null) => void;
-
-  onOpenSidebar: () => void; // <-- новый проп
-  sidebarOpen: boolean; // <-- новый проп
+  onOpenSidebar: () => void;
+  sidebarOpen: boolean;
 }
 
 export function ChatHeader({
   profile,
   onProfileChange,
   onOpenSidebar,
-  sidebarOpen, // <-- новый проп
+  sidebarOpen,
 }: ChatHeaderProps) {
   const { dict: ru } = useI18n();
 
   return (
-    <header className="flex items-center gap-3 border-b border-edge bg-card px-4 py-3.5 sm:px-6">
-      {!sidebarOpen && (
-        <button
-          type="button"
-          onClick={onOpenSidebar}
-          className="grid size-9 place-items-center rounded-xl text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg"
-        >
-          <MenuIcon size={20} />
-        </button>
-      )}
+    <header className="flex items-center gap-2 border-b border-edge bg-card/95 px-3 py-3 backdrop-blur sm:gap-3 sm:px-6 sm:py-3.5">
+      <button
+        type="button"
+        onClick={onOpenSidebar}
+        aria-label="Открыть боковую панель"
+        aria-expanded={sidebarOpen}
+        className={`grid size-9 flex-none place-items-center rounded-xl text-fg-muted transition-colors hover:bg-mint-soft hover:text-fg ${
+          sidebarOpen ? "lg:hidden" : ""
+        }`}
+      >
+        <MenuIcon size={20} />
+      </button>
 
       <span aria-hidden className="h-5 w-px bg-edge" />
 
@@ -45,7 +45,7 @@ export function ChatHeader({
         <ArrowLeftIcon size={20} />
       </Link>
 
-      <span aria-hidden className="h-5 w-px bg-edge" />
+      <span aria-hidden className="hidden h-5 w-px bg-edge sm:block" />
 
       <span
         aria-hidden
@@ -55,7 +55,7 @@ export function ChatHeader({
       </span>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[15px] font-extrabold text-fg">
+        <p className="truncate text-[14px] font-extrabold text-fg sm:text-[15px]">
           {ru.chat.title}
         </p>
 
@@ -69,7 +69,6 @@ export function ChatHeader({
       </div>
 
       <div className="flex items-center gap-2 lg:hidden">
-        <LanguageSwitcher />
         {profile && (
           <ProfileMenu profile={profile} onProfileChange={onProfileChange} />
         )}

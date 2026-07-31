@@ -19,6 +19,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (pending || (!value.trim() && !image)) return;
+
     onSend(value, image ?? undefined);
     setValue("");
     setImage(null);
@@ -26,6 +27,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
 
   const onFileChange = () => {
     const file = fileRef.current?.files?.[0];
+
     if (file && !pending) setImage(file);
     if (fileRef.current) fileRef.current.value = "";
   };
@@ -33,35 +35,17 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   return (
     <form
       onSubmit={submit}
-      className="
-    relative
-    z-20
-    flex-none
-    border-t
-    border-[#e8efe8]
-    bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))]
-    px-4
-    pt-3
-    pb-[max(1rem,env(safe-area-inset-bottom))]
-    sm:px-6
-  "
+      className="relative z-20 flex-none border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))] px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-3 sm:pb-[max(1rem,env(safe-area-inset-bottom))]"
     >
       <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onFocus={() => {
-          requestAnimationFrame(() => {
-            window.scrollTo({
-              top: 0,
-              behavior: "instant",
-            });
-          });
-        }}
-        placeholder={ru.chat.inputPlaceholder}
-        enterKeyHint="send"
-        autoComplete="off"
-        className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint"
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        onChange={onFileChange}
+        className="sr-only"
+        tabIndex={-1}
       />
+
       {image && (
         <div className="mb-2.5 flex animate-fade-up items-center justify-between gap-3 rounded-[15px] border border-[#cfe7d3] bg-[linear-gradient(135deg,rgba(235,249,238,0.96),rgba(246,252,246,0.96))] px-3 py-2.5 motion-reduce:animate-none">
           <span className="flex min-w-0 items-center gap-2.5">
@@ -71,6 +55,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
             >
               <CameraIcon size={16} strokeWidth={2} />
             </span>
+
             <span className="min-w-0">
               <strong className="block truncate text-[12px] font-extrabold text-[#234637]">
                 {ru.chat.imageChipTitle}
@@ -80,6 +65,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
               </small>
             </span>
           </span>
+
           <button
             type="button"
             onClick={() => setImage(null)}
@@ -90,8 +76,9 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
           </button>
         </div>
       )}
-      <div className="rounded-[18px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_13px_34px_rgba(6,78,59,0.09)] transition-shadow duration-200 focus-within:bg-[linear-gradient(120deg,rgba(22,163,74,0.55),rgba(132,204,22,0.3)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.45))] focus-within:shadow-[0_0_0_4px_rgba(31,145,83,0.14),0_13px_34px_rgba(6,78,59,0.12)]">
-        <div className="flex items-center gap-2 rounded-[17px] bg-white/[0.97] px-2 py-1.5">
+
+      <div className="rounded-[18px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_10px_28px_rgba(6,78,59,0.08)] transition-shadow duration-200 focus-within:bg-[linear-gradient(120deg,rgba(22,163,74,0.55),rgba(132,204,22,0.3)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.45))] focus-within:shadow-[0_0_0_4px_rgba(31,145,83,0.14),0_13px_34px_rgba(6,78,59,0.12)]">
+        <div className="flex min-w-0 items-center gap-2 rounded-[17px] bg-white/[0.97] px-2 py-1.5">
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
@@ -101,12 +88,18 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
           >
             <CameraIcon size={18} strokeWidth={2} />
           </button>
+
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            disabled={pending}
             placeholder={ru.chat.inputPlaceholder}
-            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint"
+            enterKeyHint="send"
+            autoComplete="off"
+            aria-label={ru.chat.inputPlaceholder}
+            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint disabled:cursor-not-allowed disabled:opacity-70"
           />
+
           <button
             type="submit"
             disabled={pending || (!value.trim() && !image)}
