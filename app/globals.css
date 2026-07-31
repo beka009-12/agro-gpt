@@ -66,6 +66,19 @@
   }
 }
 
+/* Reset some styles for consistency across browsers */
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --fallback-app-height: 100dvh;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

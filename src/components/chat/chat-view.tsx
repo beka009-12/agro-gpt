@@ -128,13 +128,15 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-[800px] flex-1 flex-col overflow-hidden">
+    <div className="mx-auto flex min-h-0 w-full max-w-[800px] flex-1 flex-col overflow-hidden">
       {geoStatus === "denied" && !hasProfileLocation && <GeoWarningBanner />}
+
       <MessageList
         messages={messages}
         pending={pending}
         onSuggestion={(text) => void send(text)}
       />
+
       <ChatInput
         pending={pending}
         onSend={(text, image) => void send(text, image)}

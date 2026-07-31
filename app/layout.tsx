@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   return {
     metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
     ),
     title: dict.meta.title,
     description: dict.meta.description,

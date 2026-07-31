@@ -34,15 +34,15 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
     <form
       onSubmit={submit}
       className="
-    sticky
-    bottom-0
+    relative
     z-20
+    flex-none
     border-t
     border-[#e8efe8]
     bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))]
     px-4
     pt-3
-    pb-4
+    pb-[max(1rem,env(safe-area-inset-bottom))]
     sm:px-6
   "
     >
