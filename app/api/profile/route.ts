@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { UpdateProfileRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
@@ -96,12 +97,13 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     }
 
     const { full_name, email } = parsed.data
+    const payload: UpdateProfileRequest = { full_name, email }
     const data = await apiFetch(
       "/api/profile",
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ full_name, email }),
+        body: JSON.stringify(payload),
       },
       apiMsgs
     )

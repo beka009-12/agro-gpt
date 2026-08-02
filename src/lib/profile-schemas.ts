@@ -3,13 +3,16 @@ import type { Dictionary } from "@/src/i18n/dictionaries"
 import { makeEmailField } from "@/src/lib/auth-schemas"
 
 export const userProfileSchema = z.object({
-  id: z.string(),
+  id: z.uuid(),
   full_name: z.string(),
+  phone: z.string().nullable(),
   email: z.string().nullable(),
-  language: z.string(),
+  language: z.enum(["ky", "ru", "en"]),
+  is_active: z.boolean(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
-  location_available: z.boolean().default(false),
+  created_at: z.string(),
+  updated_at: z.string(),
 })
 
 export type UserProfile = z.infer<typeof userProfileSchema>

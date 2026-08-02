@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { LoginRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { setAuthCookies } from "@/src/lib/auth-cookies"
@@ -26,15 +27,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const { email, password } = parsed.data
+    const payload: LoginRequest = {
+      email,
+      password,
+      device_info: request.headers.get("user-agent"),
+    }
     const data = await apiFetch(
       "/api/auth/login",
       {
         method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-          device_info: request.headers.get("user-agent"),
-        }),
+        body: JSON.stringify(payload),
       },
       apiMsgs
     )
@@ -52,7 +54,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     setAuthCookies(store, {
       token: login.data.access_token,
       expiresAt: login.data.expires_at,
-      userId: login.data.user_id,
+      userId: login.data.user.id,
     })
 
     return NextResponse.json({ ok: true })

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { ResetPasswordRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { makeResetPasswordFormSchema } from "@/src/lib/auth-schemas"
@@ -17,15 +18,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const { email, reset_code, new_password } = parsed.data
+    const payload: ResetPasswordRequest = { email, reset_code, new_password }
     await apiFetch(
       "/api/auth/reset-password",
       {
         method: "POST",
-        body: JSON.stringify({
-          email,
-          reset_code,
-          new_password,
-        }),
+        body: JSON.stringify(payload),
       },
       {
         unavailable: ru.auth.errors.unavailable,

@@ -1,12 +1,20 @@
 import { z } from "zod"
+import type {
+  ChatOutSchema,
+  DiagnosisResponseSchema,
+} from "@/src/api/generated/models"
 
-export const chatCreateResponseSchema = z.object({
+export const chatCreateResponseSchema: z.ZodType<
+  Pick<ChatOutSchema, "id">
+> = z.object({
   id: z.uuid(),
 })
 
 export const chatIdSchema = z.uuid()
 
-export const diagnosisResponseSchema = z.object({
+export const diagnosisResponseSchema: z.ZodType<
+  Pick<DiagnosisResponseSchema, "answer">
+> = z.object({
   answer: z.string(),
 })
 

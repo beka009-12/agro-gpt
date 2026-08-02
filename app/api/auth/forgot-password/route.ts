@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { ForgotPasswordRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { makeForgotPasswordFormSchema } from "@/src/lib/auth-schemas"
@@ -16,11 +17,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    const payload: ForgotPasswordRequest = { email: parsed.data.email }
     await apiFetch(
       "/api/auth/forgot-password",
       {
         method: "POST",
-        body: JSON.stringify({ email: parsed.data.email }),
+        body: JSON.stringify(payload),
       },
       {
         unavailable: ru.auth.errors.unavailable,

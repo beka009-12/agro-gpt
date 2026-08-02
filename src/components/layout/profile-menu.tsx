@@ -276,8 +276,7 @@ export function ProfileMenu({
   }
 
   const hasLocation =
-    profile.location_available ||
-    (profile.latitude !== null && profile.longitude !== null)
+    profile.latitude !== null && profile.longitude !== null
   const initials = initialsOf(profile.full_name)
 
   return (

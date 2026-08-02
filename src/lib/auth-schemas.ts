@@ -62,12 +62,24 @@ export type ResetPasswordFormValues = z.infer<
   ReturnType<typeof makeResetPasswordFormSchema>
 >
 
-// Ответ /api/auth/register и /api/auth/login не типизирован в OpenAPI —
-// парсим защитно: обязателен только access_token
+// Backend пока не публикует response_model для auth в OpenAPI,
+// поэтому фактический ответ валидируем вручную.
+const authUserSchema = z.object({
+  id: z.uuid(),
+  full_name: z.string(),
+  phone: z.string().nullable(),
+  email: z.string().nullable(),
+  language: z.enum(["ky", "ru", "en"]),
+  is_active: z.boolean(),
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
+})
+
 export const loginResponseSchema = z.object({
   access_token: z.string().min(1),
-  expires_at: z.string().optional(),
-  full_name: z.string().optional(),
-  language: z.string().optional(),
-  user_id: z.string().optional(),
+  token_type: z.literal("bearer"),
+  expires_at: z.string(),
+  user: authUserSchema,
 })

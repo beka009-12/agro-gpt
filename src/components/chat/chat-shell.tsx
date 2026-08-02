@@ -34,8 +34,8 @@ export function ChatShell() {
 
   const hasProfileLocation =
     profile !== null &&
-    (profile.location_available ||
-      (profile.latitude !== null && profile.longitude !== null));
+    profile.latitude !== null &&
+    profile.longitude !== null;
 
   const startNewChat = () => {
     setSessionId((id) => id + 1);

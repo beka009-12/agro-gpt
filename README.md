@@ -14,8 +14,8 @@
 | Анимации | `motion/react` + общие токены `src/lib/motion-tokens.ts` |
 | Формы и валидация | react-hook-form + zod (`@hookform/resolvers`) |
 | Уведомления | react-hot-toast |
-| Данные | fetch через Route Handlers; настроен `@tanstack/react-query` (провайдер в `app/providers.tsx`) |
-| Типы API | orval — генерация из OpenAPI бэкенда (`npm run generate-api`) |
+| Данные | `fetch` через Route Handlers |
+| Типы API | Orval — fetch-клиент и DTO из OpenAPI бэкенда (`bun run generate-api`) |
 | Шрифты | Plus Jakarta Sans (основной), Manrope (хедер) через `next/font` |
 
 ## Быстрый старт
@@ -23,5 +23,6 @@
 ```bash
 cp .env.example .env.local   # указать API_URL бэкенда
 bun install                  # или npm install
+bun run generate-api        # обновить API-клиент и DTO из openapi.json
 bun dev                      # или npm run dev → http://localhost:3000
-``
+```

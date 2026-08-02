@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { UpdateLocationRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
@@ -34,12 +35,13 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       )
     }
 
+    const payload: UpdateLocationRequest = parsed.data
     const data = await apiFetch(
       "/api/profile/location",
       {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(payload),
       },
       apiMsgs
     )
