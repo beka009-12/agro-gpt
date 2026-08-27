@@ -113,7 +113,7 @@ export const getForgotPasswordApiAuthForgotPasswordPostUrl = () => {
 
 /**
  * Отправляет код сброса пароля на email или SMS (что указано).
- * Ответ одинаковый независимо от того, найден пользователь или нет — чтобы не палить существование аккаунта.
+ * Ответ одинаковый независимо от того, найден пользователь или нет - чтобы не палить существование аккаунта.
  * @summary Forgot Password
  */
 export const forgotPasswordApiAuthForgotPasswordPost = async (forgotPasswordRequest: ForgotPasswordRequest, options?: RequestInit): Promise<unknown> => {

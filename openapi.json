@@ -28,9 +28,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -69,9 +67,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -118,9 +114,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -143,7 +137,7 @@
           "Auth"
         ],
         "summary": "Forgot Password",
-        "description": "Отправляет код сброса пароля на email или SMS (что указано).\nОтвет одинаковый независимо от того, найден пользователь или нет — чтобы не палить существование аккаунта.",
+        "description": "Отправляет код сброса пароля на email или SMS (что указано).\nОтвет одинаковый независимо от того, найден пользователь или нет - чтобы не палить существование аккаунта.",
         "operationId": "forgot_password_api_auth_forgot_password_post",
         "requestBody": {
           "content": {
@@ -160,9 +154,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -201,9 +193,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -250,9 +240,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -312,9 +300,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -364,9 +350,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -428,9 +412,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -618,9 +600,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -808,9 +788,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -830,6 +808,118 @@
             "BearerAuth": []
           }
         ]
+      }
+    },
+    "/top-diseases/": {
+      "get": {
+        "tags": [
+          "Главная страница"
+        ],
+        "summary": "Top Diseases",
+        "operationId": "top_diseases_top_diseases__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TopDiseaseSchema"
+                  },
+                  "type": "array",
+                  "title": "Response Top Diseases Top Diseases  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/top-diseases/{disease_name}/details": {
+      "get": {
+        "tags": [
+          "Главная страница"
+        ],
+        "summary": "Disease Details",
+        "operationId": "disease_details_top_diseases__disease_name__details_get",
+        "parameters": [
+          {
+            "name": "disease_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Disease Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiseaseDetailsResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/disease-map/": {
+      "get": {
+        "tags": [
+          "Главная страница"
+        ],
+        "summary": "Disease Map",
+        "operationId": "disease_map_disease_map__get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20000,
+              "minimum": 1,
+              "default": 5000,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiseaseMapResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/sessions/user/{user_id}": {
@@ -1003,9 +1093,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -1067,9 +1155,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -1097,7 +1183,7 @@
           "Upload"
         ],
         "summary": "Upload Image File",
-        "description": "Принимает реальный файл с устройства пользователя (камера/галерея) —\nв отличие от /upload/image, которому нужна уже готовая внешняя ссылка.\nВозвращает абсолютный URL, готовый для отправки в WebSocket-чат\n(поле \"image\" в сообщении сокета).",
+        "description": "Принимает реальный файл с устройства пользователя (камера/галерея) -\nв отличие от /upload/image, которому нужна уже готовая внешняя ссылка.\nВозвращает абсолютный URL, готовый для отправки в WebSocket-чат\n(поле \"image\" в сообщении сокета).",
         "operationId": "upload_image_file_upload_image_file_post",
         "parameters": [
           {
@@ -1132,9 +1218,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -1191,9 +1275,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           },
@@ -1222,9 +1304,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           }
@@ -1243,9 +1323,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-
-                }
+                "schema": {}
               }
             }
           }
@@ -1527,6 +1605,141 @@
         ],
         "title": "DiagnosisResponseSchema"
       },
+      "DiseaseDetailSchema": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "crop_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crop Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "content"
+        ],
+        "title": "DiseaseDetailSchema",
+        "description": "Один материал из базы знаний. Внутренние оценки и ранги сюда не попадают."
+      },
+      "DiseaseDetailsResponseSchema": {
+        "properties": {
+          "disease_name": {
+            "type": "string",
+            "title": "Disease Name"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/DiseaseDetailSchema"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "disease_name",
+          "sources"
+        ],
+        "title": "DiseaseDetailsResponseSchema"
+      },
+      "DiseaseMapFeatureSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "Feature"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeoJSONGeometrySchema"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DiseaseMapPropertiesSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "geometry",
+          "properties"
+        ],
+        "title": "DiseaseMapFeatureSchema"
+      },
+      "DiseaseMapPropertiesSchema": {
+        "properties": {
+          "disease_name": {
+            "type": "string",
+            "title": "Disease Name"
+          },
+          "crop_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crop Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "disease_name",
+          "created_at"
+        ],
+        "title": "DiseaseMapPropertiesSchema"
+      },
+      "DiseaseMapResponseSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "FeatureCollection"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/components/schemas/DiseaseMapFeatureSchema"
+            },
+            "type": "array",
+            "title": "Features"
+          }
+        },
+        "type": "object",
+        "required": [
+          "features"
+        ],
+        "title": "DiseaseMapResponseSchema",
+        "description": "FeatureCollection как есть, без агрегации по регионам и зумам.\n\nКластеризация и раскраска по плотности - работа фронтенда: стандартная\nбиблиотека вроде Leaflet.markercluster делает это лучше и без похода на сервер\nпри каждом изменении масштаба."
+      },
       "ForgotPasswordRequest": {
         "properties": {
           "phone": {
@@ -1555,6 +1768,27 @@
         },
         "type": "object",
         "title": "ForgotPasswordRequest"
+      },
+      "GeoJSONGeometrySchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "Point"
+          },
+          "coordinates": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Coordinates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "coordinates"
+        ],
+        "title": "GeoJSONGeometrySchema"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1771,6 +2005,30 @@
         ],
         "title": "SessionSafeOutSchema"
       },
+      "TopDiseaseSchema": {
+        "properties": {
+          "disease_name": {
+            "type": "string",
+            "title": "Disease Name"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "is_fallback": {
+            "type": "boolean",
+            "title": "Is Fallback"
+          }
+        },
+        "type": "object",
+        "required": [
+          "disease_name",
+          "count",
+          "is_fallback"
+        ],
+        "title": "TopDiseaseSchema",
+        "description": "Строка топа болезней.\n\nis_fallback отличает наблюдение от заглушки: true означает, что болезнь взята\nиз статичного списка частых болезней зерновых, а не посчитана по диагнозам.\nУ таких строк count всегда 0, и это честно - за окно их не встречали ни разу.\nКлиенту флаг нужен, чтобы не выдавать заглушку за статистику."
+      },
       "UpdateLocationRequest": {
         "properties": {
           "latitude": {
@@ -1886,7 +2144,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT / access token",
-        "description": "Вставьте токен в формате: Bearer \u003Caccess_token\u003E"
+        "description": "Вставьте токен в формате: Bearer <access_token>"
       }
     }
   }
