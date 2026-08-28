@@ -13,7 +13,7 @@ const components: Components = {
     <p className="mb-2.5 leading-relaxed last:mb-0">{children}</p>
   ),
   strong: ({ children }) => (
-    <strong className="font-bold text-[#1d3a2b]">{children}</strong>
+    <strong className="font-bold text-fg">{children}</strong>
   ),
   ul: ({ children }) => (
     <ul className="mb-2.5 list-disc space-y-1.5 pl-5 last:mb-0">{children}</ul>
@@ -23,22 +23,22 @@ const components: Components = {
   ),
   li: ({ children }) => <li className="leading-relaxed">{children}</li>,
   h1: ({ children }) => (
-    <p className="mb-1.5 mt-3 text-[15px] font-extrabold text-[#1d3a2b] first:mt-0">
+    <p className="mb-1.5 mt-3 text-[15px] font-extrabold text-fg first:mt-0">
       {children}
     </p>
   ),
   h2: ({ children }) => (
-    <p className="mb-1.5 mt-3 text-[15px] font-extrabold text-[#1d3a2b] first:mt-0">
+    <p className="mb-1.5 mt-3 text-[15px] font-extrabold text-fg first:mt-0">
       {children}
     </p>
   ),
   h3: ({ children }) => (
-    <p className="mb-1.5 mt-3 text-[14px] font-extrabold text-[#1d3a2b] first:mt-0">
+    <p className="mb-1.5 mt-3 text-[14px] font-extrabold text-fg first:mt-0">
       {children}
     </p>
   ),
   h4: ({ children }) => (
-    <p className="mb-1 mt-2.5 text-[14px] font-bold text-[#1d3a2b] first:mt-0">
+    <p className="mb-1 mt-2.5 text-[14px] font-bold text-fg first:mt-0">
       {children}
     </p>
   ),
@@ -53,16 +53,16 @@ const components: Components = {
     </a>
   ),
   code: ({ children }) => (
-    <code className="rounded bg-[#e3ede1] px-1.5 py-0.5 text-[12.5px]">
+    <code className="rounded bg-surface-muted px-1.5 py-0.5 text-[12.5px]">
       {children}
     </code>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="mb-2.5 border-l-2 border-[#b9d5bd] pl-3 text-[#4a5f52] last:mb-0">
+    <blockquote className="mb-2.5 border-l-2 border-edge pl-3 text-fg-muted last:mb-0">
       {children}
     </blockquote>
   ),
-  hr: () => <hr className="my-3 border-[#d8e6d6]" />,
+  hr: () => <hr className="my-3 border-edge" />,
 }
 
 export function BotMarkdown({ text }: BotMarkdownProps) {

@@ -35,7 +35,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
   return (
     <form
       onSubmit={submit}
-      className="relative z-20 flex-none border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))] px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-3 sm:pb-[max(1rem,env(safe-area-inset-bottom))]"
+      className="relative z-20 flex-none border-t border-edge bg-surface-raised/95 px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-3 sm:pb-[max(1rem,env(safe-area-inset-bottom))]"
     >
       <input
         ref={fileRef}
@@ -47,7 +47,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
       />
 
       {image && (
-        <div className="mb-2.5 flex animate-fade-up items-center justify-between gap-3 rounded-[15px] border border-[#cfe7d3] bg-[linear-gradient(135deg,rgba(235,249,238,0.96),rgba(246,252,246,0.96))] px-3 py-2.5 motion-reduce:animate-none">
+        <div className="mb-2.5 flex items-center justify-between gap-3 rounded-[15px] border border-edge bg-accent-soft px-3 py-2.5">
           <span className="flex min-w-0 items-center gap-2.5">
             <span
               aria-hidden
@@ -57,7 +57,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
             </span>
 
             <span className="min-w-0">
-              <strong className="block truncate text-[12px] font-extrabold text-[#234637]">
+              <strong className="block truncate text-[12px] font-extrabold text-fg">
                 {ru.chat.imageChipTitle}
               </strong>
               <small className="block truncate text-[10px] text-fg-faint">
@@ -84,7 +84,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
             onClick={() => fileRef.current?.click()}
             disabled={pending}
             aria-label={ru.chat.attachLabel}
-            className="grid size-10 flex-none place-items-center rounded-[12px] border border-[#d0e5d3] bg-[linear-gradient(180deg,#fff,#f8fbf8)] text-[#52675d] transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-[#9ed2a8] hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
+            className="grid size-10 flex-none place-items-center rounded-[12px] border border-edge bg-surface-raised text-fg-muted transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-accent hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
           >
             <CameraIcon size={18} strokeWidth={2} />
           </button>
@@ -104,7 +104,7 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
             type="submit"
             disabled={pending || (!value.trim() && !image)}
             aria-label={ru.chat.sendLabel}
-            className="grid size-10 flex-none place-items-center rounded-[12px] bg-[linear-gradient(145deg,#1bb052,#12853d)] text-white shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
+            className="grid size-10 flex-none place-items-center rounded-[12px] bg-accent text-accent-contrast shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
           >
             <SendIcon size={18} strokeWidth={2} />
           </button>

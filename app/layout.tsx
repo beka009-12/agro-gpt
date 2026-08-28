@@ -1,20 +1,29 @@
 import type { Metadata } from "next";
-import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Manrope, Onest } from "next/font/google";
 import { I18nProvider } from "@/src/i18n/client";
 import { getDictionary } from "@/src/i18n/dictionaries";
 import { getDict, getLocale } from "@/src/i18n/server";
 import { Providers } from "./providers";
 import "./globals.css";
 
-// Manrope остаётся только для хедера — его дизайн зафиксирован (см. header.tsx)
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
+  display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin", "cyrillic-ext"],
+const onest = Onest({
+  variable: "--font-onest",
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  preload: false,
 });
 
 const OG_LOCALES: Record<string, string> = {
@@ -52,7 +61,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${plusJakarta.variable} h-full antialiased`}
+      className={`${manrope.variable} ${onest.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <I18nProvider locale={locale} dict={dict}>

@@ -1,114 +1,117 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #f6f2e7;
-  --color-card: #ffffff;
-  --color-section-alt: #fbf9f3;
-  --color-accent: #1f9153;
-  --color-accent-strong: #167a41;
-  --color-deep: #16382a;
-  --color-mint: #d3e6cd;
-  --color-mint-soft: #eaf3e5;
-  --color-tan-soft: #f1ece0;
-  --color-tan-strong: #8a6f2e;
-  --color-lime: #cbe86b;
-  --color-fg: #142a1f;
-  --color-fg-muted: #5c6b60;
-  --color-fg-faint: #8a9285;
-  --color-edge: #e4ddc9;
-  --color-danger: #b3391f;
+  --color-brand: #169653;
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-muted: #f4f6f4;
+  --color-accent: #169653;
+  --color-accent-strong: #0d7440;
+  --color-accent-soft: #e8f5ed;
+  --color-accent-contrast: #ffffff;
+  --color-forest: #0d3b29;
+  --color-fg: #10251a;
+  --color-fg-muted: #55635b;
+  --color-fg-faint: #7a857e;
+  --color-edge: #dce3de;
+  --color-danger: #9f2f2f;
+  --color-warning: #775313;
+  --color-success: #246f45;
 
-  /* хедер закреплён на прежней палитре — см. header.tsx */
-  --color-header-bg: #f6faf4;
-  --color-header-edge: #dcebdc;
-  --color-header-fg: #103626;
-  --color-header-fg-muted: #667085;
-  --color-header-accent: #16a34a;
-  --color-header-accent-strong: #15803d;
-  --color-header-mint-soft: #e8f7eb;
+  /* Temporary compatibility aliases while Tasks 2-9 migrate consumers. */
+  --color-card: var(--color-surface-raised);
+  --color-section-alt: var(--color-surface);
+  --color-deep: var(--color-forest);
+  --color-mint: #b9ddc7;
+  --color-mint-soft: var(--color-accent-soft);
+  --color-tan-soft: var(--color-surface-muted);
+  --color-tan-strong: var(--color-fg-muted);
+  --color-lime: #bfe86f;
+  --color-header-bg: var(--color-surface);
+  --color-header-edge: var(--color-edge);
+  --color-header-fg: var(--color-fg);
+  --color-header-fg-muted: var(--color-fg-muted);
+  --color-header-accent: var(--color-accent);
+  --color-header-accent-strong: var(--color-accent-strong);
+  --color-header-mint-soft: var(--color-accent-soft);
 
-  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
   --font-header: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
-  --animate-sprout-sway: sprout-sway 4s ease-in-out infinite;
-  --animate-floaty: floaty 4s ease-in-out infinite;
-  --animate-fade-up: fade-up 0.25s ease both;
-
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes sprout-sway {
-    0%,
-    100% {
-      transform: rotate(-2deg);
-    }
-    50% {
-      transform: rotate(2deg);
-    }
-  }
-
-  @keyframes floaty {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-  }
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --radius-sheet: 1rem;
 }
 
-input,
-textarea,
-button {
-  font: inherit;
-}
-
-@supports (height: 100dvh) {
-  :root {
-    --fallback-app-height: 100dvh;
-  }
+:root {
+  color-scheme: light;
+  --gradient-brand: linear-gradient(135deg, #0d3b29 0%, #0d7440 52%, #169653 100%);
+  --z-header: 30;
+  --z-drawer: 40;
+  --z-sheet: 50;
+  --z-toast: 60;
+  --app-height: 100dvh;
+  --app-offset-top: 0px;
 }
 
 html {
+  min-width: 320px;
   scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  background: var(--color-bg);
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+.bg-brand-gradient {
+  background-image: var(--gradient-brand);
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 ::selection {
-  background-color: var(--color-accent);
+  background: var(--color-brand);
   color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
-/* Поле чата: фокус показывает капсула-обёртка, а не сам input */
 .chat-input-field:focus-visible {
   outline: none;
 }
 
-.chat-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cdefs%3E%3Cpath id='p' d='M0 -3.5 C-4.5 -10 -4 -18 0 -24 C4 -18 4.5 -10 0 -3.5 Z'/%3E%3C/defs%3E%3Cg fill='none' stroke='%231f9153' stroke-opacity='.09' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(46 50) rotate(10)'%3E%3Cuse href='%23p'/%3E%3Cuse href='%23p' transform='rotate(60)'/%3E%3Cuse href='%23p' transform='rotate(120)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(240)'/%3E%3Cuse href='%23p' transform='rotate(300)'/%3E%3Ccircle r='2.2'/%3E%3C/g%3E%3Cg transform='translate(160 106) rotate(-16) scale(0.8)'%3E%3Cuse href='%23p'/%3E%3Cuse href='%23p' transform='rotate(60)'/%3E%3Cuse href='%23p' transform='rotate(120)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(240)'/%3E%3Cuse href='%23p' transform='rotate(300)'/%3E%3Ccircle r='2.2'/%3E%3C/g%3E%3Cg transform='translate(86 178) rotate(28) scale(0.62)'%3E%3Cuse href='%23p'/%3E%3Cuse href='%23p' transform='rotate(60)'/%3E%3Cuse href='%23p' transform='rotate(120)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(240)'/%3E%3Cuse href='%23p' transform='rotate(300)'/%3E%3Ccircle r='2.2'/%3E%3C/g%3E%3Cg transform='translate(192 26) rotate(44) scale(0.5)'%3E%3Cuse href='%23p'/%3E%3Cuse href='%23p' transform='rotate(60)'/%3E%3Cuse href='%23p' transform='rotate(120)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(240)'/%3E%3Cuse href='%23p' transform='rotate(300)'/%3E%3Ccircle r='2.2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  background-size: 220px 220px;
+@media (prefers-reduced-motion: reduce), (update: slow) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

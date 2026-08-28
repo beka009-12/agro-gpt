@@ -14,7 +14,7 @@ export function EmptyState({ onSuggestion }: EmptyStateProps) {
     <div className="w-full max-w-[640px] px-4 text-center sm:px-5 sm:pb-8">
       <span
         aria-hidden
-        className="mx-auto grid size-14 place-items-center rounded-[18px] bg-[linear-gradient(145deg,#e8f8ea,#d5f0d9)] text-accent shadow-[0_12px_30px_rgba(22,163,74,0.08)] sm:size-[82px] sm:rounded-[26px]"
+        className="mx-auto grid size-14 place-items-center rounded-[18px] bg-accent-soft text-accent shadow-[0_12px_30px_rgba(22,163,74,0.08)] sm:size-[82px] sm:rounded-[26px]"
       >
         <PlantIcon size={28} strokeWidth={1.8} />
       </span>
@@ -37,7 +37,7 @@ export function EmptyState({ onSuggestion }: EmptyStateProps) {
             key={suggestion}
             type="button"
             onClick={() => onSuggestion(suggestion)}
-            className="rounded-[15px] border border-edge bg-card p-3.5 text-left text-[13px] font-medium leading-snug text-[#46584f] transition-[border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-[#9fd3a8] hover:bg-[#f8fcf8] motion-reduce:transform-none"
+            className="rounded-[15px] border border-edge bg-card p-3.5 text-left text-[13px] font-medium leading-snug text-fg-muted transition-[border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-accent hover:bg-surface motion-reduce:transform-none"
           >
             {suggestion}
           </button>

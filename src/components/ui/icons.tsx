@@ -1,351 +1,101 @@
-import type { ReactElement, ReactNode, SVGProps } from "react";
+import type { ReactElement } from "react"
+import type {
+  Icon as PhosphorIcon,
+  IconProps as PhosphorIconProps,
+} from "@phosphor-icons/react"
+import {
+  ArrowLeftIcon as PhosphorArrowLeftIcon,
+  ArrowUpIcon as PhosphorArrowUpIcon,
+  ArrowsClockwiseIcon as PhosphorArrowsClockwiseIcon,
+  CameraIcon as PhosphorCameraIcon,
+  CaretDownIcon as PhosphorCaretDownIcon,
+  CaretRightIcon as PhosphorCaretRightIcon,
+  CheckIcon as PhosphorCheckIcon,
+  ClipboardTextIcon as PhosphorClipboardTextIcon,
+  CloudIcon as PhosphorCloudIcon,
+  EyeIcon as PhosphorEyeIcon,
+  EyeSlashIcon as PhosphorEyeSlashIcon,
+  FarmIcon as PhosphorFarmIcon,
+  FlaskIcon as PhosphorFlaskIcon,
+  FlowerIcon as PhosphorFlowerIcon,
+  GlobeIcon as PhosphorGlobeIcon,
+  HouseIcon as PhosphorHouseIcon,
+  LeafIcon as PhosphorLeafIcon,
+  ListIcon as PhosphorListIcon,
+  MapPinIcon as PhosphorMapPinIcon,
+  PaperclipIcon as PhosphorPaperclipIcon,
+  PaperPlaneTiltIcon as PhosphorPaperPlaneTiltIcon,
+  PlantIcon as PhosphorPlantIcon,
+  PlusIcon as PhosphorPlusIcon,
+  ShieldCheckIcon as PhosphorShieldCheckIcon,
+  StarIcon as PhosphorStarIcon,
+  ThermometerIcon as PhosphorThermometerIcon,
+  TreeStructureIcon as PhosphorTreeStructureIcon,
+  TrendUpIcon as PhosphorTrendUpIcon,
+  UserFocusIcon as PhosphorUserFocusIcon,
+  WarningIcon as PhosphorWarningIcon,
+  XIcon as PhosphorXIcon,
+} from "@phosphor-icons/react/dist/ssr"
 
-export interface IconProps extends SVGProps<SVGSVGElement> {
-  size?: number;
-}
+export type IconProps = PhosphorIconProps
+export const ICON_WEIGHT: NonNullable<IconProps["weight"]> = "regular"
 
-function IconBase({
-  size = 24,
-  children,
-  ...rest
-}: IconProps & { children: ReactNode }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      {...rest}
-    >
-      {children}
-    </svg>
-  );
-}
+type AppIcon = (props: IconProps) => ReactElement
 
-export function MenuIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </IconBase>
-  );
-}
+function createIcon(Icon: PhosphorIcon): AppIcon {
+  return function AppIcon({ size = 24, weight = ICON_WEIGHT, ...props }) {
+    const ariaHidden =
+      props["aria-hidden"] ?? (props.alt || props["aria-label"] ? undefined : true)
 
-export function CameraIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M4.5 8.5a2 2 0 0 1 2-2h1.9l1.2-1.7a1.5 1.5 0 0 1 1.2-.65h2.4a1.5 1.5 0 0 1 1.2.65l1.2 1.7h1.9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2Z" />
-      <circle cx="12" cy="12.5" r="3.25" />
-    </IconBase>
-  );
-}
-
-function FlaskIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M10 3.5h4" />
-      <path d="M10.5 3.5v5L5.9 16.9a2 2 0 0 0 1.8 3.1h8.6a2 2 0 0 0 1.8-3.1L13.5 8.5v-5" />
-      <path d="M7.75 14.5h8.5" />
-    </IconBase>
-  );
-}
-
-export function SproutIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M12 20c0-7 0-11 0-13.6" />
-      <path
-        d="M12 9.6C12 9.6 8.8 8.8 8 12c2.4 1.6 4 0 4-2.4Z"
-        fill="currentColor"
-        stroke="none"
+    return (
+      <Icon
+        {...props}
+        aria-hidden={ariaHidden}
+        size={size}
+        weight={weight}
       />
-      <path
-        d="M12 12.8c0 0 3.2-.8 4 2.4-2.4 1.6-4 0-4-2.4Z"
-        fill="currentColor"
-        stroke="none"
-      />
-      <path d="M8.75 20.5h6.5" />
-    </IconBase>
-  );
+    )
+  }
 }
 
-export function PaperclipIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-    </IconBase>
-  );
-}
+export const MenuIcon = createIcon(PhosphorListIcon)
+export const CameraIcon = createIcon(PhosphorCameraIcon)
+export const SproutIcon = createIcon(PhosphorPlantIcon)
+export const PaperclipIcon = createIcon(PhosphorPaperclipIcon)
+export const ArrowLeftIcon = createIcon(PhosphorArrowLeftIcon)
+export const ArrowUpIcon = createIcon(PhosphorArrowUpIcon)
+export const CheckIcon = createIcon(PhosphorCheckIcon)
+export const ChevronDownIcon = createIcon(PhosphorCaretDownIcon)
+export const HomeIcon = createIcon(PhosphorHouseIcon)
+export const GlobeIcon = createIcon(PhosphorGlobeIcon)
+export const LeafIcon = createIcon(PhosphorLeafIcon)
+export const BloomIcon = createIcon(PhosphorFlowerIcon)
+export const ShieldCheckIcon = createIcon(PhosphorShieldCheckIcon)
+export const PlantIcon = createIcon(PhosphorPlantIcon)
+export const CloudIcon = createIcon(PhosphorCloudIcon)
+export const SendIcon = createIcon(PhosphorPaperPlaneTiltIcon)
+export const MapPinIcon = createIcon(PhosphorMapPinIcon)
+export const ChevronRightIcon = createIcon(PhosphorCaretRightIcon)
+export const PlusIcon = createIcon(PhosphorPlusIcon)
+export const EyeIcon = createIcon(PhosphorEyeIcon)
+export const EyeOffIcon = createIcon(PhosphorEyeSlashIcon)
+export const AlertTriangleIcon = createIcon(PhosphorWarningIcon)
+export const XIcon = createIcon(PhosphorXIcon)
 
-export function ArrowLeftIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M19 12H5" />
-      <path d="m11.5 5.5-6.5 6.5 6.5 6.5" />
-    </IconBase>
-  );
-}
+export type AudienceIconId = "farmer" | "agronomist" | "gardener"
 
-export function ArrowUpIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M12 19V5" />
-      <path d="m5.5 11.5 6.5-6.5 6.5 6.5" />
-    </IconBase>
-  );
-}
-
-export function CheckIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m4.5 12.5 5 5 10-11" />
-    </IconBase>
-  );
-}
-
-export function ChevronDownIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m6 9.5 6 6 6-6" />
-    </IconBase>
-  );
-}
-
-export function HomeIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m4.5 10.5 7.5-6 7.5 6" />
-      <path d="M6.5 9v9.5a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9" />
-      <path d="M10 19.5v-5h4v5" />
-    </IconBase>
-  );
-}
-
-export function GlobeIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <circle cx="12" cy="12" r="8" />
-      <path d="M4 12h16" />
-      <path d="M12 4c2.2 2 3.4 5 3.4 8s-1.2 6-3.4 8c-2.2-2-3.4-5-3.4-8s1.2-6 3.4-8Z" />
-    </IconBase>
-  );
-}
-
-function ConsultIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <circle cx="10" cy="8.5" r="3" />
-      <path d="M4.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
-      <path d="m16.5 12.5 1.6 1.6L21 11" />
-    </IconBase>
-  );
-}
-
-function SchemeIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <rect x="6" y="5" width="12" height="15" rx="1.6" />
-      <path d="M9 4.5h6a1 1 0 0 1 1 1v1H8v-1a1 1 0 0 1 1-1Z" />
-      <path d="M9 11h6M9 14.5h6M9 8h3" />
-    </IconBase>
-  );
-}
-
-export function LeafIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M6 18c-1-5 1-11 12-12 1 8-3 12-8 12-1.5 0-2.8-.2-4-1Z" />
-      <path d="M6 18c1.6-3 4-5.4 8-7.2" />
-    </IconBase>
-  );
-}
-
-function RootsIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M12 4v6" />
-      <path d="M12 10c-1.5 1-2.3 3-2 6M12 10c1.5 1 2.3 3 2 6M12 10c-2.8 1-4.3 3.6-4.5 6.5M12 10c2.8 1 4.3 3.6 4.5 6.5" />
-    </IconBase>
-  );
-}
-
-function GrowthIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m4 16 5-5 3.5 3.5L20 7" />
-      <path d="M14.5 7H20v5.5" />
-    </IconBase>
-  );
-}
-
-function ResilienceIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M11 5.5a2 2 0 1 1 4 0v8.4a4 4 0 1 1-4 0V5.5Z" />
-      <path d="M13 9v5.5" />
-    </IconBase>
-  );
-}
-
-export function BloomIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <circle cx="12" cy="12" r="2" />
-      <circle cx="12" cy="7" r="2.3" />
-      <circle cx="12" cy="17" r="2.3" />
-      <circle cx="7" cy="12" r="2.3" />
-      <circle cx="17" cy="12" r="2.3" />
-    </IconBase>
-  );
-}
-
-function HarvestIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M5 19v-8M12 19V5M19 19v-6" />
-    </IconBase>
-  );
-}
-
-function StarIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m12 4.2 2.2 4.6 5 .7-3.6 3.5.8 5-4.4-2.4-4.4 2.4.8-5-3.6-3.5 5-.7L12 4.2Z" />
-    </IconBase>
-  );
-}
-
-function RenewIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7" />
-      <path d="M17.7 3.5v3.3h-3.3M6.3 20.5v-3.3h3.3" />
-    </IconBase>
-  );
-}
-
-export function ShieldCheckIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m12 3.5 7 2.4v5.4c0 4.6-2.9 7.9-7 9.2-4.1-1.3-7-4.6-7-9.2V5.9l7-2.4Z" />
-      <path d="m9 12 2.2 2.2L15.5 10" />
-    </IconBase>
-  );
-}
-
-export function PlantIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M12 21V9" />
-      <path d="M12 13C7 13 4 10 4 5c5 0 8 3 8 8Z" />
-      <path d="M12 17c5 0 8-3 8-8-5 0-8 3-8 8Z" />
-    </IconBase>
-  );
-}
-
-function FarmerIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M4 21v-8a8 8 0 0 1 16 0v8" />
-      <path d="M9 21v-5h6v5" />
-      <path d="M7 8c2-4 8-4 10 0" />
-    </IconBase>
-  );
-}
-
-function AgronomistIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 21a8 8 0 0 1 16 0" />
-      <path d="M18 4v4M16 6h4" />
-    </IconBase>
-  );
-}
-
-export function CloudIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M8 19a4 4 0 1 1 0-8 6 6 0 0 1 11.5 2A3.5 3.5 0 1 1 19 20H8Z" />
-    </IconBase>
-  );
-}
-
-export function SendIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m22 2-7 20-4-9-9-4Z" />
-      <path d="M22 2 11 13" />
-    </IconBase>
-  );
-}
-
-export function MapPinIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M19.5 10.2c0 5.3-7.5 11.3-7.5 11.3s-7.5-6-7.5-11.3a7.5 7.5 0 0 1 15 0Z" />
-      <circle cx="12" cy="10" r="2.75" />
-    </IconBase>
-  );
-}
-
-export function ChevronRightIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m9 18 6-6-6-6" />
-    </IconBase>
-  );
-}
-
-export function PlusIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M12 5v14" />
-      <path d="M5 12h14" />
-    </IconBase>
-  );
-}
-
-export type AudienceIconId = "farmer" | "agronomist" | "gardener";
-
-const AUDIENCE_ICONS: Record<
-  AudienceIconId,
-  (props: IconProps) => ReactElement
-> = {
-  farmer: FarmerIcon,
-  agronomist: AgronomistIcon,
+const AUDIENCE_ICONS: Record<AudienceIconId, AppIcon> = {
+  farmer: createIcon(PhosphorFarmIcon),
+  agronomist: createIcon(PhosphorUserFocusIcon),
   gardener: PlantIcon,
-};
-
-export function EyeIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M2.5 12S5.5 5.5 12 5.5 21.5 12 21.5 12 18.5 18.5 12 18.5 2.5 12 2.5 12Z" />
-      <circle cx="12" cy="12" r="3" />
-    </IconBase>
-  );
-}
-
-export function EyeOffIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M3 3l18 18" />
-      <path d="M10.6 5.63A9.53 9.53 0 0 1 12 5.5c6.5 0 9.5 6.5 9.5 6.5a14.5 14.5 0 0 1-3.1 3.9M6.6 6.6C4 8.3 2.5 12 2.5 12S5.5 18.5 12 18.5c1.3 0 2.5-.24 3.55-.66" />
-      <path d="M9.9 10.1a3 3 0 0 0 4 4" />
-    </IconBase>
-  );
 }
 
 export function AudienceIcon({
   id,
   ...props
 }: { id: AudienceIconId } & IconProps) {
-  const Component = AUDIENCE_ICONS[id];
-  return <Component {...props} />;
+  const Icon = AUDIENCE_ICONS[id]
+  return <Icon {...props} />
 }
 
 export type AboutIconId =
@@ -361,44 +111,25 @@ export type AboutIconId =
   | "harvest"
   | "star"
   | "renew"
-  | "shield";
+  | "shield"
 
-const ABOUT_ICONS: Record<AboutIconId, (props: IconProps) => ReactElement> = {
-  flask: FlaskIcon,
-  consult: ConsultIcon,
-  scheme: SchemeIcon,
+const ABOUT_ICONS: Record<AboutIconId, AppIcon> = {
+  flask: createIcon(PhosphorFlaskIcon),
+  consult: createIcon(PhosphorUserFocusIcon),
+  scheme: createIcon(PhosphorClipboardTextIcon),
   globe: GlobeIcon,
   leaf: LeafIcon,
-  roots: RootsIcon,
-  growth: GrowthIcon,
-  resilience: ResilienceIcon,
+  roots: createIcon(PhosphorTreeStructureIcon),
+  growth: createIcon(PhosphorTrendUpIcon),
+  resilience: createIcon(PhosphorThermometerIcon),
   bloom: BloomIcon,
-  harvest: HarvestIcon,
-  star: StarIcon,
-  renew: RenewIcon,
+  harvest: createIcon(PhosphorFarmIcon),
+  star: createIcon(PhosphorStarIcon),
+  renew: createIcon(PhosphorArrowsClockwiseIcon),
   shield: ShieldCheckIcon,
-};
+}
 
 export function AboutIcon({ id, ...props }: { id: AboutIconId } & IconProps) {
-  const Component = ABOUT_ICONS[id];
-  return <Component {...props} />;
-}
-
-export function AlertTriangleIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-      <path d="M12 9v4" />
-      <path d="M12 17h.01" />
-    </IconBase>
-  );
-}
-
-export function XIcon(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </IconBase>
-  );
+  const Icon = ABOUT_ICONS[id]
+  return <Icon {...props} />
 }

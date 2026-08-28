@@ -49,7 +49,7 @@ export function ChatHeader({
 
       <span
         aria-hidden
-        className="grid size-9 flex-none place-items-center rounded-xl bg-[linear-gradient(145deg,#16a34a,#064e3b)] text-white"
+        className="grid size-9 flex-none place-items-center rounded-xl bg-accent text-accent-contrast"
       >
         <PlantIcon size={20} strokeWidth={1.8} />
       </span>
@@ -59,7 +59,7 @@ export function ChatHeader({
           {ru.chat.title}
         </p>
 
-        <p className="mt-0.5 hidden items-center gap-1.5 text-xs font-bold text-[#248449] sm:flex">
+        <p className="mt-0.5 hidden items-center gap-1.5 text-xs font-bold text-accent sm:flex">
           <span
             aria-hidden
             className="size-1.5 rounded-full bg-accent shadow-[0_0_0_4px_rgba(34,197,94,0.12)]"

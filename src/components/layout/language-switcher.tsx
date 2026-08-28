@@ -130,7 +130,7 @@ export function LanguageSwitcher({
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-label={dict.languageSwitcher.title}
-          className="group flex h-9 min-w-[70px] flex-none items-center justify-center gap-1.5 rounded-xl border border-edge bg-card px-2.5 text-[13px] font-semibold text-fg shadow-[0_2px_8px_rgba(6,78,59,0.04)] transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:border-[#b8d9bd] hover:bg-mint-soft hover:shadow-[0_5px_14px_rgba(6,78,59,0.08)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
+          className="group flex h-9 min-w-[70px] flex-none items-center justify-center gap-1.5 rounded-xl border border-edge bg-card px-2.5 text-[13px] font-semibold text-fg shadow-[0_2px_8px_rgba(6,78,59,0.04)] transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:border-accent hover:bg-mint-soft hover:shadow-[0_5px_14px_rgba(6,78,59,0.08)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
         >
           <GlobeIcon size={15} strokeWidth={1.9} className="text-accent" />
 
@@ -192,7 +192,7 @@ export function LanguageSwitcher({
                   aria-hidden
                   tabIndex={-1}
                   onClick={() => setOpen(false)}
-                  className="absolute inset-0 cursor-default bg-[#10261b]/40 backdrop-blur-[3px]"
+                  className="absolute inset-0 cursor-default bg-forest/50 backdrop-blur-[3px]"
                 />
 
                 <motion.div
@@ -225,7 +225,7 @@ export function LanguageSwitcher({
                   <div className="flex items-center gap-3 border-b border-edge px-4 py-4 sm:px-5">
                     <span
                       aria-hidden
-                      className="grid size-10 flex-none place-items-center rounded-[13px] bg-[linear-gradient(145deg,#e9f8eb,#d9f0dc)] text-accent"
+                      className="grid size-10 flex-none place-items-center rounded-[13px] bg-accent-soft text-accent"
                     >
                       <GlobeIcon size={20} strokeWidth={1.9} />
                     </span>
@@ -262,7 +262,7 @@ export function LanguageSwitcher({
                           aria-pressed={active}
                           className={`group flex w-full items-center gap-3 rounded-[15px] border px-3 py-3 text-left transition-[border-color,background-color,box-shadow,transform] duration-200 motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 ${
                             active
-                              ? "border-[#b8ddbf] bg-[linear-gradient(135deg,#f1faf2,#e9f6eb)] shadow-[0_5px_16px_rgba(22,163,74,0.07)]"
+                              ? "border-accent bg-accent-soft shadow-[0_5px_16px_rgba(22,163,74,0.07)]"
                               : "border-transparent bg-bg/70 hover:-translate-y-px hover:border-edge hover:bg-card hover:shadow-[0_5px_16px_rgba(6,78,59,0.06)]"
                           }`}
                         >
@@ -270,7 +270,7 @@ export function LanguageSwitcher({
                             aria-hidden
                             className={`grid size-10 flex-none place-items-center rounded-[12px] text-[11px] font-extrabold uppercase tracking-[0.07em] ${
                               active
-                                ? "bg-accent text-white shadow-[0_6px_15px_rgba(22,163,74,0.22)]"
+                                ? "bg-accent text-accent-contrast shadow-[0_6px_15px_rgba(22,163,74,0.22)]"
                                 : "border border-edge bg-card text-fg-muted"
                             }`}
                           >

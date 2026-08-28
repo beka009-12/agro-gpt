@@ -68,7 +68,7 @@ export function MessageList({
           >
             {m.role === "bot" ? (
               <div className="flex justify-start pr-[12%]">
-                <div className="min-w-0 rounded-[18px_18px_18px_6px] bg-[#f0f6ef] px-4 py-3 text-[14px] text-[#34483d]">
+                <div className="min-w-0 rounded-[18px_18px_18px_6px] bg-surface-muted px-4 py-3 text-[14px] text-fg-muted">
                   <BotMarkdown text={m.text} />
                 </div>
               </div>
@@ -90,7 +90,7 @@ export function MessageList({
                   )}
 
                   {m.text && (
-                    <div className="rounded-[18px_18px_6px_18px] bg-accent px-4 py-3 text-[14px] leading-relaxed text-white">
+                    <div className="rounded-[18px_18px_6px_18px] bg-accent px-4 py-3 text-[14px] leading-relaxed text-accent-contrast">
                       <span>{m.text}</span>
                     </div>
                   )}
