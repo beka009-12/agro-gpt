@@ -8,7 +8,7 @@ export async function HowItWorks() {
   return (
     <section id="how-it-works" className="scroll-mt-24 bg-white px-5 py-24 md:px-8 md:py-32">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow={ru.howItWorks.eyebrow} title={ru.howItWorks.title} />
+        <SectionHeading title={ru.howItWorks.title} />
 
         <div className="grid gap-10 border-t border-edge pt-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:pt-12">
           {ru.howItWorks.steps.map((step, index) => (
