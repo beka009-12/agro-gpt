@@ -83,11 +83,11 @@ Excluded:
 
 Reading this as: a redesign-overhaul of a multilingual AI agronomy service for farmers and agronomists, with a trust-first nature-tech language, leaning toward a custom Tailwind v4 design system, botanical photography, and restrained Motion.
 
-Approved dials:
+Revised dials after the Gros Farm reference review:
 
-- `DESIGN_VARIANCE: 7`
-- `MOTION_INTENSITY: 5`
-- `VISUAL_DENSITY: 5`
+- `DESIGN_VARIANCE: 6`
+- `MOTION_INTENSITY: 2`
+- `VISUAL_DENSITY: 3`
 
 ### Approaches considered
 
@@ -103,13 +103,14 @@ The brand uses one green accent family. Status colors are semantic and never use
 
 Core light tokens:
 
-- Deep forest: `#123B2A`.
-- Brand green: `#238A52`.
-- Main surface: `#F4F7F3`.
-- Primary text: `#17231C`.
-- Border: `#D7E1D8`.
+- Deep forest: `#0D3B29`.
+- Brand green: `#169653`.
+- Main surface: `#FFFFFF`.
+- Muted control surface: `#F4F6F4`.
+- Primary text: `#10251A`.
+- Border: `#DCE3DE`.
 
-Dark tokens will be calibrated from the same forest family, using near-black green surfaces rather than pure black. Both themes must preserve WCAG AA contrast and equal interaction hierarchy.
+The marketing experience is intentionally light-first and theme-locked. Green is reserved for actions, emphasis, and one strong contrast surface per page. Large milk, beige, and green page backgrounds are not used.
 
 ### Typography
 
@@ -158,7 +159,7 @@ Foundation:
 
 - Semantic CSS tokens.
 - Typography and spacing scales.
-- Motion tokens.
+- Minimal feedback tokens. Marketing sections remain static.
 - Layer and z-index tokens.
 
 Primitives:

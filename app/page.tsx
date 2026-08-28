@@ -1,6 +1,5 @@
 import { Header } from "@/src/components/layout/header"
 import { Footer } from "@/src/components/layout/footer"
-import { FloatingNav } from "@/src/components/layout/floating-nav"
 import { Hero } from "@/src/components/landing/hero"
 import { Audience } from "@/src/components/landing/audience"
 import { Features } from "@/src/components/landing/features"
@@ -46,7 +45,6 @@ export default async function Home() {
         <CtaBanner />
       </main>
       <Footer />
-      <FloatingNav />
     </>
   )
 }

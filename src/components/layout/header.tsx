@@ -16,20 +16,12 @@ import { LogoMark } from "./logo"
 import { ProfileMenu, useProfile } from "./profile-menu"
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const { dict: ru } = useI18n()
   const reduced = useReducedMotion()
   const rootRef = useRef<HTMLElement>(null)
   const { profile, setProfile } = useProfile()
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
 
   useEffect(() => {
     if (!menuOpen) return
@@ -59,13 +51,9 @@ export function Header() {
     <header
       ref={rootRef}
       style={{ fontFamily: "var(--font-header)" }}
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || menuOpen
-          ? "border-b border-header-edge bg-header-bg/90 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
-      }`}
+      className="sticky inset-x-0 top-0 z-50 border-b border-header-edge bg-white/95 backdrop-blur-md"
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 md:px-8">
         <Link
           href="/"
           aria-label={ru.header.logoAria}
@@ -73,13 +61,13 @@ export function Header() {
           className="flex items-center gap-2.5"
         >
           <LogoMark size={30} />
-          <span className="text-[19px] font-bold tracking-tight text-header-fg">
+          <span className="font-display text-[20px] font-semibold tracking-[-0.025em] text-header-fg">
             ibo
           </span>
         </Link>
 
         {/* десктоп-навигация */}
-        <nav className="hidden items-center gap-5 sm:flex">
+        <nav className="hidden items-center gap-6 sm:flex">
           <LanguageSwitcher />
           <Link
             href={onAbout ? "/" : "/about"}
@@ -89,7 +77,7 @@ export function Header() {
           </Link>
           <Link
             href="/chat"
-            className="rounded-full bg-header-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-header-accent-strong"
+            className="inline-flex min-h-11 items-center rounded-control bg-header-accent px-5 py-2.5 text-sm font-semibold text-accent-contrast transition-[background-color,transform] hover:bg-header-accent-strong active:translate-y-px"
           >
             {ru.header.startChat}
           </Link>
@@ -104,7 +92,7 @@ export function Header() {
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
           aria-label={ru.header.menuLabel}
-          className="flex size-10 flex-col items-center justify-center gap-[5px] rounded-full sm:hidden"
+          className="flex size-11 flex-col items-center justify-center gap-[5px] rounded-control sm:hidden"
         >
           <motion.span
             aria-hidden
@@ -130,7 +118,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: reduced ? 0 : -8 }}
             transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-            className="border-t border-header-edge px-4 pb-5 pt-4 sm:hidden"
+            className="border-t border-header-edge bg-white px-5 pb-5 pt-4 sm:hidden"
           >
             {profile && (
               <div className="mb-3 overflow-hidden rounded-2xl border border-header-edge bg-card">
@@ -160,7 +148,7 @@ export function Header() {
                       aria-hidden
                       className={`grid size-8 shrink-0 place-items-center rounded-lg ${
                         active
-                          ? "bg-header-accent text-white"
+                          ? "bg-header-accent text-accent-contrast"
                           : "bg-header-mint-soft text-header-accent"
                       }`}
                     >
@@ -184,7 +172,7 @@ export function Header() {
             <Link
               href="/chat"
               onClick={close}
-              className="mt-3 block rounded-full bg-header-accent px-5 py-3 text-center text-[15px] font-bold text-white transition-colors hover:bg-header-accent-strong"
+              className="mt-3 block rounded-control bg-header-accent px-5 py-3 text-center text-[15px] font-semibold text-accent-contrast transition-colors hover:bg-header-accent-strong"
             >
               {ru.header.startChat}
             </Link>

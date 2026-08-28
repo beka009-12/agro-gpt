@@ -5,14 +5,13 @@ import { LogoMark } from "./logo"
 export async function Footer() {
   const ru = await getDict()
   return (
-    <footer className="border-t border-edge py-7">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4">
+    <footer className="border-t border-edge bg-white py-10">
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:grid-cols-[1fr_auto] sm:items-end md:px-8">
         <span className="flex items-center gap-2">
-          <LogoMark size={22} />
-          <span className="text-[15px] font-bold text-fg">ibo</span>
+          <LogoMark size={26} />
+          <span className="font-display text-lg font-semibold tracking-[-0.02em] text-fg">ibo</span>
         </span>
-        <span className="text-[13px] text-fg-faint">{ru.footer.copyright}</span>
-        <span className="flex items-center gap-5">
+        <span className="flex flex-wrap items-center gap-5 sm:justify-end">
           <Link
             href="/about"
             className="text-[13px] font-semibold text-accent transition-colors hover:text-accent-strong"
@@ -23,6 +22,7 @@ export async function Footer() {
             {ru.footer.support}
           </span>
         </span>
+        <span className="text-[13px] text-fg-faint sm:col-span-2">{ru.footer.copyright}</span>
       </div>
     </footer>
   )

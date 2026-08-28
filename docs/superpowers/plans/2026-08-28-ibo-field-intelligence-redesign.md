@@ -20,11 +20,11 @@
 - No `any`; use interfaces/types for props, API responses, state, and reducer actions. Use `async/await` only. New filenames are kebab-case.
 - Server Components are the default. Add `"use client"` only to stateful forms, browser APIs, Motion wrappers, and interactive shells.
 - All visible strings and accessible names belong in `src/i18n/ru.json`, `ky.json`, and `en.json` together. No visible em dash or en dash characters.
-- Light and dark themes use the same semantic class names. Theme selection follows `prefers-color-scheme`; do not add a theme toggle in this scope.
-- Brand colors: forest `#123B2A`, green `#238A52`, light surface `#F4F7F3`, light text `#17231C`, light border `#D7E1D8`. Status colors are semantic only.
+- The site is light-first and theme-locked by explicit product direction. White is the page background; dark green and brand green are accents, not full-page surfaces.
+- Brand colors: forest `#0D3B29`, green `#169653`, white surface `#FFFFFF`, muted control surface `#F4F6F4`, light text `#10251A`, light border `#DCE3DE`. Status colors are semantic only.
 - Radius system: 12px controls, 16px cards/sheets, full circles/pills only for avatars and compact tags.
 - Icons: Phosphor only for interface controls; keep `LogoMark` as the sole custom brand SVG.
-- Motion durations: 180ms, 280ms, 420ms maximum. Animate transform/opacity only. Honor reduced motion and `@media (update: slow)`.
+- Motion durations: 180ms, 280ms, 420ms maximum. Use motion only for direct interaction feedback and required state changes. Marketing sections do not animate on scroll.
 - Do not ship equal three-card feature rows, fake product screenshots, decorative weather/version/number/status/scroll labels, unmanaged presentation-only scroll listeners, decorative infinite animation, duplicate CTA intent, or light-only styling.
 - Each task begins with a failing targeted test or invariant, ends with targeted tests plus `bunx tsc --noEmit`, and gets one English Conventional Commit.
 - Do not claim completion until Task 10 passes tests, TypeScript, lint, production build, browser QA, accessibility checks, and the design pre-flight audit.
@@ -44,49 +44,42 @@
 
 **Interfaces:**
 - Produces CSS fonts `--font-manrope`, `--font-onest`, `--font-plex-mono` and Tailwind families `font-display`, `font-sans`, `font-mono`.
-- Produces semantic colors `bg`, `surface`, `surface-raised`, `surface-muted`, `fg`, `fg-muted`, `fg-faint`, `edge`, `accent`, `accent-strong`, `accent-soft`, `danger`, `warning`, and `success` in both themes.
+- Produces semantic colors `bg`, `surface`, `surface-raised`, `surface-muted`, `fg`, `fg-muted`, `fg-faint`, `edge`, `accent`, `accent-strong`, `accent-soft`, `danger`, `warning`, and `success` in the light theme.
 - Preserves existing icon export names temporarily, but implements them as typed Phosphor adapters with one `ICON_WEIGHT`.
 - Produces `DURATION.fast = 0.18`, `DURATION.base = 0.28`, `DURATION.slow = 0.42`, `REVEAL_OFFSET = 16`.
 
-- [ ] **Step 1: Add a failing design-contract test**
+- [x] **Step 1: Add a failing design-contract test**
 
-Create `src/lib/design-contract.test.ts`:
+Create `src/lib/design-contract.test.ts`. The test covers the executable motion contract. CSS and `next/font` are framework configuration and are verified through TypeScript, the production build, and computed styles in the browser instead of brittle source-text assertions:
 
 ```ts
 import { describe, expect, test } from "bun:test"
 import { DURATION, REVEAL_OFFSET } from "./motion-tokens"
 
-const globalsUrl = new URL("../../app/globals.css", import.meta.url)
-
-describe("Field Intelligence design contract", () => {
-  test("uses the approved motion scale", () => {
+describe("Field Intelligence motion contract", () => {
+  test("keeps feedback and transitions within the approved motion scale", () => {
     expect(DURATION).toEqual({ fast: 0.18, base: 0.28, slow: 0.42 })
-    expect(REVEAL_OFFSET).toBe(16)
   })
 
-  test("declares semantic light and dark tokens", async () => {
-    const css = await Bun.file(globalsUrl).text()
-    expect(css).toContain("--color-accent: #238a52")
-    expect(css).toContain("--color-bg: #f4f7f3")
-    expect(css).toContain("@media (prefers-color-scheme: dark)")
-    expect(css).toContain("--font-sans: var(--font-onest)")
+  test("limits reveal movement to a short spatial cue", () => {
+    expect(REVEAL_OFFSET).toBe(16)
   })
 })
 ```
 
-- [ ] **Step 2: Run the test and confirm the expected failure**
+- [x] **Step 2: Run the test and confirm the expected failure**
 
 Run: `bun test src/lib/design-contract.test.ts`
 
-Expected: failure because old durations, old palette, and no dark theme remain.
+Expected: failure because the old durations and 24px reveal offset remain.
 
-- [ ] **Step 3: Install the single icon family**
+- [x] **Step 3: Install the single icon family**
 
 Run: `bun add @phosphor-icons/react`
 
 Expected: `package.json` and `bun.lock` contain `@phosphor-icons/react`; no other icon package is added.
 
-- [ ] **Step 4: Configure typography in `app/layout.tsx`**
+- [x] **Step 4: Configure typography in `app/layout.tsx`**
 
 Replace Plus Jakarta with `Onest`, add `IBM_Plex_Mono`, preserve `generateMetadata`, `I18nProvider`, and `Providers`, and configure:
 
@@ -113,20 +106,20 @@ const plexMono = IBM_Plex_Mono({
 
 Apply all three variables to `<html>`; keep `font-sans` on `<body>`.
 
-- [ ] **Step 5: Replace the global token system**
+- [x] **Step 5: Replace the global token system**
 
 In `app/globals.css`:
 
 - Keep Tailwind 4 `@import "tailwindcss"`.
 - Define the light semantic tokens with the approved five core values.
-- Add calibrated dark values under `@media (prefers-color-scheme: dark)`: background `#0D1711`, surfaces `#121F17` and `#18271E`, text `#E8F0EA`, muted text `#A9B9AE`, border `#304238`, accent `#55B77B`, accent strong `#75CC94`, accent soft `#1B3927`.
+- Lock the root to the light theme: page background `#FFFFFF`, muted control surface `#F4F6F4`, text `#10251A`, muted text `#55635B`, border `#DCE3DE`, accent `#169653`, accent strong `#0D7440`, accent soft `#E8F5ED`, forest `#0D3B29`.
 - Map `font-display`, `font-sans`, and `font-mono` to Manrope, Onest, and IBM Plex Mono.
 - Add semantic layer values (`--z-header`, `--z-drawer`, `--z-sheet`, `--z-toast`) and 12px/16px radius values.
-- Remove header-only palette tokens, decorative infinite keyframes, and the old inline chat pattern.
+- Remove the separate header palette values, decorative infinite keyframes, and the old inline chat pattern. Keep temporary header/card token aliases pointing at the new semantic values until their consumers migrate in Tasks 2-9, so each intermediate commit remains buildable.
 - Retain safe dynamic viewport support, global selection, body color, and a visible `:focus-visible` ring.
-- Add `color-scheme: light dark`; reduced-motion and slow-update rules disable nonessential animation and scrolling behavior.
+- Add `color-scheme: light`; reduced-motion and slow-update rules disable nonessential animation and scrolling behavior.
 
-- [ ] **Step 6: Replace custom interface paths with Phosphor adapters**
+- [x] **Step 6: Replace custom interface paths with Phosphor adapters**
 
 In `src/components/ui/icons.tsx`, export:
 
@@ -163,7 +156,7 @@ export const ICON_WEIGHT: IconProps["weight"] = "regular"
 
 Re-export the current component names as small typed wrappers with `weight={props.weight ?? ICON_WEIGHT}`. Keep `AudienceIcon` and `AboutIcon` as typed ID-to-component maps, not custom SVG paths. Replace `BloomIcon` with the Phosphor `Sparkle` adapter until consumers are redesigned.
 
-- [ ] **Step 7: Update motion tokens**
+- [x] **Step 7: Update motion tokens**
 
 ```ts
 export const DURATION = { fast: 0.18, base: 0.28, slow: 0.42 } as const
@@ -171,7 +164,7 @@ export const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
 export const REVEAL_OFFSET = 16
 ```
 
-- [ ] **Step 8: Verify and commit**
+- [x] **Step 8: Verify and commit**
 
 Run: `bun test src/lib/design-contract.test.ts && bunx tsc --noEmit`
 

@@ -1,25 +1,25 @@
 {
   "meta": {
-    "title": "ibo — AI agronomist in your pocket",
+    "title": "ibo - AI agronomist in your pocket",
     "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English.",
     "login": {
-      "title": "ibo — sign in",
+      "title": "ibo - sign in",
       "description": "Sign in to ibo with your email and password."
     },
     "register": {
-      "title": "ibo — sign up",
-      "description": "Create an ibo account — an AI agronomist in your pocket."
+      "title": "ibo - sign up",
+      "description": "Create an ibo account - an AI agronomist in your pocket."
     },
     "forgotPassword": {
-      "title": "ibo — forgot password",
+      "title": "ibo - forgot password",
       "description": "Regain access to your ibo account."
     },
     "resetPassword": {
-      "title": "ibo — new password",
+      "title": "ibo - new password",
       "description": "Set a new password for your ibo account."
     },
     "chat": {
-      "title": "ibo — chat",
+      "title": "ibo - chat",
       "description": "Chat with the ibo AI agronomist."
     }
   },
@@ -43,7 +43,7 @@
       "detect": "Detect my location",
       "detecting": "Detecting…",
       "saved": "Location updated",
-      "denied": "Location access is blocked — allow it in your browser settings",
+      "denied": "Location access is blocked - allow it in your browser settings",
       "failed": "Could not detect your location",
       "unsupported": "Your browser does not support geolocation"
     },
@@ -55,14 +55,14 @@
       "home": "Home"
     },
     "startChat": "Start chat",
-    "logoAria": "ibo — home page",
+    "logoAria": "ibo - home page",
     "menuLabel": "Menu"
   },
   "hero": {
     "badge": "Digital assistant for farmers and agronomists",
-    "titleStart": "Show your plant — ",
-    "titleAccent": "AI helps you understand what's wrong",
-    "subtitle": "ibo analyzes symptom descriptions and plant photos, identifies the likely cause and builds clear recommendations: what to check, what to do now and how to prevent it from happening again.",
+    "titleStart": "Plant diagnostics ",
+    "titleAccent": "powered by AI",
+    "subtitle": "Describe the symptoms or upload a photo. ibo suggests a likely cause and a clear action plan.",
     "ctaChat": "Open chat",
     "ctaAbout": "About the company",
     "trust": [
@@ -115,7 +115,7 @@
       {
         "icon": "gardener",
         "title": "Gardeners",
-        "description": "Questions about yellowing, spots, pests, watering and care — at home, in the garden or greenhouse."
+        "description": "Questions about yellowing, spots, pests, watering and care - at home, in the garden or greenhouse."
       }
     ]
   },
@@ -158,7 +158,7 @@
       },
       {
         "title": "Describe the problem",
-        "description": "Symptoms, crop, when it appeared — and attach a photo."
+        "description": "Symptoms, crop, when it appeared - and attach a photo."
       },
       {
         "title": "Get a recommendation",
@@ -168,16 +168,16 @@
   },
   "cta": {
     "title": "Check your plant right now",
-    "description": "Describe the symptoms or upload a photo — AI will tell you what to check and what to do.",
+    "description": "Describe the symptoms or upload a photo - AI will tell you what to check and what to do.",
     "button": "Open chat"
   },
   "about": {
-    "metaTitle": "About us — ibo",
+    "metaTitle": "About us - ibo",
     "metaDescription": "AGRO IBO is a domestic company founded in Kyrgyzstan. HYDROWOOLKS next-generation organic fertilizers.",
     "badge": "A Kyrgyz company with international goals",
-    "titleStart": "We are building ",
-    "titleAccent": "efficient and eco-friendly agriculture",
-    "subtitle": "ibo is a domestic company founded in Kyrgyzstan. Our goal is to increase crop yields and preserve soil fertility with high-quality, ecologically safe organic solutions.",
+    "titleStart": "Sustainable ",
+    "titleAccent": "agriculture",
+    "subtitle": "A Kyrgyz company creating organic solutions that improve yields while preserving long-term soil fertility.",
     "stats": [
       "Kyrgyzstan · local production",
       "All crops",
@@ -274,7 +274,7 @@
     "toHome": "Home page"
   },
   "footer": {
-    "copyright": "© 2026 ibo — AI agronomist assistant",
+    "copyright": "© 2026 ibo - AI agronomist assistant",
     "aboutLink": "About us",
     "support": "Support"
   },
@@ -299,18 +299,18 @@
     "sendLabel": "Send",
     "newChat": "New chat",
     "geoWarning": {
-      "text": "You haven't allowed location access — diagnosis may be less accurate: without it we can't factor in your local weather.",
+      "text": "You haven't allowed location access - diagnosis may be less accurate: without it we can't factor in your local weather.",
       "dismissLabel": "Hide warning"
     },
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
-      "imageTooLarge": "File is too large — attach a photo up to 10 MB"
+      "imageTooLarge": "File is too large - attach a photo up to 10 MB"
     }
   },
   "auth": {
     "register": {
       "title": "Create an account",
-      "subtitle": "A couple of fields — and the AI agronomist is working for you.",
+      "subtitle": "A couple of fields - and the AI agronomist is working for you.",
       "steps": [
         "Contacts",
         "Password",
@@ -346,7 +346,7 @@
     },
     "forgotPassword": {
       "title": "Forgot password",
-      "subtitle": "Enter your email — we'll send a reset code.",
+      "subtitle": "Enter your email - we'll send a reset code.",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "submit": "Send code",
@@ -363,7 +363,7 @@
       "newPasswordLabel": "New password",
       "confirmPasswordLabel": "Confirm password",
       "submit": "Save password",
-      "success": "Password updated — sign in with your new password",
+      "success": "Password updated - sign in with your new password",
       "backToLogin": "Back to sign in"
     },
     "common": {
@@ -384,7 +384,7 @@
       "unavailable": "Service is temporarily unavailable",
       "checkData": "Please check your data",
       "unexpectedResponse": "The server returned an unexpected response",
-      "unauthorized": "Session expired — please sign in again"
+      "unauthorized": "Session expired - please sign in again"
     }
   }
 }
