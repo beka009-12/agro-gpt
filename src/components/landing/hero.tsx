@@ -51,7 +51,7 @@ export async function Hero() {
           {ru.hero.trust.map((item) => (
             <li
               key={item}
-              className="border-b border-edge py-5 text-sm font-medium text-fg-muted last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:first:pl-0 sm:last:border-r-0"
+              className="flex min-h-16 items-center justify-center border-b border-edge py-5 text-center text-sm font-medium text-fg-muted last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0"
             >
               {item}
             </li>

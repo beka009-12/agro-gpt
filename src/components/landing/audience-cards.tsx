@@ -5,7 +5,7 @@ type AudienceItem = Dictionary["audience"]["items"][number]
 
 function AudienceArticle({ item }: { item: AudienceItem }) {
   return (
-    <article className="py-9 md:py-12">
+    <article className="h-full py-9 md:py-10">
       <span className="grid size-11 place-items-center rounded-control bg-accent-soft text-accent-strong">
         <AudienceIcon
           id={item.icon as AudienceIconId}
@@ -24,22 +24,18 @@ function AudienceArticle({ item }: { item: AudienceItem }) {
 }
 
 export function AudienceCards({ items }: { items: AudienceItem[] }) {
-  const [primary, ...secondary] = items
-
-  if (!primary) return null
+  if (items.length === 0) return null
 
   return (
-    <div className="grid border-t border-edge md:grid-cols-12">
-      <div className="border-b border-edge md:col-span-5 md:border-b-0 md:border-r md:pr-12">
-        <AudienceArticle item={primary} />
-      </div>
-      <div className="md:col-span-7 md:ml-12">
-        {secondary.map((item) => (
-          <div key={item.title} className="border-b border-edge last:border-b-0">
-            <AudienceArticle item={item} />
-          </div>
-        ))}
-      </div>
+    <div className="grid border-y border-edge md:grid-cols-3">
+      {items.map((item, index) => (
+        <div
+          key={item.title}
+          className={`border-b border-edge last:border-b-0 md:border-b-0 md:border-r md:px-8 md:last:border-r-0 ${index === 0 ? "md:pl-0" : ""} ${index === items.length - 1 ? "md:pr-0" : ""}`}
+        >
+          <AudienceArticle item={item} />
+        </div>
+      ))}
     </div>
   )
 }
