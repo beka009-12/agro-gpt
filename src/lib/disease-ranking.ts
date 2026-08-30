@@ -34,7 +34,7 @@ function cleanDiseaseName(name: string): string {
   return name.normalize("NFKC").trim().replace(/\s+/g, " ")
 }
 
-function getDiseaseNames(name: string): readonly string[] {
+export function normalizeDiseaseNames(name: string): readonly string[] {
   const cleanName = cleanDiseaseName(name)
   const lookupName = cleanName.toLocaleLowerCase("ru-RU")
 
@@ -48,7 +48,7 @@ export function normalizeTopDiseases(
 ): NormalizedTopDisease[] {
   const diseases = items.reduce<Record<string, NormalizedTopDisease>>(
     (result, item) => {
-      return getDiseaseNames(item.disease_name).reduce<
+      return normalizeDiseaseNames(item.disease_name).reduce<
         Record<string, NormalizedTopDisease>
       >((currentResult, diseaseName) => {
         const currentDisease = currentResult[diseaseName]

@@ -1,6 +1,7 @@
 import { Header } from "@/src/components/layout/header"
 import { Footer } from "@/src/components/layout/footer"
 import { Hero } from "@/src/components/landing/hero"
+import { DiseaseIntelligence } from "@/src/components/landing/disease-intelligence"
 import { Audience } from "@/src/components/landing/audience"
 import { Features } from "@/src/components/landing/features"
 import { HowItWorks } from "@/src/components/landing/how-it-works"
@@ -39,6 +40,7 @@ export default async function Home() {
       <Header />
       <main>
         <Hero />
+        <DiseaseIntelligence />
         <Audience />
         <Features />
         <HowItWorks />

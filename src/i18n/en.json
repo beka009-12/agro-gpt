@@ -98,6 +98,43 @@
       ]
     }
   },
+  "diseaseIntelligence": {
+    "eyebrow": "Diagnosis data",
+    "title": "Which diseases occur most often — and where",
+    "description": "A current view of completed diagnoses. The ranking shows disease frequency, while the map includes only cases with shared coordinates.",
+    "ranking": {
+      "eyebrow": "Frequency",
+      "title": "Common diseases",
+      "observed": "Based on completed diagnoses",
+      "fallback": "Reference data",
+      "empty": "No diagnoses yet",
+      "emptyDescription": "The ranking will appear after the first completed diagnoses.",
+      "error": "Could not load the ranking",
+      "errorDescription": "The data is temporarily unavailable. Please refresh the page later."
+    },
+    "map": {
+      "eyebrow": "Geography",
+      "title": "Diagnosis map",
+      "points": "Map points: {count}",
+      "ariaLabel": "Interactive plant diagnosis map",
+      "emptyTitle": "No map points yet",
+      "emptyDescription": "The map will fill in when diagnoses include coordinates.",
+      "error": "Could not load the map",
+      "errorDescription": "Location data is temporarily unavailable. The ranking still works."
+    },
+    "details": {
+      "eyebrow": "Disease reference",
+      "diagnoses": "Recorded diagnoses: {count}",
+      "source": "Open source",
+      "close": "Close reference",
+      "retry": "Try again",
+      "empty": "No reference materials yet",
+      "emptyDescription": "Reference materials have not been added for this disease yet.",
+      "error": "Could not load the reference",
+      "errorDescription": "Please retry the request in a few seconds.",
+      "invalidName": "Invalid disease name"
+    }
+  },
   "audience": {
     "eyebrow": "Who the service is for",
     "title": "A useful tool for everyone who grows plants",
