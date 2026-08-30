@@ -101,7 +101,7 @@ export default function DiseaseMap({
   }, [points])
 
   return (
-    <div className="relative min-h-[360px] overflow-hidden rounded-card border border-edge bg-surface-muted lg:min-h-[440px]">
+    <div className="relative isolate min-h-[360px] overflow-hidden rounded-card border border-edge bg-surface-muted lg:min-h-[440px]">
       <div
         ref={containerRef}
         className="absolute inset-0 z-0"

@@ -45,6 +45,7 @@ describe("normalizeTopDiseases", () => {
       { disease_name: "Дефицит азота", count: 4, is_fallback: false },
       { disease_name: "грибковое поражение", count: 4, is_fallback: false },
       { disease_name: "пожелтение листьев", count: 3, is_fallback: false },
+      { disease_name: "сорная растительность", count: 2, is_fallback: false },
       { disease_name: "септориоз", count: 7, is_fallback: false },
     ])
 

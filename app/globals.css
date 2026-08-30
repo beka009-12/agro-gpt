@@ -104,6 +104,10 @@ button:not(:disabled),
   outline: none;
 }
 
+.disease-details-dialog:focus-visible {
+  outline: none;
+}
+
 .leaflet-container {
   background: var(--color-surface-muted);
   font-family: var(--font-sans);

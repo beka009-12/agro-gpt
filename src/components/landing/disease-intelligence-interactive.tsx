@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import {
   ArrowUpIcon,
   MapPinIcon,
-  XIcon,
 } from "@/src/components/ui/icons"
 import type { Dictionary } from "@/src/i18n/dictionaries"
 import {
@@ -14,6 +13,7 @@ import {
   type DiseaseMapPoint,
 } from "@/src/lib/disease-intelligence"
 import type { NormalizedTopDisease } from "@/src/lib/disease-ranking"
+import { DiseaseDetailsModal } from "./disease-details-modal"
 
 const DiseaseMap = dynamic(() => import("./disease-map"), {
   ssr: false,
@@ -130,6 +130,7 @@ export function DiseaseIntelligenceInteractive({
                       type="button"
                       onClick={() => selectDisease(disease.diseaseName)}
                       className="group w-full py-4 text-left"
+                      aria-haspopup="dialog"
                       aria-expanded={selected}
                     >
                       <span className="flex items-center gap-3">
@@ -205,106 +206,15 @@ export function DiseaseIntelligenceInteractive({
         </div>
       </div>
 
-      {selectedDisease !== null ? (
-        <section
-          className="mt-6 rounded-card border border-edge bg-white p-5 sm:p-7"
-          aria-live="polite"
-        >
-          <div className="flex items-start justify-between gap-5 border-b border-edge pb-5">
-            <div>
-              <p className="text-sm font-semibold text-accent">
-                {labels.details.eyebrow}
-              </p>
-              <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.025em] text-fg sm:text-3xl">
-                {selectedDisease}
-              </h3>
-              {selectedCount !== undefined ? (
-                <p className="mt-2 text-sm text-fg-muted">
-                  {labels.details.diagnoses.replace(
-                    "{count}",
-                    String(selectedCount)
-                  )}
-                </p>
-              ) : null}
-            </div>
-            <button
-              type="button"
-              onClick={closeDetails}
-              className="flex size-10 shrink-0 items-center justify-center rounded-control border border-edge text-fg-muted transition-colors hover:border-accent hover:text-accent"
-              aria-label={labels.details.close}
-            >
-              <XIcon size={18} />
-            </button>
-          </div>
-
-          {detailsStatus === "loading" ? (
-            <div className="grid gap-4 py-6 md:grid-cols-3">
-              {[0, 1, 2].map((item) => (
-                <div
-                  key={item}
-                  className="h-36 animate-pulse rounded-control bg-surface-muted"
-                />
-              ))}
-            </div>
-          ) : null}
-
-          {detailsStatus === "error" ? (
-            <div className="py-7">
-              <StatusMessage
-                title={labels.details.error}
-                description={labels.details.errorDescription}
-              />
-              <button
-                type="button"
-                onClick={retryDetails}
-                className="mt-4 rounded-control bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-strong"
-              >
-                {labels.details.retry}
-              </button>
-            </div>
-          ) : null}
-
-          {detailsStatus === "ready" && details?.sources.length === 0 ? (
-            <StatusMessage
-              title={labels.details.empty}
-              description={labels.details.emptyDescription}
-            />
-          ) : null}
-
-          {detailsStatus === "ready" && details !== null ? (
-            <div className="grid gap-4 pt-6 md:grid-cols-3">
-              {details.sources.slice(0, 3).map((source, index) => (
-                <article
-                  key={`${source.title}-${index}`}
-                  className="rounded-control border border-edge bg-surface-muted p-5"
-                >
-                  {source.cropName !== null ? (
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-accent">
-                      {source.cropName}
-                    </p>
-                  ) : null}
-                  <h4 className="mt-2 font-display text-lg font-semibold leading-snug text-fg">
-                    {source.title}
-                  </h4>
-                  <p className="mt-3 line-clamp-4 text-sm leading-6 text-fg-muted">
-                    {source.content}
-                  </p>
-                  {source.sourceUrl !== null ? (
-                    <a
-                      href={source.sourceUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-5 inline-flex text-sm font-semibold text-accent hover:text-accent-strong"
-                    >
-                      {labels.details.source}
-                    </a>
-                  ) : null}
-                </article>
-              ))}
-            </div>
-          ) : null}
-        </section>
-      ) : null}
+      <DiseaseDetailsModal
+        diseaseName={selectedDisease}
+        diagnosesCount={selectedCount}
+        details={details}
+        status={detailsStatus}
+        labels={labels.details}
+        onClose={closeDetails}
+        onRetry={retryDetails}
+      />
     </>
   )
 }

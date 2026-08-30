@@ -20,6 +20,7 @@ const CONFIRMED_NON_DISEASE_NAMES = new Set([
   "дефицит азота",
   "грибковое поражение",
   "пожелтение листьев",
+  "сорная растительность",
 ])
 
 const topDiseaseApiItemSchema: z.ZodType<TopDiseaseSchema> = z.object({
