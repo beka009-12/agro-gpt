@@ -291,13 +291,22 @@
       "Check my plant from a photo and give recommendations."
     ],
     "typingTitle": "AI is analyzing the plant…",
-    "inputPlaceholder": "e.g., my tomato's lower leaves are turning yellow…",
+    "inputPlaceholder": "Describe the plant symptoms…",
     "attachLabel": "Attach photo",
     "imageChipTitle": "Plant photo",
     "imageChipNote": "Image ready to send",
     "removeImageLabel": "Remove photo",
     "sendLabel": "Send",
     "newChat": "New chat",
+    "sidebarLabel": "Chat navigation",
+    "openSidebarLabel": "Open sidebar",
+    "closeSidebarLabel": "Close sidebar",
+    "collapseSidebarLabel": "Collapse sidebar",
+    "expandSidebarLabel": "Expand sidebar",
+    "inputHint": "Enter to send, Shift+Enter for a new line",
+    "imagePreviewLabel": "Open plant photo",
+    "enlargedImageAlt": "Enlarged plant photo",
+    "closeImageLabel": "Close photo preview",
     "geoWarning": {
       "text": "You haven't allowed location access - diagnosis may be less accurate: without it we can't factor in your local weather.",
       "dismissLabel": "Hide warning"

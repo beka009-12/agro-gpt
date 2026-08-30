@@ -28,6 +28,7 @@ import {
   PlantIcon as PhosphorPlantIcon,
   PlusIcon as PhosphorPlusIcon,
   ShieldCheckIcon as PhosphorShieldCheckIcon,
+  SidebarSimpleIcon as PhosphorSidebarSimpleIcon,
   StarIcon as PhosphorStarIcon,
   ThermometerIcon as PhosphorThermometerIcon,
   TreeStructureIcon as PhosphorTreeStructureIcon,
@@ -71,6 +72,7 @@ export const GlobeIcon = createIcon(PhosphorGlobeIcon)
 export const LeafIcon = createIcon(PhosphorLeafIcon)
 export const BloomIcon = createIcon(PhosphorFlowerIcon)
 export const ShieldCheckIcon = createIcon(PhosphorShieldCheckIcon)
+export const SidebarIcon = createIcon(PhosphorSidebarSimpleIcon)
 export const PlantIcon = createIcon(PhosphorPlantIcon)
 export const CloudIcon = createIcon(PhosphorCloudIcon)
 export const SendIcon = createIcon(PhosphorPaperPlaneTiltIcon)

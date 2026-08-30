@@ -291,13 +291,22 @@
       "Проверь растение по фотографии и дай рекомендации."
     ],
     "typingTitle": "AI анализирует растение…",
-    "inputPlaceholder": "Например: у томата желтеют нижние листья…",
+    "inputPlaceholder": "Опишите симптомы растения…",
     "attachLabel": "Прикрепить фото",
     "imageChipTitle": "Фото растения",
     "imageChipNote": "Изображение готово к отправке",
     "removeImageLabel": "Удалить фото",
     "sendLabel": "Отправить",
     "newChat": "Новый чат",
+    "sidebarLabel": "Навигация чата",
+    "openSidebarLabel": "Открыть боковую панель",
+    "closeSidebarLabel": "Закрыть боковую панель",
+    "collapseSidebarLabel": "Свернуть боковую панель",
+    "expandSidebarLabel": "Развернуть боковую панель",
+    "inputHint": "Enter - отправить, Shift+Enter - новая строка",
+    "imagePreviewLabel": "Открыть фото растения",
+    "enlargedImageAlt": "Увеличенное фото растения",
+    "closeImageLabel": "Закрыть просмотр фото",
     "geoWarning": {
       "text": "Вы не разрешили доступ к местоположению - диагностика может быть менее точной: без него мы не учитываем погоду вашего района.",
       "dismissLabel": "Скрыть предупреждение"

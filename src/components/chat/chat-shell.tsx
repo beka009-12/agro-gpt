@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
 import { ChatView } from "./chat-view";
+import {
+  createSidebarState,
+  getSidebarPresentation,
+  reduceSidebarState,
+} from "./sidebar-state";
 import { useViewportHeight } from "../hooks/useViewportHeight";
 
 const DESKTOP_QUERY = "(min-width: 1024px)";
@@ -13,25 +18,28 @@ export function ChatShell() {
   useViewportHeight();
 
   const [sessionId, setSessionId] = useState(0);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const [sidebarState, dispatchSidebar] = useReducer(
+    reduceSidebarState,
+    createSidebarState(),
+  );
+  const sidebarTriggerRef = useRef<HTMLButtonElement>(null);
   const { profile, setProfile } = useProfile();
 
   useEffect(() => {
     const media = window.matchMedia(DESKTOP_QUERY);
-
-    const syncSidebarWithViewport = () => {
-      setSidebarOpen(media.matches);
+    const syncViewport = () => {
+      dispatchSidebar({ type: "viewport-changed", isDesktop: media.matches });
     };
 
-    syncSidebarWithViewport();
-    media.addEventListener("change", syncSidebarWithViewport);
+    syncViewport();
+    media.addEventListener("change", syncViewport);
 
     return () => {
-      media.removeEventListener("change", syncSidebarWithViewport);
+      media.removeEventListener("change", syncViewport);
     };
   }, []);
 
+  const presentation = getSidebarPresentation(sidebarState);
   const hasProfileLocation =
     profile !== null &&
     profile.latitude !== null &&
@@ -39,17 +47,12 @@ export function ChatShell() {
 
   const startNewChat = () => {
     setSessionId((id) => id + 1);
-
-    // На телефоне после выбора действия закрываем drawer,
-    // как это делает мобильный интерфейс ChatGPT.
-    if (!window.matchMedia(DESKTOP_QUERY).matches) {
-      setSidebarOpen(false);
-    }
+    dispatchSidebar({ type: "new-chat" });
   };
 
   return (
     <div
-      className="fixed inset-x-0 flex min-h-0 w-full overflow-hidden"
+      className="fixed inset-x-0 flex min-h-0 w-full overflow-hidden bg-white"
       style={{
         top: "var(--app-offset-top, 0px)",
         height: "var(--app-height, 100dvh)",
@@ -59,27 +62,27 @@ export function ChatShell() {
         onNewChat={startNewChat}
         profile={profile}
         onProfileChange={setProfile}
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen((open) => !open)}
-        onClose={() => setSidebarOpen(false)}
+        isDesktop={sidebarState.isDesktop}
+        desktopExpanded={presentation.desktopExpanded}
+        mobileOpen={presentation.mobileOpen}
+        triggerRef={sidebarTriggerRef}
+        onToggle={() => dispatchSidebar({ type: "toggle" })}
+        onClose={() => dispatchSidebar({ type: "close" })}
       />
 
-      <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-card">
-        <div
-          aria-hidden
-          className="chat-pattern pointer-events-none absolute inset-0"
+      <main
+        inert={presentation.mobileOpen ? true : undefined}
+        className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-white"
+      >
+        <ChatHeader
+          profile={profile}
+          onProfileChange={setProfile}
+          onOpenSidebar={() => dispatchSidebar({ type: "open" })}
+          sidebarOpen={presentation.mobileOpen}
+          sidebarTriggerRef={sidebarTriggerRef}
         />
 
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden">
-          <ChatHeader
-            profile={profile}
-            onProfileChange={setProfile}
-            onOpenSidebar={() => setSidebarOpen(true)}
-            sidebarOpen={sidebarOpen}
-          />
-
-          <ChatView key={sessionId} hasProfileLocation={hasProfileLocation} />
-        </div>
+        <ChatView key={sessionId} hasProfileLocation={hasProfileLocation} />
       </main>
     </div>
   );

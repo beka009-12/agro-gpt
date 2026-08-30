@@ -8,36 +8,34 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ onSuggestion }: EmptyStateProps) {
-  const { dict: ru } = useI18n();
+  const { dict } = useI18n();
 
   return (
-    <div className="w-full max-w-[640px] px-4 text-center sm:px-5 sm:pb-8">
+    <div className="w-full max-w-[660px] px-1 text-center sm:px-5">
       <span
         aria-hidden
-        className="mx-auto grid size-14 place-items-center rounded-[18px] bg-accent-soft text-accent shadow-[0_12px_30px_rgba(22,163,74,0.08)] sm:size-[82px] sm:rounded-[26px]"
+        className="mx-auto grid size-14 place-items-center rounded-2xl bg-accent-soft text-accent sm:size-16"
       >
         <PlantIcon size={28} strokeWidth={1.8} />
       </span>
 
-      <h2 className="mt-3 text-[20px] font-extrabold tracking-tight text-fg sm:mt-5 sm:text-[26px] md:text-[30px]">
-        <span className="sm:hidden">ИИ-помощник для агрономов</span>
-        <span className="hidden sm:inline">{ru.chat.emptyTitle}</span>
-      </h2>
+      <h1 className="mx-auto mt-4 max-w-[560px] text-[24px] font-extrabold leading-tight tracking-[-0.035em] text-fg sm:text-[30px]">
+        {dict.chat.emptyTitle}
+      </h1>
 
-      <p className="mx-auto mt-2 max-w-[540px] text-[13px] leading-relaxed text-fg-muted sm:mt-2.5 sm:text-sm">
-        <span className="sm:hidden">
-          Опишите проблему растения или добавьте фотографию.
-        </span>
-        <span className="hidden sm:inline">{ru.chat.emptySubtitle}</span>
+      <p className="mx-auto mt-2.5 max-w-[560px] text-sm leading-relaxed text-fg-muted sm:text-[15px]">
+        {dict.chat.emptySubtitle}
       </p>
 
-      <div className="mt-6 hidden gap-3 text-left sm:grid sm:grid-cols-2">
-        {ru.chat.suggestions.map((suggestion) => (
+      <div className="mt-5 grid gap-2 text-left sm:mt-7 sm:grid-cols-2 sm:gap-3">
+        {dict.chat.suggestions.map((suggestion, index) => (
           <button
             key={suggestion}
             type="button"
             onClick={() => onSuggestion(suggestion)}
-            className="rounded-[15px] border border-edge bg-card p-3.5 text-left text-[13px] font-medium leading-snug text-fg-muted transition-[border-color,background-color,transform] duration-200 hover:-translate-y-px hover:border-accent hover:bg-surface motion-reduce:transform-none"
+            className={`min-h-12 rounded-xl border border-edge bg-white px-3.5 py-3 text-left text-[13px] font-medium leading-snug text-fg-muted transition-[border-color,background-color,color] duration-150 hover:border-accent hover:bg-accent-soft hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+              index > 1 ? "hidden sm:block" : "block"
+            }`}
           >
             {suggestion}
           </button>

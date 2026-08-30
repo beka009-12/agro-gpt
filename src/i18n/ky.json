@@ -291,13 +291,22 @@
       "Өсүмдүктү сүрөт боюнча текшерип, сунуштарды бер."
     ],
     "typingTitle": "AI өсүмдүктү талдап жатат…",
-    "inputPlaceholder": "Мисалы: помидордун ылдыйкы жалбырактары саргарып жатат…",
+    "inputPlaceholder": "Өсүмдүктүн белгилерин жазыңыз…",
     "attachLabel": "Сүрөт тиркөө",
     "imageChipTitle": "Өсүмдүктүн сүрөтү",
     "imageChipNote": "Сүрөт жөнөтүүгө даяр",
     "removeImageLabel": "Сүрөттү өчүрүү",
     "sendLabel": "Жөнөтүү",
     "newChat": "Жаңы чат",
+    "sidebarLabel": "Чат навигациясы",
+    "openSidebarLabel": "Каптал панелди ачуу",
+    "closeSidebarLabel": "Каптал панелди жабуу",
+    "collapseSidebarLabel": "Каптал панелди жыйноо",
+    "expandSidebarLabel": "Каптал панелди жайуу",
+    "inputHint": "Enter - жөнөтүү, Shift+Enter - жаңы сап",
+    "imagePreviewLabel": "Өсүмдүктүн сүрөтүн ачуу",
+    "enlargedImageAlt": "Өсүмдүктүн чоңойтулган сүрөтү",
+    "closeImageLabel": "Сүрөттү көрүүнү жабуу",
     "geoWarning": {
       "text": "Сиз жайгашкан жерди аныктоого уруксат берген жоксуз - диагностика азыраак так болушу мүмкүн: ансыз аймагыңыздын аба ырайын эске ала албайбыз.",
       "dismissLabel": "Эскертүүнү жашыруу"

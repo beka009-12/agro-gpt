@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "motion/react";
-import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens";
+import Image from "next/image";
+import { useI18n } from "@/src/i18n/client";
+import { PlantIcon } from "@/src/components/ui/icons";
 import { BotMarkdown } from "./bot-markdown";
 import { EmptyState } from "./empty-state";
 import { TypingIndicator } from "./typing-indicator";
@@ -19,26 +20,25 @@ export function MessageList({
   pending,
   onSuggestion,
 }: MessageListProps) {
+  const { dict } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    const element = scrollRef.current;
+    if (element) element.scrollTop = element.scrollHeight;
   }, [messages.length, pending]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveImage(null);
+    if (!activeImage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveImage(null);
     };
 
     window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeImage]);
 
   const isEmpty = messages.length === 0 && !pending;
 
@@ -47,95 +47,85 @@ export function MessageList({
       <div
         ref={scrollRef}
         aria-live="polite"
-        className={`flex min-h-0 flex-1 flex-col gap-3.5 p-4 sm:p-6 ${
-          isEmpty
-            ? "overflow-hidden"
-            : "overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch]"
+        className={`flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 [webkit-overflow-scrolling:touch] sm:p-6 ${
+          isEmpty ? "items-center" : ""
         }`}
       >
         {isEmpty && (
-          <div className="flex min-h-0 flex-1 items-center justify-center">
+          <div className="flex w-full flex-1 items-center justify-center py-6 sm:py-10">
             <EmptyState onSuggestion={onSuggestion} />
           </div>
         )}
 
-        {messages.map((m) => (
-          <motion.div
-            key={m.id}
-            initial={reduced ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.base, ease: EASE_OUT }}
-          >
-            {m.role === "bot" ? (
-              <div className="flex justify-start pr-[12%]">
-                <div className="min-w-0 rounded-[18px_18px_18px_6px] bg-surface-muted px-4 py-3 text-[14px] text-fg-muted">
-                  <BotMarkdown text={m.text} />
+        {messages.map((message) => (
+          <div key={message.id}>
+            {message.role === "bot" ? (
+              <div className="flex items-start justify-start gap-2.5 pr-[8%] sm:pr-[16%]">
+                <span
+                  aria-hidden
+                  className="mt-0.5 grid size-8 flex-none place-items-center rounded-lg bg-accent-soft text-accent"
+                >
+                  <PlantIcon size={17} strokeWidth={1.8} />
+                </span>
+                <div className="min-w-0 rounded-[4px_16px_16px_16px] border border-edge bg-surface-muted px-4 py-3 text-sm leading-relaxed text-fg-muted">
+                  <BotMarkdown text={message.text} />
                 </div>
               </div>
             ) : (
-              <div className="flex justify-end pl-[12%]">
-                <div className="flex flex-col items-end gap-2">
-                  {m.imageUrl && (
+              <div className="flex justify-end pl-[8%] sm:pl-[16%]">
+                <div className="flex max-w-full flex-col items-end gap-2">
+                  {message.imageUrl && (
                     <button
                       type="button"
-                      onClick={() => setActiveImage(m.imageUrl ?? null)}
-                      className="group overflow-hidden rounded-[18px_18px_6px_18px] focus:outline-none focus:ring-2 focus:ring-white/50"
+                      onClick={() => setActiveImage(message.imageUrl ?? null)}
+                      aria-label={dict.chat.imagePreviewLabel}
+                      className="group overflow-hidden rounded-[16px_16px_4px_16px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                     >
-                      <img
-                        src={m.imageUrl}
-                        alt=""
-                        className="h-48 w-72 cursor-zoom-in rounded-[18px_18px_6px_18px] object-cover transition-transform duration-200 group-hover:scale-105"
+                      <Image
+                        src={message.imageUrl}
+                        alt={message.imageName ?? dict.chat.imageChipTitle}
+                        width={288}
+                        height={192}
+                        sizes="(max-width: 640px) 70vw, 288px"
+                        unoptimized
+                        className="h-48 w-72 max-w-[70vw] cursor-zoom-in object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                       />
                     </button>
                   )}
 
-                  {m.text && (
-                    <div className="rounded-[18px_18px_6px_18px] bg-accent px-4 py-3 text-[14px] leading-relaxed text-accent-contrast">
-                      <span>{m.text}</span>
+                  {message.text && (
+                    <div className="whitespace-pre-wrap rounded-[16px_16px_4px_16px] bg-accent px-4 py-3 text-sm leading-relaxed text-accent-contrast">
+                      {message.text}
                     </div>
                   )}
                 </div>
               </div>
             )}
-          </motion.div>
+          </div>
         ))}
 
-        {pending && (
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.fast }}
-          >
-            <TypingIndicator />
-          </motion.div>
-        )}
+        {pending && <TypingIndicator />}
       </div>
 
-      <AnimatePresence>
-        {activeImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-          >
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: DURATION.fast, ease: EASE_OUT }}
+      {activeImage && (
+        <button
+          type="button"
+          onClick={() => setActiveImage(null)}
+          aria-label={dict.chat.closeImageLabel}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <span className="relative block h-[90vh] w-[90vw]">
+            <Image
               src={activeImage}
-              alt="Увеличенное изображение"
-              className="max-h-[90vh] max-w-[90vw] cursor-zoom-out rounded-xl object-contain shadow-2xl"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveImage(null);
-              }}
+              alt={dict.chat.enlargedImageAlt}
+              fill
+              sizes="90vw"
+              unoptimized
+              className="object-contain"
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </span>
+        </button>
+      )}
     </>
   );
 }
