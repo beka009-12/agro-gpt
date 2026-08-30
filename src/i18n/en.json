@@ -280,16 +280,8 @@
   },
   "chat": {
     "back": "← Home",
-    "title": "Plant diagnostics",
-    "status": "AI is ready to analyze",
-    "emptyTitle": "What is happening with your plant?",
-    "emptySubtitle": "Describe the symptoms or upload a photo. Mention the crop, the affected part of the plant, watering and when the problem appeared.",
-    "suggestions": [
-      "My tomato's lower leaves are turning yellow. I water twice a week.",
-      "Dark spots appeared on my potatoes after the rains.",
-      "Apple tree leaves are curling at the edges. What should I check?",
-      "Check my plant from a photo and give recommendations."
-    ],
+    "emptyTitle": "Describe the plant problem",
+    "emptySubtitle": "Tell us in your own words what symptoms you noticed, or attach a photo. More precise details will help produce a more useful answer.",
     "typingTitle": "AI is analyzing the plant…",
     "inputPlaceholder": "Describe the plant symptoms…",
     "attachLabel": "Attach photo",

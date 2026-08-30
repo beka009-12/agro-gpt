@@ -144,7 +144,6 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       <MessageList
         messages={messages}
         pending={pending}
-        onSuggestion={(text) => void send(text)}
       />
 
       <ChatInput

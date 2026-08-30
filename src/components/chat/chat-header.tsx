@@ -3,9 +3,10 @@
 import type { RefObject } from "react";
 import Link from "next/link";
 import { useI18n } from "@/src/i18n/client";
+import { LogoMark } from "@/src/components/layout/logo";
 import { ProfileMenu } from "@/src/components/layout/profile-menu";
 import type { UserProfile } from "@/src/lib/profile-schemas";
-import { ArrowLeftIcon, MenuIcon, PlantIcon } from "@/src/components/ui/icons";
+import { MenuIcon } from "@/src/components/ui/icons";
 
 interface ChatHeaderProps {
   profile: UserProfile | null;
@@ -39,28 +40,14 @@ export function ChatHeader({
 
       <Link
         href="/"
-        aria-label={dict.chat.back}
-        className="grid size-11 flex-none place-items-center rounded-xl text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        aria-label={dict.header.logoAria}
+        className="flex h-11 flex-none items-center gap-2 rounded-xl px-2 text-fg transition-colors duration-150 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
-        <ArrowLeftIcon size={20} />
+        <LogoMark size={27} />
+        <span className="text-base font-bold tracking-tight">ibo</span>
       </Link>
 
-      <span
-        aria-hidden
-        className="ml-0.5 grid size-10 flex-none place-items-center rounded-xl bg-accent-soft text-accent sm:ml-1"
-      >
-        <PlantIcon size={21} strokeWidth={1.8} />
-      </span>
-
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-extrabold tracking-[-0.01em] text-fg sm:text-[15px]">
-          {dict.chat.title}
-        </p>
-        <p className="mt-0.5 hidden items-center gap-1.5 text-xs font-semibold text-fg-faint sm:flex">
-          <span aria-hidden className="size-1.5 rounded-full bg-accent" />
-          {dict.chat.status}
-        </p>
-      </div>
+      <div className="flex-1" />
 
       <div className="lg:hidden">
         {profile && (

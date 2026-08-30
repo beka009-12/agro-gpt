@@ -12,14 +12,9 @@ import type { ChatMessage } from "./types";
 interface MessageListProps {
   messages: ChatMessage[];
   pending: boolean;
-  onSuggestion: (text: string) => void;
 }
 
-export function MessageList({
-  messages,
-  pending,
-  onSuggestion,
-}: MessageListProps) {
+export function MessageList({ messages, pending }: MessageListProps) {
   const { dict } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -53,7 +48,7 @@ export function MessageList({
       >
         {isEmpty && (
           <div className="flex w-full flex-1 items-center justify-center py-6 sm:py-10">
-            <EmptyState onSuggestion={onSuggestion} />
+            <EmptyState />
           </div>
         )}
 
