@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_CLASSES = {
   primary:
-    "bg-accent text-white hover:bg-accent-strong disabled:hover:bg-accent",
+    "bg-accent text-accent-contrast hover:bg-accent-strong disabled:hover:bg-accent",
   ghost:
     "bg-transparent text-fg-muted hover:bg-mint-soft disabled:hover:bg-transparent",
 } as const

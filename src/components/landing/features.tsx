@@ -1,117 +1,70 @@
+import Image from "next/image"
 import { getDict } from "@/src/i18n/server"
 import { CameraIcon, CheckIcon, ShieldCheckIcon } from "@/src/components/ui/icons"
-import { SectionReveal } from "./section-reveal"
 import { SectionHeading } from "./section-heading"
-
-/** декоративная иллюстрация — заполняет пространство рядом с карточками справа */
-function TreeIllustration({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 200 260"
-      className={`animate-sprout-sway motion-reduce:animate-none ${className ?? ""}`}
-    >
-      <ellipse cx="100" cy="248" rx="46" ry="8" fill="currentColor" className="text-edge" />
-      <path
-        d="M100 240V150"
-        stroke="currentColor"
-        strokeWidth="10"
-        strokeLinecap="round"
-        className="text-tan-strong/70"
-      />
-      <circle cx="100" cy="96" r="62" fill="currentColor" className="text-mint-soft" />
-      <circle cx="60" cy="120" r="42" fill="currentColor" className="text-accent/85" />
-      <circle cx="140" cy="118" r="46" fill="currentColor" className="text-accent-strong/80" />
-      <circle cx="100" cy="150" r="40" fill="currentColor" className="text-accent" />
-      <circle cx="72" cy="88" r="7" fill="currentColor" className="text-lime" />
-      <circle cx="132" cy="72" r="5.5" fill="currentColor" className="text-lime" />
-      <circle cx="118" cy="132" r="6" fill="currentColor" className="text-lime" />
-    </svg>
-  )
-}
 
 export async function Features() {
   const ru = await getDict()
   const [photoCard, safetyCard] = ru.features.cards
+
   return (
-    <section id="features" className="scroll-mt-24 bg-card py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-4">
-        <SectionReveal>
-          <SectionHeading eyebrow={ru.features.eyebrow} title={ru.features.title} />
-        </SectionReveal>
-        <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
-          <SectionReveal className="lg:h-full">
-            <div className="relative overflow-hidden rounded-[30px] bg-[linear-gradient(145deg,#123625,#1f6b45)] p-7 text-white md:p-9 lg:h-full lg:min-h-[420px]">
-              <div
-                aria-hidden
-                className="absolute -right-24 -top-32 size-[350px] rounded-full bg-[radial-gradient(circle,rgba(203,232,107,0.28),transparent_65%)]"
-              />
-              <h3 className="relative z-[2] max-w-[420px] text-2xl font-extrabold leading-tight tracking-tight md:text-3xl">
-                {ru.features.panel.title}
-              </h3>
-              <p className="relative z-[2] mt-3.5 max-w-[500px] text-[15px] leading-relaxed text-[#cfe6d6]">
-                {ru.features.panel.description}
-              </p>
-              <ul className="relative z-[2] mt-6 grid gap-3">
-                {ru.features.panel.points.map((point, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 rounded-[15px] border border-white/10 bg-white/[0.09] px-3.5 py-3"
-                  >
-                    <span
-                      aria-hidden
-                      className="grid size-6 flex-none place-items-center rounded-full bg-[rgba(203,232,107,0.2)] text-lime"
-                    >
-                      <CheckIcon size={12} strokeWidth={3} />
-                    </span>
-                    <span className="text-sm leading-normal text-[#e7f3ea]">
-                      {point}
-                    </span>
+    <section id="features" className="scroll-mt-24 bg-white px-5 py-20 md:px-8 md:py-24">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading title={ru.features.title} />
+
+        <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
+          <article className="bg-brand-gradient relative overflow-hidden rounded-card p-7 text-white sm:p-9 lg:col-span-7 lg:p-10">
+            <div className="flex flex-col">
+              <div>
+                <h3 className="max-w-[580px] font-display text-[32px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[42px]">
+                  {ru.features.panel.title}
+                </h3>
+                <p className="mt-5 max-w-[540px] text-base leading-7 text-white/75">
+                  {ru.features.panel.description}
+                </p>
+              </div>
+              <ul className="mt-10 grid gap-0 border-t border-white/20">
+                {ru.features.panel.points.map((point) => (
+                  <li key={point} className="flex items-start gap-3 border-b border-white/20 py-4 text-[15px] leading-6 text-white/90">
+                    <CheckIcon className="mt-1 shrink-0 text-lime" size={16} weight="bold" />
+                    <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
-          </SectionReveal>
+          </article>
 
-          {/* правая колонка: карточки друг под другом, дерево стоит справа у границы */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:min-h-[420px] lg:grid-cols-[1fr_auto] lg:gap-5">
-            <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-5">
-              <SectionReveal delay={0.08} className="lg:flex-1">
-                <article className="h-full rounded-[28px] bg-tan-soft p-6 shadow-[0_10px_28px_rgba(20,42,31,0.05)]">
-                  <span
-                    aria-hidden
-                    className="grid size-11 place-items-center rounded-[14px] bg-card text-tan-strong"
-                  >
-                    <CameraIcon size={22} strokeWidth={2} />
-                  </span>
-                  <h3 className="mt-5 text-lg font-extrabold text-fg">
-                    {photoCard.title}
-                  </h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-fg-muted">
-                    {photoCard.description}
-                  </p>
-                </article>
-              </SectionReveal>
-              <SectionReveal delay={0.16} className="lg:flex-1">
-                <article className="h-full rounded-[28px] bg-mint-soft p-6 shadow-[0_10px_28px_rgba(20,42,31,0.05)]">
-                  <span
-                    aria-hidden
-                    className="grid size-11 place-items-center rounded-[14px] bg-card text-accent-strong"
-                  >
-                    <ShieldCheckIcon size={22} strokeWidth={2} />
-                  </span>
-                  <h3 className="mt-5 text-lg font-extrabold text-fg">
-                    {safetyCard.title}
-                  </h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-fg-muted">
-                    {safetyCard.description}
-                  </p>
-                </article>
-              </SectionReveal>
-            </div>
-            <SectionReveal delay={0.22} className="hidden lg:flex lg:items-end">
-              <TreeIllustration className="pointer-events-none h-[235px] w-auto" />
-            </SectionReveal>
+          <div className="grid gap-5 lg:col-span-5 lg:gap-6">
+            <article className="overflow-hidden rounded-card border border-edge bg-white">
+              <div className="relative aspect-[16/7] overflow-hidden">
+                <Image
+                  src="/images/powdery-mildew.jpg"
+                  alt={photoCard.title}
+                  fill
+                  sizes="(min-width: 1024px) 480px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6 sm:p-7">
+                <CameraIcon size={23} className="text-accent" />
+                <h3 className="mt-4 font-display text-2xl font-semibold tracking-[-0.025em] text-fg">
+                  {photoCard.title}
+                </h3>
+                <p className="mt-3 text-base leading-7 text-fg-muted">
+                  {photoCard.description}
+                </p>
+              </div>
+            </article>
+
+            <article className="rounded-card border border-edge bg-surface-muted p-6 sm:p-7">
+              <ShieldCheckIcon size={24} className="text-accent" />
+              <h3 className="mt-4 font-display text-2xl font-semibold tracking-[-0.025em] text-fg">
+                {safetyCard.title}
+              </h3>
+              <p className="mt-3 text-base leading-7 text-fg-muted">
+                {safetyCard.description}
+              </p>
+            </article>
           </div>
         </div>
       </div>

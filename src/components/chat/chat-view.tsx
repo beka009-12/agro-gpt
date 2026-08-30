@@ -52,10 +52,13 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
   const [pending, setPending] = useState(false);
   const chatIdRef = useRef<string | null>(null);
   const objectUrlsRef = useRef<string[]>([]);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const urls = objectUrlsRef.current;
     return () => {
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = null;
       for (const url of urls) URL.revokeObjectURL(url);
     };
   }, []);
@@ -80,6 +83,8 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       imageName: image?.name,
     });
     setPending(true);
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       const coords = await getCoords();
@@ -96,6 +101,7 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       const res = await fetch("/api/chat/message", {
         method: "POST",
         body: form,
+        signal: controller.signal,
       });
       const data: unknown = await res.json().catch(() => null);
 
@@ -120,21 +126,24 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       }
       chatIdRef.current = parsed.chatId;
       pushMessage({ role: "bot", text: parsed.answer });
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
       pushMessage({ role: "bot", text: ru.auth.errors.network });
     } finally {
-      setPending(false);
+      if (abortControllerRef.current === controller) {
+        abortControllerRef.current = null;
+        setPending(false);
+      }
     }
   };
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-[800px] flex-1 flex-col overflow-hidden">
+    <div className="mx-auto flex min-h-0 w-full max-w-[880px] flex-1 flex-col overflow-hidden">
       {geoStatus === "denied" && !hasProfileLocation && <GeoWarningBanner />}
 
       <MessageList
         messages={messages}
         pending={pending}
-        onSuggestion={(text) => void send(text)}
       />
 
       <ChatInput

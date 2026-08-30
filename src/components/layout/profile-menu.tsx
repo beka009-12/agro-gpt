@@ -394,7 +394,7 @@ export function ProfileMenu({
                           className={`rounded-full px-2.5 py-1 text-[11px] font-extrabold ${
                             hasLocation
                               ? "bg-mint-soft text-accent-strong"
-                              : "bg-tan-soft text-[#4a4633]"
+                              : "bg-tan-soft text-fg-muted"
                           }`}
                         >
                           {hasLocation ? p.location.on : p.location.off}

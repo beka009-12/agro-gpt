@@ -1,25 +1,25 @@
 {
   "meta": {
-    "title": "ibo — AI agronomist in your pocket",
+    "title": "ibo - AI agronomist in your pocket",
     "description": "Plant disease diagnosis from photos and AI agronomist advice. In Kyrgyz, Russian and English.",
     "login": {
-      "title": "ibo — sign in",
+      "title": "ibo - sign in",
       "description": "Sign in to ibo with your email and password."
     },
     "register": {
-      "title": "ibo — sign up",
-      "description": "Create an ibo account — an AI agronomist in your pocket."
+      "title": "ibo - sign up",
+      "description": "Create an ibo account - an AI agronomist in your pocket."
     },
     "forgotPassword": {
-      "title": "ibo — forgot password",
+      "title": "ibo - forgot password",
       "description": "Regain access to your ibo account."
     },
     "resetPassword": {
-      "title": "ibo — new password",
+      "title": "ibo - new password",
       "description": "Set a new password for your ibo account."
     },
     "chat": {
-      "title": "ibo — chat",
+      "title": "ibo - chat",
       "description": "Chat with the ibo AI agronomist."
     }
   },
@@ -43,7 +43,7 @@
       "detect": "Detect my location",
       "detecting": "Detecting…",
       "saved": "Location updated",
-      "denied": "Location access is blocked — allow it in your browser settings",
+      "denied": "Location access is blocked - allow it in your browser settings",
       "failed": "Could not detect your location",
       "unsupported": "Your browser does not support geolocation"
     },
@@ -55,14 +55,14 @@
       "home": "Home"
     },
     "startChat": "Start chat",
-    "logoAria": "ibo — home page",
+    "logoAria": "ibo - home page",
     "menuLabel": "Menu"
   },
   "hero": {
     "badge": "Digital assistant for farmers and agronomists",
-    "titleStart": "Show your plant — ",
-    "titleAccent": "AI helps you understand what's wrong",
-    "subtitle": "ibo analyzes symptom descriptions and plant photos, identifies the likely cause and builds clear recommendations: what to check, what to do now and how to prevent it from happening again.",
+    "titleStart": "Plant diagnostics ",
+    "titleAccent": "powered by AI",
+    "subtitle": "Describe the symptoms or upload a photo. ibo suggests a likely cause and a clear action plan.",
     "ctaChat": "Open chat",
     "ctaAbout": "About the company",
     "trust": [
@@ -98,6 +98,43 @@
       ]
     }
   },
+  "diseaseIntelligence": {
+    "eyebrow": "Diagnosis data",
+    "title": "Which diseases occur most often — and where",
+    "description": "A current view of completed diagnoses. The ranking shows disease frequency, while the map includes only cases with shared coordinates.",
+    "ranking": {
+      "eyebrow": "Frequency",
+      "title": "Common diseases",
+      "observed": "Based on completed diagnoses",
+      "fallback": "Reference data",
+      "empty": "No diagnoses yet",
+      "emptyDescription": "The ranking will appear after the first completed diagnoses.",
+      "error": "Could not load the ranking",
+      "errorDescription": "The data is temporarily unavailable. Please refresh the page later."
+    },
+    "map": {
+      "eyebrow": "Geography",
+      "title": "Diagnosis map",
+      "points": "Map points: {count}",
+      "ariaLabel": "Interactive plant diagnosis map",
+      "emptyTitle": "No map points yet",
+      "emptyDescription": "The map will fill in when diagnoses include coordinates.",
+      "error": "Could not load the map",
+      "errorDescription": "Location data is temporarily unavailable. The ranking still works."
+    },
+    "details": {
+      "eyebrow": "Disease reference",
+      "diagnoses": "Recorded diagnoses: {count}",
+      "source": "Open source",
+      "close": "Close reference",
+      "retry": "Try again",
+      "empty": "No reference materials yet",
+      "emptyDescription": "Reference materials have not been added for this disease yet.",
+      "error": "Could not load the reference",
+      "errorDescription": "Please retry the request in a few seconds.",
+      "invalidName": "Invalid disease name"
+    }
+  },
   "audience": {
     "eyebrow": "Who the service is for",
     "title": "A useful tool for everyone who grows plants",
@@ -115,7 +152,7 @@
       {
         "icon": "gardener",
         "title": "Gardeners",
-        "description": "Questions about yellowing, spots, pests, watering and care — at home, in the garden or greenhouse."
+        "description": "Questions about yellowing, spots, pests, watering and care - at home, in the garden or greenhouse."
       }
     ]
   },
@@ -158,7 +195,7 @@
       },
       {
         "title": "Describe the problem",
-        "description": "Symptoms, crop, when it appeared — and attach a photo."
+        "description": "Symptoms, crop, when it appeared - and attach a photo."
       },
       {
         "title": "Get a recommendation",
@@ -168,16 +205,16 @@
   },
   "cta": {
     "title": "Check your plant right now",
-    "description": "Describe the symptoms or upload a photo — AI will tell you what to check and what to do.",
+    "description": "Describe the symptoms or upload a photo - AI will tell you what to check and what to do.",
     "button": "Open chat"
   },
   "about": {
-    "metaTitle": "About us — ibo",
+    "metaTitle": "About us - ibo",
     "metaDescription": "AGRO IBO is a domestic company founded in Kyrgyzstan. HYDROWOOLKS next-generation organic fertilizers.",
     "badge": "A Kyrgyz company with international goals",
-    "titleStart": "We are building ",
-    "titleAccent": "efficient and eco-friendly agriculture",
-    "subtitle": "ibo is a domestic company founded in Kyrgyzstan. Our goal is to increase crop yields and preserve soil fertility with high-quality, ecologically safe organic solutions.",
+    "titleStart": "Sustainable ",
+    "titleAccent": "agriculture",
+    "subtitle": "A Kyrgyz company creating organic solutions that improve yields while preserving long-term soil fertility.",
     "stats": [
       "Kyrgyzstan · local production",
       "All crops",
@@ -274,43 +311,45 @@
     "toHome": "Home page"
   },
   "footer": {
-    "copyright": "© 2026 ibo — AI agronomist assistant",
+    "copyright": "© 2026 ibo - AI agronomist assistant",
     "aboutLink": "About us",
     "support": "Support"
   },
   "chat": {
     "back": "← Home",
-    "title": "Plant diagnostics",
-    "status": "AI is ready to analyze",
-    "emptyTitle": "What is happening with your plant?",
-    "emptySubtitle": "Describe the symptoms or upload a photo. Mention the crop, the affected part of the plant, watering and when the problem appeared.",
-    "suggestions": [
-      "My tomato's lower leaves are turning yellow. I water twice a week.",
-      "Dark spots appeared on my potatoes after the rains.",
-      "Apple tree leaves are curling at the edges. What should I check?",
-      "Check my plant from a photo and give recommendations."
-    ],
+    "readyStatus": "ibo is ready",
+    "emptyTitle": "Describe the plant problem",
+    "emptySubtitle": "Tell us in your own words what symptoms you noticed, or attach a photo. More precise details will help produce a more useful answer.",
     "typingTitle": "AI is analyzing the plant…",
-    "inputPlaceholder": "e.g., my tomato's lower leaves are turning yellow…",
+    "inputPlaceholder": "Describe the plant symptoms…",
     "attachLabel": "Attach photo",
     "imageChipTitle": "Plant photo",
     "imageChipNote": "Image ready to send",
     "removeImageLabel": "Remove photo",
     "sendLabel": "Send",
     "newChat": "New chat",
+    "sidebarLabel": "Chat navigation",
+    "openSidebarLabel": "Open sidebar",
+    "closeSidebarLabel": "Close sidebar",
+    "collapseSidebarLabel": "Collapse sidebar",
+    "expandSidebarLabel": "Expand sidebar",
+    "inputHint": "Enter to send, Shift+Enter for a new line",
+    "imagePreviewLabel": "Open plant photo",
+    "enlargedImageAlt": "Enlarged plant photo",
+    "closeImageLabel": "Close photo preview",
     "geoWarning": {
-      "text": "You haven't allowed location access — diagnosis may be less accurate: without it we can't factor in your local weather.",
+      "text": "You haven't allowed location access - diagnosis may be less accurate: without it we can't factor in your local weather.",
       "dismissLabel": "Hide warning"
     },
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
-      "imageTooLarge": "File is too large — attach a photo up to 10 MB"
+      "imageTooLarge": "File is too large - attach a photo up to 10 MB"
     }
   },
   "auth": {
     "register": {
       "title": "Create an account",
-      "subtitle": "A couple of fields — and the AI agronomist is working for you.",
+      "subtitle": "A couple of fields - and the AI agronomist is working for you.",
       "steps": [
         "Contacts",
         "Password",
@@ -346,7 +385,7 @@
     },
     "forgotPassword": {
       "title": "Forgot password",
-      "subtitle": "Enter your email — we'll send a reset code.",
+      "subtitle": "Enter your email - we'll send a reset code.",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "submit": "Send code",
@@ -363,7 +402,7 @@
       "newPasswordLabel": "New password",
       "confirmPasswordLabel": "Confirm password",
       "submit": "Save password",
-      "success": "Password updated — sign in with your new password",
+      "success": "Password updated - sign in with your new password",
       "backToLogin": "Back to sign in"
     },
     "common": {
@@ -384,7 +423,7 @@
       "unavailable": "Service is temporarily unavailable",
       "checkData": "Please check your data",
       "unexpectedResponse": "The server returned an unexpected response",
-      "unauthorized": "Session expired — please sign in again"
+      "unauthorized": "Session expired - please sign in again"
     }
   }
 }

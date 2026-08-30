@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
-import type { FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent, KeyboardEvent } from "react";
 import { useI18n } from "@/src/i18n/client";
-import { CameraIcon, SendIcon } from "@/src/components/ui/icons";
+import { CameraIcon, SendIcon, XIcon } from "@/src/components/ui/icons";
+import { shouldSubmitChatInput } from "./chat-input-keyboard";
 
 interface ChatInputProps {
   pending: boolean;
@@ -11,13 +12,22 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ pending, onSend }: ChatInputProps) {
-  const { dict: ru } = useI18n();
+  const { dict } = useI18n();
   const [value, setValue] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = "0px";
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
+  }, [value]);
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (pending || (!value.trim() && !image)) return;
 
     onSend(value, image ?? undefined);
@@ -25,88 +35,113 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
     setImage(null);
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (
+      shouldSubmitChatInput({
+        key: event.key,
+        shiftKey: event.shiftKey,
+        composing: event.nativeEvent.isComposing,
+        hasContent: Boolean(value.trim() || image),
+      })
+    ) {
+      event.preventDefault();
+      formRef.current?.requestSubmit();
+    }
+  };
+
   const onFileChange = () => {
     const file = fileRef.current?.files?.[0];
-
     if (file && !pending) setImage(file);
     if (fileRef.current) fileRef.current.value = "";
   };
 
   return (
     <form
+      ref={formRef}
       onSubmit={submit}
-      className="relative z-20 flex-none border-t border-[#e8efe8] bg-[linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,251,246,.98))] px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-3 sm:pb-[max(1rem,env(safe-area-inset-bottom))]"
+      className="relative z-20 flex-none bg-white px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 sm:px-6 sm:pb-[max(1rem,env(safe-area-inset-bottom))] sm:pt-3"
     >
       <input
         ref={fileRef}
         type="file"
         accept="image/*"
         onChange={onFileChange}
-        className="sr-only"
+        aria-label={dict.chat.attachLabel}
+        className="hidden"
         tabIndex={-1}
       />
 
-      {image && (
-        <div className="mb-2.5 flex animate-fade-up items-center justify-between gap-3 rounded-[15px] border border-[#cfe7d3] bg-[linear-gradient(135deg,rgba(235,249,238,0.96),rgba(246,252,246,0.96))] px-3 py-2.5 motion-reduce:animate-none">
-          <span className="flex min-w-0 items-center gap-2.5">
-            <span
-              aria-hidden
-              className="grid size-9 flex-none place-items-center rounded-[11px] bg-card text-accent shadow-[0_5px_13px_rgba(6,78,59,0.07)]"
+      <div className="rounded-[22px] border border-edge bg-white p-2 shadow-[0_10px_32px_rgba(6,48,34,0.08)] transition-[border-color,box-shadow] duration-150 focus-within:border-accent/70 focus-within:shadow-[0_0_0_3px_rgba(22,163,74,0.1),0_12px_36px_rgba(6,48,34,0.1)]">
+        {image && (
+          <div className="mb-2 flex items-center justify-between gap-3 rounded-xl bg-accent-soft px-3 py-2">
+            <span className="flex min-w-0 items-center gap-2.5">
+              <span
+                aria-hidden
+                className="grid size-9 flex-none place-items-center rounded-lg bg-white text-accent shadow-[0_3px_10px_rgba(6,48,34,0.06)]"
+              >
+                <CameraIcon size={17} strokeWidth={2} />
+              </span>
+              <span className="min-w-0">
+                <strong className="block truncate text-xs font-bold text-fg">
+                  {dict.chat.imageChipTitle}
+                </strong>
+                <small className="block truncate text-[11px] text-fg-faint">
+                  {image.name || dict.chat.imageChipNote}
+                </small>
+              </span>
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setImage(null)}
+              aria-label={dict.chat.removeImageLabel}
+              className="grid size-9 flex-none place-items-center rounded-lg text-fg-faint transition-colors duration-150 hover:bg-white hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <CameraIcon size={16} strokeWidth={2} />
-            </span>
+              <XIcon size={17} />
+            </button>
+          </div>
+        )}
 
-            <span className="min-w-0">
-              <strong className="block truncate text-[12px] font-extrabold text-[#234637]">
-                {ru.chat.imageChipTitle}
-              </strong>
-              <small className="block truncate text-[10px] text-fg-faint">
-                {image.name || ru.chat.imageChipNote}
-              </small>
-            </span>
-          </span>
+        <label htmlFor="chat-message" className="sr-only">
+          {dict.chat.inputPlaceholder}
+        </label>
+        <textarea
+          ref={textareaRef}
+          id="chat-message"
+          rows={1}
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={pending}
+          placeholder={dict.chat.inputPlaceholder}
+          enterKeyHint="send"
+          autoComplete="off"
+          className="chat-input-field max-h-32 min-h-[52px] w-full resize-none overflow-y-auto border-none bg-transparent px-3 py-3 text-base leading-[24px] text-fg outline-none placeholder:text-fg-faint disabled:cursor-not-allowed disabled:opacity-60"
+        />
 
-          <button
-            type="button"
-            onClick={() => setImage(null)}
-            aria-label={ru.chat.removeImageLabel}
-            className="grid size-7 flex-none place-items-center rounded-lg bg-white/80 text-fg-faint transition-colors hover:bg-white hover:text-danger"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      <div className="rounded-[18px] bg-[linear-gradient(120deg,rgba(22,163,74,0.34),rgba(132,204,22,0.14)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.24))] p-px shadow-[0_10px_28px_rgba(6,78,59,0.08)] transition-shadow duration-200 focus-within:bg-[linear-gradient(120deg,rgba(22,163,74,0.55),rgba(132,204,22,0.3)_42%,rgba(255,255,255,0.95)_72%,rgba(22,163,74,0.45))] focus-within:shadow-[0_0_0_4px_rgba(31,145,83,0.14),0_13px_34px_rgba(6,78,59,0.12)]">
-        <div className="flex min-w-0 items-center gap-2 rounded-[17px] bg-white/[0.97] px-2 py-1.5">
+        <div className="flex min-w-0 items-center gap-2 px-0.5 pt-1">
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={pending}
-            aria-label={ru.chat.attachLabel}
-            className="grid size-10 flex-none place-items-center rounded-[12px] border border-[#d0e5d3] bg-[linear-gradient(180deg,#fff,#f8fbf8)] text-[#52675d] transition-[transform,border-color,background-color] duration-200 hover:-translate-y-px hover:border-[#9ed2a8] hover:bg-mint-soft motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60"
+            aria-label={dict.chat.attachLabel}
+            className="grid size-11 flex-none place-items-center rounded-full border border-edge bg-surface-muted text-fg-muted transition-[border-color,background-color,color] duration-150 hover:border-accent/40 hover:bg-accent-soft hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <CameraIcon size={18} strokeWidth={2} />
+            <CameraIcon size={20} strokeWidth={2} />
           </button>
 
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            disabled={pending}
-            placeholder={ru.chat.inputPlaceholder}
-            enterKeyHint="send"
-            autoComplete="off"
-            aria-label={ru.chat.inputPlaceholder}
-            className="chat-input-field h-10 min-w-0 flex-1 border-none bg-transparent px-1.5 text-base text-fg outline-none placeholder:text-fg-faint disabled:cursor-not-allowed disabled:opacity-70"
-          />
+          <p className="ml-1 hidden min-w-0 flex-1 text-left text-[11px] font-medium text-fg-faint sm:block">
+            {dict.chat.inputHint}
+          </p>
+          <span aria-hidden className="flex-1 sm:hidden" />
 
           <button
             type="submit"
             disabled={pending || (!value.trim() && !image)}
-            aria-label={ru.chat.sendLabel}
-            className="grid size-10 flex-none place-items-center rounded-[12px] bg-[linear-gradient(145deg,#1bb052,#12853d)] text-white shadow-[0_9px_20px_rgba(22,163,74,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_13px_25px_rgba(22,163,74,0.31)] motion-reduce:transform-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-[0_9px_20px_rgba(22,163,74,0.24)]"
+            aria-label={dict.chat.sendLabel}
+            className="grid size-11 flex-none place-items-center rounded-full bg-accent text-accent-contrast shadow-[0_6px_16px_rgba(22,163,74,0.22)] transition-[background-color,box-shadow] duration-150 hover:bg-accent-strong hover:shadow-[0_8px_20px_rgba(22,163,74,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-accent-soft disabled:text-accent/40 disabled:shadow-none"
           >
-            <SendIcon size={18} strokeWidth={2} />
+            <SendIcon size={19} strokeWidth={2} />
           </button>
         </div>
       </div>

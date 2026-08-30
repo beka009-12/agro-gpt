@@ -11,7 +11,7 @@ export function TypingIndicator() {
 
   return (
     <div className="flex justify-start pr-[12%]">
-      <div className="flex h-9 items-center gap-[5px] rounded-[16px_16px_16px_5px] bg-[#f0f6ef] px-3.5">
+      <div className="flex h-9 items-center gap-[5px] rounded-[16px_16px_16px_5px] bg-surface-muted px-3.5">
         <span className="sr-only">{ru.chat.typingTitle}</span>
         {DOTS.map((i) => (
           <motion.span
