@@ -41,11 +41,16 @@ export function ChatHeader({
       <Link
         href="/"
         aria-label={dict.header.logoAria}
-        className="flex h-11 flex-none items-center gap-2 rounded-xl px-2 text-fg transition-colors duration-150 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex h-11 flex-none items-center gap-2 rounded-xl px-2 text-fg transition-colors duration-150 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
       >
         <LogoMark size={27} />
         <span className="text-base font-bold tracking-tight">ibo</span>
       </Link>
+
+      <div className="hidden items-center gap-2 text-sm font-bold text-fg-muted lg:flex">
+        <span aria-hidden className="size-2 rounded-full bg-accent" />
+        <span>{dict.chat.readyStatus}</span>
+      </div>
 
       <div className="flex-1" />
 

@@ -280,6 +280,7 @@
   },
   "chat": {
     "back": "← Home",
+    "readyStatus": "ibo is ready",
     "emptyTitle": "Describe the plant problem",
     "emptySubtitle": "Tell us in your own words what symptoms you noticed, or attach a photo. More precise details will help produce a more useful answer.",
     "typingTitle": "AI is analyzing the plant…",
