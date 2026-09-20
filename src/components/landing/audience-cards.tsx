@@ -5,8 +5,8 @@ type AudienceItem = Dictionary["audience"]["items"][number]
 
 function AudienceArticle({ item }: { item: AudienceItem }) {
   return (
-    <article className="h-full py-9 md:py-10">
-      <span className="grid size-11 place-items-center rounded-control bg-accent-soft text-accent-strong">
+    <article className="group h-full py-9 transition-transform duration-200 md:py-10 lg:hover:-translate-y-1">
+      <span className="grid size-11 place-items-center rounded-control bg-accent-soft text-accent-strong transition-colors duration-200 group-hover:bg-accent group-hover:text-white">
         <AudienceIcon
           id={item.icon as AudienceIconId}
           size={22}
