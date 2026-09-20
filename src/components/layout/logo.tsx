@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../../../images/Code_Generated_Image.png";
+import logo from "../../../images/logo-drop-v2.png";
 
 interface LogoMarkProps {
   size?: number;
