@@ -42,12 +42,16 @@ export function MessageList({ messages, pending }: MessageListProps) {
       <div
         ref={scrollRef}
         aria-live="polite"
-        className={`flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 [webkit-overflow-scrolling:touch] sm:p-6 ${
+        className={`chat-dot-grid relative flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 [webkit-overflow-scrolling:touch] sm:p-6 ${
           isEmpty ? "items-center" : ""
         }`}
       >
         {isEmpty && (
-          <div className="flex w-full flex-1 items-center justify-center py-6 sm:py-10">
+          <div className="relative flex w-full flex-1 items-center justify-center py-6 sm:py-10">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 size-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-[90px]"
+            />
             <EmptyState />
           </div>
         )}
