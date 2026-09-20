@@ -240,13 +240,28 @@
       "title": "Our flagship product",
       "description": "HYDROWOOLKS is a liquid organic fertilizer obtained through a special hydrolysis of sheep wool. It is produced in Kyrgyzstan and suitable for many types of crops.",
       "composition": [
-        "Organic matter",
-        "Free amino acids",
-        "Organic nitrogen",
-        "Natural nutrients"
+        "Organic matter - 10.4%",
+        "Organic carbon - 4.1%",
+        "Organic nitrogen - 0.5%",
+        "Free amino acids - 1.03%",
+        "pH level - 12-13"
       ],
+      "registration": "Officially registered and approved for sale in Kyrgyzstan (No. 25-G-1403).",
+      "applicationTitle": "How and when to apply",
+      "application": [
+        {
+          "method": "Foliar spraying",
+          "dose": "150-300 ml per 100 L of water"
+        },
+        {
+          "method": "Drip irrigation",
+          "dose": "1-3 L per day"
+        }
+      ],
+      "applicationNote": "Visible effect within 3 days of first use in open field or greenhouse. Compatible with most organic and mineral fertilizers.",
       "volumesTitle": "Available volumes",
       "sizes": [
+        "0.5 kg",
         "1 kg",
         "5 kg",
         "10 kg",
@@ -313,10 +328,14 @@
   "footer": {
     "copyright": "© 2026 ibo - AI agronomist assistant",
     "aboutLink": "About us",
-    "support": "Support"
+    "support": "Support",
+    "tagline": "An AI agronomist that helps you grow healthy plants.",
+    "navTitle": "Navigation",
+    "contactTitle": "Contact us",
+    "address": "Mramornoye village, Koltsevaya st. 24, Chuy region, Kyrgyzstan"
   },
   "chat": {
-    "back": "← Home",
+    "back": "Home",
     "readyStatus": "ibo is ready",
     "emptyTitle": "Describe the plant problem",
     "emptySubtitle": "Tell us in your own words what symptoms you noticed, or attach a photo. More precise details will help produce a more useful answer.",

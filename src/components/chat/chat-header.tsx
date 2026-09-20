@@ -6,7 +6,7 @@ import { useI18n } from "@/src/i18n/client";
 import { LogoMark } from "@/src/components/layout/logo";
 import { ProfileMenu } from "@/src/components/layout/profile-menu";
 import type { UserProfile } from "@/src/lib/profile-schemas";
-import { MenuIcon } from "@/src/components/ui/icons";
+import { ArrowLeftIcon, MenuIcon } from "@/src/components/ui/icons";
 
 interface ChatHeaderProps {
   profile: UserProfile | null;
@@ -47,7 +47,17 @@ export function ChatHeader({
         <span className="text-base font-bold tracking-tight">ibo</span>
       </Link>
 
-      <div className="hidden items-center gap-2 text-sm font-bold text-fg-muted lg:flex">
+      <Link
+        href="/"
+        className="hidden items-center gap-2 rounded-control px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg lg:flex"
+      >
+        <ArrowLeftIcon size={16} />
+        <span>{dict.chat.back}</span>
+      </Link>
+
+      <span aria-hidden className="hidden h-5 w-px bg-edge lg:block" />
+
+      <div className="hidden items-center gap-2 px-3 text-sm font-bold text-fg-muted lg:flex">
         <span aria-hidden className="size-2 rounded-full bg-accent" />
         <span>{dict.chat.readyStatus}</span>
       </div>

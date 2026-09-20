@@ -192,7 +192,7 @@ export function LanguageSwitcher({
                   aria-hidden
                   tabIndex={-1}
                   onClick={() => setOpen(false)}
-                  className="absolute inset-0 cursor-default bg-forest/50 backdrop-blur-[3px]"
+                  className="absolute inset-0 cursor-default bg-black/40 backdrop-blur-[2px]"
                 />
 
                 <motion.div

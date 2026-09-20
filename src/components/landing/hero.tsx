@@ -1,21 +1,21 @@
-import Link from "next/link"
-import { getDict } from "@/src/i18n/server"
-import { ChevronRightIcon } from "@/src/components/ui/icons"
-import { DiagnosisCard } from "./diagnosis-card"
+import Link from "next/link";
+import { getDict } from "@/src/i18n/server";
+import { CheckIcon, ChevronRightIcon } from "@/src/components/ui/icons";
+import { DiagnosisCard } from "./diagnosis-card";
 
 export async function Hero() {
-  const ru = await getDict()
+  const ru = await getDict();
 
   return (
     <section className="overflow-hidden bg-white">
-      <div className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl items-center gap-12 px-5 py-16 md:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-20 lg:py-20">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 md:px-8 lg:min-h-[640px] lg:grid-cols-[1.08fr_0.92fr] lg:gap-20 lg:py-12">
         <div className="min-w-0 max-w-[720px]">
-          <p className="mb-6 text-sm font-semibold text-accent">{ru.hero.badge}</p>
+          <p className="mb-6 text-sm font-semibold text-accent">
+            {ru.hero.badge}
+          </p>
           <h1 className="font-display text-[44px] font-semibold leading-[1.02] tracking-[-0.05em] text-fg sm:text-[54px] lg:text-[58px]">
             {ru.hero.titleStart}
-            <span className="text-accent">
-              {ru.hero.titleAccent}
-            </span>
+            <span className="text-accent">{ru.hero.titleAccent}</span>
           </h1>
           <p className="mt-7 max-w-[620px] text-lg leading-[1.65] text-fg-muted">
             {ru.hero.subtitle}
@@ -47,11 +47,11 @@ export async function Hero() {
       </div>
 
       <div className="border-y border-edge">
-        <ul className="mx-auto grid max-w-7xl gap-0 px-5 sm:grid-cols-3 md:px-8">
+        <ul className="grid gap-0 sm:grid-cols-3">
           {ru.hero.trust.map((item) => (
             <li
               key={item}
-              className="flex min-h-16 items-center justify-center border-b border-edge py-5 text-center text-sm font-medium text-fg-muted last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0"
+              className="group flex min-h-16 items-center justify-center gap-2 border-b border-edge px-5 py-5 text-center text-sm font-medium text-fg-muted transition-colors duration-200 last:border-b-0 hover:bg-accent-soft hover:text-accent-strong sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0"
             >
               {item}
             </li>
@@ -59,5 +59,5 @@ export async function Hero() {
         </ul>
       </div>
     </section>
-  )
+  );
 }

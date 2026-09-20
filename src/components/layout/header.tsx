@@ -1,57 +1,60 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useI18n } from "@/src/i18n/client"
-import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useI18n } from "@/src/i18n/client";
+import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens";
 import {
   ChevronRightIcon,
   HomeIcon,
   LeafIcon,
-} from "@/src/components/ui/icons"
-import { LanguageSwitcher } from "./language-switcher"
-import { LogoMark } from "./logo"
-import { ProfileMenu, useProfile } from "./profile-menu"
+} from "@/src/components/ui/icons";
+import { LanguageSwitcher } from "./language-switcher";
+import { LogoMark } from "./logo";
+import { ProfileMenu, useProfile } from "./profile-menu";
 
 export function Header() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const pathname = usePathname()
-  const { dict: ru } = useI18n()
-  const reduced = useReducedMotion()
-  const rootRef = useRef<HTMLElement>(null)
-  const { profile, setProfile } = useProfile()
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { dict: ru } = useI18n();
+  const reduced = useReducedMotion();
+  const rootRef = useRef<HTMLElement>(null);
+  const { profile, setProfile } = useProfile();
 
   useEffect(() => {
-    if (!menuOpen) return
+    if (!menuOpen) return;
     const onPointerDown = (e: PointerEvent) => {
-      if (rootRef.current?.contains(e.target as Node)) return
+      if (rootRef.current?.contains(e.target as Node)) return;
       // шторка профиля рендерится порталом в body (вне header) — тап в ней
       // не должен закрывать бургер, иначе ProfileMenu размонтируется вместе с ним
-      if (e.target instanceof Element && e.target.closest("[data-profile-sheet]"))
-        return
-      setMenuOpen(false)
-    }
+      if (
+        e.target instanceof Element &&
+        e.target.closest("[data-profile-sheet]")
+      )
+        return;
+      setMenuOpen(false);
+    };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false)
-    }
-    document.addEventListener("pointerdown", onPointerDown)
-    document.addEventListener("keydown", onKeyDown)
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown)
-      document.removeEventListener("keydown", onKeyDown)
-    }
-  }, [menuOpen])
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
 
-  const close = () => setMenuOpen(false)
-  const onAbout = pathname === "/about"
+  const close = () => setMenuOpen(false);
+  const onAbout = pathname === "/about";
 
   return (
     <header
       ref={rootRef}
       style={{ fontFamily: "var(--font-header)" }}
-      className="sticky inset-x-0 top-0 z-50 border-b border-header-edge bg-white/95 backdrop-blur-md"
+      className="sticky inset-x-0 top-0 z-50 border-b border-header-edge bg-white/95 backrond-white backdrop-blur-[2px] supports-backdrop-blur:bg-white/95"
     >
       <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 md:px-8">
         <Link
@@ -97,29 +100,48 @@ export function Header() {
           <motion.span
             aria-hidden
             animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-            transition={{ duration: reduced ? 0.1 : DURATION.fast, ease: EASE_OUT }}
+            transition={{
+              duration: reduced ? 0.1 : DURATION.fast,
+              ease: EASE_OUT,
+            }}
             className="h-[2px] w-5 rounded-full bg-header-fg"
           />
           <motion.span
             aria-hidden
             animate={menuOpen ? { rotate: -45, y: -2 } : { rotate: 0, y: 0 }}
-            transition={{ duration: reduced ? 0.1 : DURATION.fast, ease: EASE_OUT }}
+            transition={{
+              duration: reduced ? 0.1 : DURATION.fast,
+              ease: EASE_OUT,
+            }}
             className="h-[2px] w-5 rounded-full bg-header-fg"
           />
         </button>
       </div>
 
       {/* мобильная панель меню */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {menuOpen && (
-          <motion.nav
-            key="mobile-menu"
-            initial={{ opacity: 0, y: reduced ? 0 : -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduced ? 0 : -8 }}
-            transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-            className="border-t border-header-edge bg-white px-5 pb-5 pt-4 sm:hidden"
-          >
+          <>
+            <motion.button
+              key="mobile-menu-backdrop"
+              type="button"
+              aria-hidden
+              tabIndex={-1}
+              onClick={close}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: DURATION.fast, ease: EASE_OUT }}
+              className="fixed inset-x-0 top-[72px] bottom-0 z-30 cursor-default bg-black/40 backdrop-blur-[2px] sm:hidden"
+            />
+            <motion.nav
+              key="mobile-menu"
+              initial={{ opacity: 0, y: reduced ? 0 : -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reduced ? 0 : -8 }}
+              transition={{ duration: DURATION.fast, ease: EASE_OUT }}
+              className="absolute inset-x-0 top-full z-40 max-h-[calc(100dvh-72px)] overflow-y-auto border-t border-header-edge bg-white px-5 pb-5 pt-4 shadow-lg sm:hidden"
+            >
             {profile && (
               <div className="mb-3 overflow-hidden rounded-2xl border border-header-edge bg-card">
                 <ProfileMenu
@@ -135,7 +157,7 @@ export function Header() {
                 { href: "/", label: ru.header.nav.home, Icon: HomeIcon },
                 { href: "/about", label: ru.header.nav.about, Icon: LeafIcon },
               ].map(({ href, label, Icon }) => {
-                const active = pathname === href
+                const active = pathname === href;
                 return (
                   <Link
                     key={href}
@@ -165,7 +187,7 @@ export function Header() {
                     </span>
                     <ChevronRightIcon size={15} className="text-fg-faint" />
                   </Link>
-                )
+                );
               })}
               <LanguageSwitcher variant="row" onDone={close} />
             </div>
@@ -176,9 +198,10 @@ export function Header() {
             >
               {ru.header.startChat}
             </Link>
-          </motion.nav>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </header>
-  )
+  );
 }

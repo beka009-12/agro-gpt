@@ -13,6 +13,7 @@ import {
   CheckIcon as PhosphorCheckIcon,
   ClipboardTextIcon as PhosphorClipboardTextIcon,
   CloudIcon as PhosphorCloudIcon,
+  EnvelopeSimpleIcon as PhosphorEnvelopeSimpleIcon,
   EyeIcon as PhosphorEyeIcon,
   EyeSlashIcon as PhosphorEyeSlashIcon,
   FarmIcon as PhosphorFarmIcon,
@@ -20,11 +21,13 @@ import {
   FlowerIcon as PhosphorFlowerIcon,
   GlobeIcon as PhosphorGlobeIcon,
   HouseIcon as PhosphorHouseIcon,
+  InstagramLogoIcon as PhosphorInstagramLogoIcon,
   LeafIcon as PhosphorLeafIcon,
   ListIcon as PhosphorListIcon,
   MapPinIcon as PhosphorMapPinIcon,
   PaperclipIcon as PhosphorPaperclipIcon,
   PaperPlaneTiltIcon as PhosphorPaperPlaneTiltIcon,
+  PhoneIcon as PhosphorPhoneIcon,
   PlantIcon as PhosphorPlantIcon,
   PlusIcon as PhosphorPlusIcon,
   ShieldCheckIcon as PhosphorShieldCheckIcon,
@@ -35,6 +38,7 @@ import {
   TrendUpIcon as PhosphorTrendUpIcon,
   UserFocusIcon as PhosphorUserFocusIcon,
   WarningIcon as PhosphorWarningIcon,
+  WhatsappLogoIcon as PhosphorWhatsappLogoIcon,
   XIcon as PhosphorXIcon,
 } from "@phosphor-icons/react/dist/ssr"
 
@@ -78,6 +82,10 @@ export const CloudIcon = createIcon(PhosphorCloudIcon)
 export const SendIcon = createIcon(PhosphorPaperPlaneTiltIcon)
 export const MapPinIcon = createIcon(PhosphorMapPinIcon)
 export const ChevronRightIcon = createIcon(PhosphorCaretRightIcon)
+export const EnvelopeSimpleIcon = createIcon(PhosphorEnvelopeSimpleIcon)
+export const PhoneIcon = createIcon(PhosphorPhoneIcon)
+export const InstagramLogoIcon = createIcon(PhosphorInstagramLogoIcon)
+export const WhatsappLogoIcon = createIcon(PhosphorWhatsappLogoIcon)
 export const PlusIcon = createIcon(PhosphorPlusIcon)
 export const EyeIcon = createIcon(PhosphorEyeIcon)
 export const EyeOffIcon = createIcon(PhosphorEyeSlashIcon)

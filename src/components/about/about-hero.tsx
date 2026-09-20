@@ -6,7 +6,7 @@ export async function AboutHero() {
 
   return (
     <section className="bg-white">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 md:px-8 md:py-20 lg:min-h-[calc(100dvh-72px)] lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 md:px-8 md:py-20 lg:min-h-[640px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
         <div className="min-w-0 max-w-[720px]">
           <p className="mb-6 text-sm font-semibold text-accent">{ru.about.badge}</p>
           <h1 className="font-display text-[44px] font-semibold leading-[1.02] tracking-[-0.05em] text-fg sm:text-[54px] lg:text-[58px]">
@@ -46,11 +46,11 @@ export async function AboutHero() {
       </div>
 
       <div className="border-y border-edge">
-        <ul className="mx-auto grid max-w-7xl px-5 sm:grid-cols-3 md:px-8">
+        <ul className="grid sm:grid-cols-3">
           {ru.about.stats.map((stat) => (
             <li
               key={stat}
-              className="flex min-h-16 items-center justify-center border-b border-edge py-5 text-center text-sm font-medium text-fg-muted last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0"
+              className="flex min-h-16 items-center justify-center border-b border-edge px-5 py-5 text-center text-sm font-medium text-fg-muted transition-colors duration-200 last:border-b-0 hover:bg-accent-soft hover:text-accent-strong sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0"
             >
               {stat}
             </li>
