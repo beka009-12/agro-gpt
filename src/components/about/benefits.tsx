@@ -1,29 +1,20 @@
 import { getDict } from "@/src/i18n/server"
-import { CheckIcon } from "@/src/components/ui/icons"
 import { SectionHeading } from "@/src/components/landing/section-heading"
+import { BenefitsCarousel } from "./benefits-carousel"
 
 export async function Benefits() {
   const ru = await getDict()
-  const { eyebrow, title, items } = ru.about.benefits
+  const { eyebrow, title, tapHint, items } = ru.about.benefits
 
   return (
     <section className="bg-white px-5 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionHeading eyebrow={eyebrow} title={title} />
+        <p className="-mt-6 mb-8 text-sm font-medium text-fg-faint md:hidden">
+          {tapHint}
+        </p>
 
-        <div className="grid border-t border-edge md:grid-cols-2 md:gap-x-16">
-          {items.map((item) => (
-            <article key={item.title} className="border-b border-edge py-7 md:py-8">
-              <CheckIcon size={20} weight="bold" className="text-accent" />
-              <h3 className="mt-5 font-display text-2xl font-semibold tracking-[-0.025em] text-fg">
-                {item.title}
-              </h3>
-              <p className="mt-3 max-w-[560px] text-[15px] leading-7 text-fg-muted">
-                {item.description}
-              </p>
-            </article>
-          ))}
-        </div>
+        <BenefitsCarousel items={items} />
       </div>
     </section>
   )
