@@ -1,8 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useI18n } from "@/src/i18n/client";
+import { mapHistoryMessage, parseHistoryResponse } from "./chat-history-mapping";
 import { ChatInput } from "./chat-input";
 import { GeoWarningBanner } from "./geo-warning-banner";
 import { MessageList } from "./message-list";
@@ -42,15 +44,19 @@ function readErrorMessage(data: unknown): string | null {
 
 interface ChatViewProps {
   hasProfileLocation: boolean;
+  initialChatId: string | null;
 }
 
-export function ChatView({ hasProfileLocation }: ChatViewProps) {
+export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
   const router = useRouter();
   const { dict: ru } = useI18n();
   const { status: geoStatus, getCoords } = useChatGeo();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pending, setPending] = useState(false);
-  const chatIdRef = useRef<string | null>(null);
+  const [hasMoreOlder, setHasMoreOlder] = useState(false);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const chatIdRef = useRef<string | null>(initialChatId);
+  const oldestCreatedAtRef = useRef<string | null>(null);
   const objectUrlsRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -62,6 +68,79 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       for (const url of urls) URL.revokeObjectURL(url);
     };
   }, []);
+
+  useEffect(() => {
+    if (!initialChatId) return;
+    let cancelled = false;
+
+    fetch(`/api/chat/${initialChatId}/messages?limit=50`)
+      .then(async (res) => {
+        const data: unknown = await res.json().catch(() => null);
+        if (cancelled) return;
+
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        if (!res.ok) {
+          toast.error(
+            res.status === 403
+              ? ru.chat.history.errors.noAccess
+              : ru.chat.history.errors.notFound,
+          );
+          router.push("/chat");
+          return;
+        }
+
+        const parsed = parseHistoryResponse(data);
+        if (!parsed) {
+          toast.error(ru.auth.errors.unexpectedResponse);
+          router.push("/chat");
+          return;
+        }
+
+        setMessages(parsed.messages.flatMap(mapHistoryMessage));
+        setHasMoreOlder(parsed.has_more);
+        oldestCreatedAtRef.current = parsed.messages.at(0)?.created_at ?? null;
+      })
+      .catch(() => {
+        if (!cancelled) {
+          toast.error(ru.auth.errors.network);
+          router.push("/chat");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialChatId]);
+
+  const loadOlderMessages = async () => {
+    if (!chatIdRef.current || !hasMoreOlder || loadingOlder) return;
+    setLoadingOlder(true);
+    try {
+      const before = oldestCreatedAtRef.current
+        ? `&before=${encodeURIComponent(oldestCreatedAtRef.current)}`
+        : "";
+      const res = await fetch(
+        `/api/chat/${chatIdRef.current}/messages?limit=50${before}`,
+      );
+      const data: unknown = await res.json().catch(() => null);
+      if (!res.ok) return;
+
+      const parsed = parseHistoryResponse(data);
+      if (!parsed) return;
+
+      const mapped = parsed.messages.flatMap(mapHistoryMessage);
+      setMessages((prev) => [...mapped, ...prev]);
+      setHasMoreOlder(parsed.has_more);
+      oldestCreatedAtRef.current =
+        parsed.messages.at(0)?.created_at ?? oldestCreatedAtRef.current;
+    } finally {
+      setLoadingOlder(false);
+    }
+  };
 
   const pushMessage = (message: Omit<ChatMessage, "id">) => {
     setMessages((prev) => [...prev, { id: crypto.randomUUID(), ...message }]);
@@ -144,6 +223,8 @@ export function ChatView({ hasProfileLocation }: ChatViewProps) {
       <MessageList
         messages={messages}
         pending={pending}
+        hasMoreOlder={hasMoreOlder}
+        onLoadOlder={() => void loadOlderMessages()}
       />
 
       <ChatInput
