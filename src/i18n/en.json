@@ -363,6 +363,30 @@
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
       "imageTooLarge": "File is too large - attach a photo up to 10 MB"
+    },
+    "history": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 days",
+      "trash": "Trash",
+      "backToChats": "Back to chats",
+      "rename": "Rename chat",
+      "delete": "Delete chat",
+      "restore": "Restore chat",
+      "confirmDeleteTitle": "Delete \"{title}\"?",
+      "confirmDeleteCancel": "Cancel",
+      "confirmDeleteConfirm": "Delete",
+      "emptyChats": "No chats yet",
+      "emptyTrash": "Trash is empty",
+      "renameInputLabel": "Chat title",
+      "errors": {
+        "notFound": "Chat not found",
+        "noAccess": "You don't have access to this chat",
+        "restoreExpired": "This chat can no longer be restored",
+        "renameFailed": "Couldn't rename the chat",
+        "deleteFailed": "Couldn't delete the chat",
+        "restoreFailed": "Couldn't restore the chat"
+      }
     }
   },
   "auth": {

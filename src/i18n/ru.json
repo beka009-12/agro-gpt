@@ -363,6 +363,30 @@
     "errors": {
       "failed": "Не получилось получить ответ. Попробуйте ещё раз.",
       "imageTooLarge": "Файл слишком большой - приложите фото до 10 МБ"
+    },
+    "history": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "last7Days": "7 дней",
+      "trash": "Корзина",
+      "backToChats": "К чатам",
+      "rename": "Переименовать чат",
+      "delete": "Удалить чат",
+      "restore": "Восстановить чат",
+      "confirmDeleteTitle": "Удалить «{title}»?",
+      "confirmDeleteCancel": "Отмена",
+      "confirmDeleteConfirm": "Удалить",
+      "emptyChats": "Пока нет чатов",
+      "emptyTrash": "Корзина пуста",
+      "renameInputLabel": "Название чата",
+      "errors": {
+        "notFound": "Чат не найден",
+        "noAccess": "Нет доступа к этому чату",
+        "restoreExpired": "Чат больше нельзя восстановить",
+        "renameFailed": "Не получилось переименовать чат",
+        "deleteFailed": "Не получилось удалить чат",
+        "restoreFailed": "Не получилось восстановить чат"
+      }
     }
   },
   "auth": {

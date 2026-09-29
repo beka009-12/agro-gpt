@@ -363,6 +363,30 @@
     "errors": {
       "failed": "Жооп алуу мүмкүн болгон жок. Кайра аракет кылыңыз.",
       "imageTooLarge": "Файл өтө чоң - 10 МБга чейинки сүрөт тиркеңиз"
+    },
+    "history": {
+      "today": "Бүгүн",
+      "yesterday": "Кечээ",
+      "last7Days": "7 күн",
+      "trash": "Себет",
+      "backToChats": "Чаттарга кайтуу",
+      "rename": "Чатты өзгөртүү",
+      "delete": "Чатты өчүрүү",
+      "restore": "Чатты калыбына келтирүү",
+      "confirmDeleteTitle": "«{title}» өчүрүлсүнбү?",
+      "confirmDeleteCancel": "Жокко чыгаруу",
+      "confirmDeleteConfirm": "Өчүрүү",
+      "emptyChats": "Азырынча чаттар жок",
+      "emptyTrash": "Себет бош",
+      "renameInputLabel": "Чаттын аталышы",
+      "errors": {
+        "notFound": "Чат табылган жок",
+        "noAccess": "Бул чатка кирүү мүмкүн эмес",
+        "restoreExpired": "Бул чатты мындан ары калыбына келтирүү мүмкүн эмес",
+        "renameFailed": "Чаттын атын өзгөртүү мүмкүн болгон жок",
+        "deleteFailed": "Чатты өчүрүү мүмкүн болгон жок",
+        "restoreFailed": "Чатты калыбына келтирүү мүмкүн болгон жок"
+      }
     }
   },
   "auth": {
