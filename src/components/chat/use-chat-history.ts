@@ -36,7 +36,6 @@ export function useChatHistory(
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.view])
 
   const toggleView = () => {

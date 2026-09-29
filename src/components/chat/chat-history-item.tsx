@@ -45,15 +45,20 @@ export function ChatHistoryItem({
   const { dict, locale } = useI18n();
   const reduceMotion = useReducedMotion();
   const [draft, setDraft] = useState(item.title ?? "");
+  const [trackedRenaming, setTrackedRenaming] = useState(isRenaming);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  if (isRenaming !== trackedRenaming) {
+    setTrackedRenaming(isRenaming);
+    if (isRenaming) setDraft(item.title ?? "");
+  }
 
   useEffect(() => {
     if (isRenaming) {
-      setDraft(item.title ?? "");
       inputRef.current?.focus();
       inputRef.current?.select();
     }
-  }, [isRenaming, item.title]);
+  }, [isRenaming]);
 
   const displayTitle =
     item.title ??

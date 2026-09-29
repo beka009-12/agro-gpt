@@ -12,17 +12,44 @@ import type { ChatMessage } from "./types";
 interface MessageListProps {
   messages: ChatMessage[];
   pending: boolean;
+  hasMoreOlder?: boolean;
+  onLoadOlder?: () => void;
 }
 
-export function MessageList({ messages, pending }: MessageListProps) {
+export function MessageList({
+  messages,
+  pending,
+  hasMoreOlder = false,
+  onLoadOlder,
+}: MessageListProps) {
   const { dict } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const prevScrollHeightRef = useRef<number | null>(null);
+  const prevMessageCountRef = useRef(messages.length);
 
   useEffect(() => {
     const element = scrollRef.current;
-    if (element) element.scrollTop = element.scrollHeight;
+    if (!element) return;
+
+    const grew = messages.length > prevMessageCountRef.current;
+    if (grew && prevScrollHeightRef.current !== null) {
+      element.scrollTop = element.scrollHeight - prevScrollHeightRef.current;
+      prevScrollHeightRef.current = null;
+    } else {
+      element.scrollTop = element.scrollHeight;
+    }
+    prevMessageCountRef.current = messages.length;
   }, [messages.length, pending]);
+
+  const handleScroll = () => {
+    const element = scrollRef.current;
+    if (!element || !hasMoreOlder || !onLoadOlder) return;
+    if (element.scrollTop < 80) {
+      prevScrollHeightRef.current = element.scrollHeight;
+      onLoadOlder();
+    }
+  };
 
   useEffect(() => {
     if (!activeImage) return;
@@ -41,6 +68,7 @@ export function MessageList({ messages, pending }: MessageListProps) {
     <>
       <div
         ref={scrollRef}
+        onScroll={handleScroll}
         aria-live="polite"
         className={`chat-dot-grid relative flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 [webkit-overflow-scrolling:touch] sm:p-6 ${
           isEmpty ? "items-center" : ""
