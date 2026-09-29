@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ChatShell } from "@/src/components/chat/chat-shell"
 import { getDict } from "@/src/i18n/server"
 import { chatIdSchema } from "@/src/lib/chat-schemas"
 
@@ -21,5 +20,5 @@ export default async function ChatByIdPage({
   const { chatId } = await params
   if (!chatIdSchema.safeParse(chatId).success) notFound()
 
-  return <ChatShell initialChatId={chatId} />
+  return null
 }

@@ -13,7 +13,7 @@ export function proxy(request: NextRequest): NextResponse {
   const hasToken = request.cookies.has(TOKEN_COOKIE)
   const { pathname } = request.nextUrl
 
-  if (!hasToken && pathname === "/chat") {
+  if (!hasToken && (pathname === "/chat" || pathname.startsWith("/chat/"))) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
   if (hasToken && GUEST_ONLY_PATHS.includes(pathname)) {
@@ -23,5 +23,12 @@ export function proxy(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ["/chat", "/login", "/register", "/forgot-password", "/reset-password"],
+  matcher: [
+    "/chat",
+    "/chat/:path*",
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+  ],
 }

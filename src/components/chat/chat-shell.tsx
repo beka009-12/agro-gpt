@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
@@ -15,18 +15,14 @@ import { useViewportHeight } from "../hooks/useViewportHeight";
 
 const DESKTOP_QUERY = "(min-width: 1024px)";
 
-interface ChatShellProps {
-  initialChatId?: string;
-}
-
-export function ChatShell({ initialChatId }: ChatShellProps) {
+export function ChatShell() {
   useViewportHeight();
   const router = useRouter();
+  const params = useParams<{ chatId?: string }>();
+  const activeChatId = typeof params.chatId === "string" ? params.chatId : null;
 
   const [sessionId, setSessionId] = useState(0);
-  const [activeChatId, setActiveChatId] = useState<string | null>(
-    initialChatId ?? null,
-  );
+  const [historyRefreshToken, setHistoryRefreshToken] = useState(0);
   const [sidebarState, dispatchSidebar] = useReducer(
     reduceSidebarState,
     createSidebarState(),
@@ -56,20 +52,22 @@ export function ChatShell({ initialChatId }: ChatShellProps) {
 
   const startNewChat = () => {
     setSessionId((id) => id + 1);
-    setActiveChatId(null);
     dispatchSidebar({ type: "new-chat" });
     router.push("/chat");
   };
 
   const selectChat = (id: string) => {
-    setActiveChatId(id);
     dispatchSidebar({ type: "new-chat" });
     router.push(`/chat/${id}`);
   };
 
   const handleActiveChatRemoved = () => {
-    setActiveChatId(null);
     router.push("/chat");
+  };
+
+  const handleChatCreated = (id: string) => {
+    router.replace(`/chat/${id}`);
+    setHistoryRefreshToken((token) => token + 1);
   };
 
   return (
@@ -93,6 +91,7 @@ export function ChatShell({ initialChatId }: ChatShellProps) {
         activeChatId={activeChatId}
         onSelectChat={selectChat}
         onActiveChatRemoved={handleActiveChatRemoved}
+        historyRefreshToken={historyRefreshToken}
       />
 
       <main
@@ -111,6 +110,7 @@ export function ChatShell({ initialChatId }: ChatShellProps) {
           key={activeChatId ?? `new-${sessionId}`}
           initialChatId={activeChatId}
           hasProfileLocation={hasProfileLocation}
+          onChatCreated={handleChatCreated}
         />
       </main>
     </div>

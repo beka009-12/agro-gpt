@@ -95,7 +95,7 @@ export function ChatHistoryItem({
       <button
         type="button"
         onClick={() => onSelect(item.id)}
-        className={`flex min-h-9 w-full min-w-0 items-center truncate rounded-lg px-2 py-1.5 text-left text-sm transition-colors duration-150 ${
+        className={`flex min-h-9 w-full min-w-0 items-center truncate rounded-lg py-1.5 pl-2 pr-9 text-left text-sm transition-colors duration-150 [@media(hover:none)]:pr-16 ${
           isActive
             ? "bg-accent-soft text-accent-strong"
             : "text-fg-muted hover:bg-surface-muted hover:text-fg"
@@ -104,7 +104,7 @@ export function ChatHistoryItem({
         <span className="truncate">{displayTitle}</span>
       </button>
 
-      <div className="absolute right-1 flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+      <div className="absolute right-1 flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
         {isTrash ? (
           <button
             type="button"

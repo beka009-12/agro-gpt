@@ -24,6 +24,7 @@ interface ChatSidebarProps {
   activeChatId: string | null;
   onSelectChat: (id: string) => void;
   onActiveChatRemoved: () => void;
+  historyRefreshToken: number;
 }
 
 const FOCUSABLE_SELECTOR = [
@@ -48,6 +49,7 @@ export function ChatSidebar({
   activeChatId,
   onSelectChat,
   onActiveChatRemoved,
+  historyRefreshToken,
 }: ChatSidebarProps) {
   const { dict } = useI18n();
   const asideRef = useRef<HTMLElement>(null);
@@ -180,6 +182,7 @@ export function ChatSidebar({
             activeChatId={activeChatId}
             onSelectChat={onSelectChat}
             onActiveChatRemoved={onActiveChatRemoved}
+            historyRefreshToken={historyRefreshToken}
           />
         ) : (
           <div className="flex-1" />

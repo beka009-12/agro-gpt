@@ -12,15 +12,17 @@ interface ChatHistoryPanelProps {
   activeChatId: string | null;
   onSelectChat: (id: string) => void;
   onActiveChatRemoved: () => void;
+  historyRefreshToken: number;
 }
 
 export function ChatHistoryPanel({
   activeChatId,
   onSelectChat,
   onActiveChatRemoved,
+  historyRefreshToken,
 }: ChatHistoryPanelProps) {
   const { dict } = useI18n();
-  const history = useChatHistory(activeChatId, onActiveChatRemoved);
+  const history = useChatHistory(activeChatId, onActiveChatRemoved, historyRefreshToken);
   const groups = groupChatsByDate(history.items, new Date());
   const isEmpty = history.status === "ready" && groups.length === 0;
 

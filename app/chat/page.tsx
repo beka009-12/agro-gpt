@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { ChatShell } from "@/src/components/chat/chat-shell"
 import { getDict } from "@/src/i18n/server"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,5 +11,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ChatPage() {
-  return <ChatShell />
+  return null
 }

@@ -45,9 +45,14 @@ function readErrorMessage(data: unknown): string | null {
 interface ChatViewProps {
   hasProfileLocation: boolean;
   initialChatId: string | null;
+  onChatCreated?: (id: string) => void;
 }
 
-export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
+export function ChatView({
+  hasProfileLocation,
+  initialChatId,
+  onChatCreated,
+}: ChatViewProps) {
   const router = useRouter();
   const { dict: ru } = useI18n();
   const { status: geoStatus, getCoords } = useChatGeo();
@@ -73,8 +78,9 @@ export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
     if (!initialChatId) return;
     let cancelled = false;
 
-    fetch(`/api/chat/${initialChatId}/messages?limit=50`)
-      .then(async (res) => {
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/chat/${initialChatId}/messages?limit=50`);
         const data: unknown = await res.json().catch(() => null);
         if (cancelled) return;
 
@@ -102,13 +108,15 @@ export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
         setMessages(parsed.messages.flatMap(mapHistoryMessage));
         setHasMoreOlder(parsed.has_more);
         oldestCreatedAtRef.current = parsed.messages.at(0)?.created_at ?? null;
-      })
-      .catch(() => {
+      } catch {
         if (!cancelled) {
           toast.error(ru.auth.errors.network);
           router.push("/chat");
         }
-      });
+      }
+    };
+
+    void load();
 
     return () => {
       cancelled = true;
@@ -161,6 +169,7 @@ export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
       imageUrl,
       imageName: image?.name,
     });
+    const wasNewChat = !chatIdRef.current;
     setPending(true);
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -205,6 +214,7 @@ export function ChatView({ hasProfileLocation, initialChatId }: ChatViewProps) {
       }
       chatIdRef.current = parsed.chatId;
       pushMessage({ role: "bot", text: parsed.answer });
+      if (wasNewChat) onChatCreated?.(parsed.chatId);
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       pushMessage({ role: "bot", text: ru.auth.errors.network });

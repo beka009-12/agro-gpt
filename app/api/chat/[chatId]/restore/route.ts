@@ -5,6 +5,7 @@ import { getDict } from "@/src/i18n/server"
 import { apiFetch } from "@/src/lib/api-server"
 import { handleApiError } from "@/src/lib/api-route-helpers"
 import { TOKEN_COOKIE } from "@/src/lib/auth-cookies"
+import { chatIdSchema } from "@/src/lib/chat-schemas"
 
 export async function POST(
   _request: NextRequest,
@@ -17,6 +18,12 @@ export async function POST(
   }
   try {
     const { chatId } = await params
+    if (!chatIdSchema.safeParse(chatId).success) {
+      return NextResponse.json(
+        { message: ru.auth.errors.checkData },
+        { status: 404 }
+      )
+    }
     const store = await cookies()
     const token = store.get(TOKEN_COOKIE)?.value
     if (!token) {
