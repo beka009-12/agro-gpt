@@ -2,8 +2,9 @@ import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getDict } from "@/src/i18n/server"
-import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { clearAuthCookies, TOKEN_COOKIE } from "@/src/lib/auth-cookies"
+import { apiFetch } from "@/src/lib/api-server"
+import { handleApiError } from "@/src/lib/api-route-helpers"
+import { TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 import {
   chatCoordsSchema,
   chatCreateResponseSchema,
@@ -131,24 +132,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ chatId, answer: diagnosis.data.answer })
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) {
-      const store = await cookies()
-      clearAuthCookies(store)
-      return NextResponse.json(
-        { message: ru.auth.errors.unauthorized },
-        { status: 401 }
-      )
-    }
-    if (error instanceof ApiError) {
-      return NextResponse.json(
-        { message: error.message },
-        { status: error.status }
-      )
-    }
-    console.error("[chat/message]", error)
-    return NextResponse.json(
-      { message: ru.auth.errors.unavailable },
-      { status: 500 }
-    )
+    return handleApiError(error, ru, "[chat/message]")
   }
 }
