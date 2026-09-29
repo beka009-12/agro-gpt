@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
@@ -14,10 +15,18 @@ import { useViewportHeight } from "../hooks/useViewportHeight";
 
 const DESKTOP_QUERY = "(min-width: 1024px)";
 
-export function ChatShell() {
+interface ChatShellProps {
+  initialChatId?: string;
+}
+
+export function ChatShell({ initialChatId }: ChatShellProps) {
   useViewportHeight();
+  const router = useRouter();
 
   const [sessionId, setSessionId] = useState(0);
+  const [activeChatId, setActiveChatId] = useState<string | null>(
+    initialChatId ?? null,
+  );
   const [sidebarState, dispatchSidebar] = useReducer(
     reduceSidebarState,
     createSidebarState(),
@@ -47,7 +56,20 @@ export function ChatShell() {
 
   const startNewChat = () => {
     setSessionId((id) => id + 1);
+    setActiveChatId(null);
     dispatchSidebar({ type: "new-chat" });
+    router.push("/chat");
+  };
+
+  const selectChat = (id: string) => {
+    setActiveChatId(id);
+    dispatchSidebar({ type: "new-chat" });
+    router.push(`/chat/${id}`);
+  };
+
+  const handleActiveChatRemoved = () => {
+    setActiveChatId(null);
+    router.push("/chat");
   };
 
   return (
@@ -68,6 +90,9 @@ export function ChatShell() {
         triggerRef={sidebarTriggerRef}
         onToggle={() => dispatchSidebar({ type: "toggle" })}
         onClose={() => dispatchSidebar({ type: "close" })}
+        activeChatId={activeChatId}
+        onSelectChat={selectChat}
+        onActiveChatRemoved={handleActiveChatRemoved}
       />
 
       <main
@@ -82,7 +107,11 @@ export function ChatShell() {
           sidebarTriggerRef={sidebarTriggerRef}
         />
 
-        <ChatView key={sessionId} hasProfileLocation={hasProfileLocation} />
+        <ChatView
+          key={activeChatId ?? `new-${sessionId}`}
+          initialChatId={activeChatId}
+          hasProfileLocation={hasProfileLocation}
+        />
       </main>
     </div>
   );
