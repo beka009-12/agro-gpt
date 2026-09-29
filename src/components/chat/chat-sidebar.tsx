@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useI18n } from "@/src/i18n/client";
 import { PlusIcon, SidebarIcon, XIcon } from "@/src/components/ui/icons";
+import { ChatHistoryPanel } from "@/src/components/chat/chat-history-panel";
 import { LanguageSwitcher } from "@/src/components/layout/language-switcher";
 import { LogoMark } from "@/src/components/layout/logo";
 import { ProfileMenu } from "@/src/components/layout/profile-menu";
@@ -20,6 +21,9 @@ interface ChatSidebarProps {
   triggerRef: RefObject<HTMLButtonElement | null>;
   onToggle: () => void;
   onClose: () => void;
+  activeChatId: string | null;
+  onSelectChat: (id: string) => void;
+  onActiveChatRemoved: () => void;
 }
 
 const FOCUSABLE_SELECTOR = [
@@ -41,6 +45,9 @@ export function ChatSidebar({
   triggerRef,
   onToggle,
   onClose,
+  activeChatId,
+  onSelectChat,
+  onActiveChatRemoved,
 }: ChatSidebarProps) {
   const { dict } = useI18n();
   const asideRef = useRef<HTMLElement>(null);
@@ -168,7 +175,15 @@ export function ChatSidebar({
           </button>
         </div>
 
-        <div className="flex-1" />
+        {expanded ? (
+          <ChatHistoryPanel
+            activeChatId={activeChatId}
+            onSelectChat={onSelectChat}
+            onActiveChatRemoved={onActiveChatRemoved}
+          />
+        ) : (
+          <div className="flex-1" />
+        )}
 
         <div
           className={`flex flex-none border-t border-edge py-3 ${
