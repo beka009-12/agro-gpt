@@ -5,6 +5,7 @@ import { DiseaseIntelligence } from "@/src/components/landing/disease-intelligen
 import { Audience } from "@/src/components/landing/audience"
 import { Features } from "@/src/components/landing/features"
 import { HowItWorks } from "@/src/components/landing/how-it-works"
+import { ReviewsSection } from "@/src/components/reviews/reviews-section"
 import { CtaBanner } from "@/src/components/landing/cta-banner"
 import { getDict } from "@/src/i18n/server"
 
@@ -44,6 +45,7 @@ export default async function Home() {
         <Audience />
         <Features />
         <HowItWorks />
+        <ReviewsSection />
         <CtaBanner />
       </main>
       <Footer />

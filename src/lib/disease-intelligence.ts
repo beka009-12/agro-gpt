@@ -25,7 +25,9 @@ export interface DiseaseDetails {
   sources: DiseaseSource[]
 }
 
-const optionalTextSchema = z.string().trim().min(1).nullable().optional()
+// без .min(1): бэк иногда шлёт crop_name: "" вместо null — normalizeDiseaseMap
+// сам схлопывает пустую/пробельную строку в null, схема не должна их отбраковывать
+const optionalTextSchema = z.string().trim().nullable().optional()
 
 const diseaseMapFeatureSchema = z.object({
   type: z.string().optional(),

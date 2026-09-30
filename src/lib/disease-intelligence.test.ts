@@ -7,6 +7,25 @@ import {
 } from "./disease-intelligence"
 
 describe("diseaseMapResponseSchema", () => {
+  test("accepts an empty-string crop_name instead of rejecting the whole batch", () => {
+    const result = diseaseMapResponseSchema.safeParse({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [74.6, 42.8] },
+          properties: {
+            disease_name: "Вирусная мозаика",
+            crop_name: "",
+            created_at: "2026-09-27T14:13:28.852213Z",
+          },
+        },
+      ],
+    })
+
+    expect(result.success).toBeTrue()
+  })
+
   test("rejects malformed map features before normalization", () => {
     const result = diseaseMapResponseSchema.safeParse({
       type: "FeatureCollection",
@@ -64,6 +83,31 @@ describe("normalizeDiseaseMap", () => {
         diseaseName: "Фитофтороз",
         cropName: "Томат",
         createdAt: "2026-08-30T10:00:00Z",
+        longitude: 74.6,
+        latitude: 42.8,
+      },
+    ])
+  })
+
+  test("normalizes an empty-string crop_name to null instead of dropping the point", () => {
+    const result = normalizeDiseaseMap({
+      features: [
+        {
+          geometry: { coordinates: [74.6, 42.8] },
+          properties: {
+            disease_name: "Вирусная мозаика",
+            crop_name: "",
+            created_at: "2026-09-27T14:13:28.852213Z",
+          },
+        },
+      ],
+    })
+
+    expect(result).toEqual([
+      {
+        diseaseName: "Вирусная мозаика",
+        cropName: null,
+        createdAt: "2026-09-27T14:13:28.852213Z",
         longitude: 74.6,
         latitude: 42.8,
       },

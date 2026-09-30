@@ -11,5 +11,8 @@ export interface BodyCreateDiagnosisDiagnosisPost {
   user_text?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  /** Фото растения (JPG, PNG, WEBP) */
   user_image?: Blob | null;
+  /** Документ PDF: протокол анализа почвы или любой другой */
+  document?: Blob | null;
 }

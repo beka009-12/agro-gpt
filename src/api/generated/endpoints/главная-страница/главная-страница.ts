@@ -7,6 +7,7 @@
  */
 import type {
   DiseaseDetailsResponseSchema,
+  DiseaseDetailsTopDiseasesDiseaseNameDetailsGetParams,
   DiseaseMapDiseaseMapGetParams,
   DiseaseMapResponseSchema,
   TopDiseaseSchema
@@ -20,6 +21,7 @@ export const getTopDiseasesTopDiseasesGetUrl = () => {
 
   return `/top-diseases/`
 }
+
 /**
  * @summary Top Diseases
  */
@@ -42,20 +44,34 @@ export const topDiseasesTopDiseasesGet = async ( options?: RequestInit): Promise
 }
 
 
-export const getDiseaseDetailsTopDiseasesDiseaseNameDetailsGetUrl = (diseaseName: string,) => {
+export const getDiseaseDetailsTopDiseasesDiseaseNameDetailsGetUrl = (diseaseName: string,
+    params?: DiseaseDetailsTopDiseasesDiseaseNameDetailsGetParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/top-diseases/${diseaseName}/details`
+  return stringifiedParams.length > 0 ? `/top-diseases/${diseaseName}/details?${stringifiedParams}` : `/top-diseases/${diseaseName}/details`
 }
 
 /**
+ * Справка по болезни из госкаталога. Страна необязательна и по умолчанию прежняя.
+ *
+ * Эндпоинт публичный - авторизации у него нет и не было, - поэтому страну
+ * приходится принимать параметром, а не выводить из пользователя. Не передали -
+ * отвечаем каталогом по умолчанию, как отвечали до появления второй страны.
  * @summary Disease Details
  */
-export const diseaseDetailsTopDiseasesDiseaseNameDetailsGet = async (diseaseName: string, options?: RequestInit): Promise<DiseaseDetailsResponseSchema> => {
+export const diseaseDetailsTopDiseasesDiseaseNameDetailsGet = async (diseaseName: string,
+    params?: DiseaseDetailsTopDiseasesDiseaseNameDetailsGetParams, options?: RequestInit): Promise<DiseaseDetailsResponseSchema> => {
 
-  const res = await fetch(getDiseaseDetailsTopDiseasesDiseaseNameDetailsGetUrl(diseaseName),
+  const res = await fetch(getDiseaseDetailsTopDiseasesDiseaseNameDetailsGetUrl(diseaseName,params),
   {
     ...options,
     method: 'GET'
@@ -107,3 +123,5 @@ export const diseaseMapDiseaseMapGet = async (params?: DiseaseMapDiseaseMapGetPa
   const data: DiseaseMapResponseSchema = body ? JSON.parse(body) : {}
   return data
 }
+
+

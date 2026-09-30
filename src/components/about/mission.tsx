@@ -1,17 +1,18 @@
 import { getDict } from "@/src/i18n/server"
+import { SECTION_PADDING } from "@/src/components/landing/section-layout"
 import { PlantIcon } from "@/src/components/ui/icons"
 
 export async function Mission() {
   const ru = await getDict()
 
   return (
-    <section className="bg-white px-5 pb-20 md:px-8 md:pb-24">
-      <div className="bg-brand-gradient mx-auto max-w-7xl rounded-card px-6 py-9 text-white sm:px-10 sm:py-12 md:px-12 md:py-14">
+    <section className={`bg-white ${SECTION_PADDING}`}>
+      <div className="bg-brand-gradient mx-auto max-w-7xl rounded-card px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-12 lg:py-12">
         <PlantIcon size={24} className="text-lime" />
-        <h2 className="mt-5 text-sm font-semibold text-white/70">
+        <h2 className="mt-4 text-sm font-semibold text-white/70">
           {ru.about.mission.title}
         </h2>
-        <p className="mt-4 max-w-[1050px] font-display text-[22px] font-semibold leading-[1.32] tracking-[-0.01em] sm:mt-5 sm:text-[32px] sm:leading-[1.22] sm:tracking-[-0.03em] lg:text-[46px] lg:leading-[1.18]">
+        <p className="mt-3 max-w-[1050px] font-display text-[20px] font-semibold leading-[1.32] tracking-[-0.01em] sm:text-[28px] sm:leading-[1.25] sm:tracking-[-0.025em] lg:text-[40px] lg:leading-[1.2]">
           {ru.about.mission.text}
         </p>
       </div>

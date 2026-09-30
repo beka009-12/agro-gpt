@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useProfile } from "@/src/components/layout/profile-menu";
 import { ChatHeader } from "./chat-header";
 import { ChatSidebar } from "./chat-sidebar";
@@ -16,8 +17,12 @@ const DESKTOP_QUERY = "(min-width: 1024px)";
 
 export function ChatShell() {
   useViewportHeight();
+  const router = useRouter();
+  const params = useParams<{ chatId?: string }>();
+  const activeChatId = typeof params.chatId === "string" ? params.chatId : null;
 
   const [sessionId, setSessionId] = useState(0);
+  const [historyRefreshToken, setHistoryRefreshToken] = useState(0);
   const [sidebarState, dispatchSidebar] = useReducer(
     reduceSidebarState,
     createSidebarState(),
@@ -48,6 +53,21 @@ export function ChatShell() {
   const startNewChat = () => {
     setSessionId((id) => id + 1);
     dispatchSidebar({ type: "new-chat" });
+    router.push("/chat");
+  };
+
+  const selectChat = (id: string) => {
+    dispatchSidebar({ type: "new-chat" });
+    router.push(`/chat/${id}`);
+  };
+
+  const handleActiveChatRemoved = () => {
+    router.push("/chat");
+  };
+
+  const handleChatCreated = (id: string) => {
+    router.replace(`/chat/${id}`);
+    setHistoryRefreshToken((token) => token + 1);
   };
 
   return (
@@ -68,6 +88,10 @@ export function ChatShell() {
         triggerRef={sidebarTriggerRef}
         onToggle={() => dispatchSidebar({ type: "toggle" })}
         onClose={() => dispatchSidebar({ type: "close" })}
+        activeChatId={activeChatId}
+        onSelectChat={selectChat}
+        onActiveChatRemoved={handleActiveChatRemoved}
+        historyRefreshToken={historyRefreshToken}
       />
 
       <main
@@ -82,7 +106,12 @@ export function ChatShell() {
           sidebarTriggerRef={sidebarTriggerRef}
         />
 
-        <ChatView key={sessionId} hasProfileLocation={hasProfileLocation} />
+        <ChatView
+          key={activeChatId ?? `new-${sessionId}`}
+          initialChatId={activeChatId}
+          hasProfileLocation={hasProfileLocation}
+          onChatCreated={handleChatCreated}
+        />
       </main>
     </div>
   );

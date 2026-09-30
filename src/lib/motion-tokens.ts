@@ -7,3 +7,10 @@ export const DURATION = {
 export const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 export const REVEAL_OFFSET = 16
+
+/** пружина для скользящих индикаторов (активный роут, EN/RU-тумблер) */
+export const SPRING_SNAPPY = {
+  type: "spring",
+  stiffness: 380,
+  damping: 32,
+} as const

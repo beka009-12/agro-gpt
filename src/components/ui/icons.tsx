@@ -4,6 +4,7 @@ import type {
   IconProps as PhosphorIconProps,
 } from "@phosphor-icons/react"
 import {
+  ArrowCounterClockwiseIcon as PhosphorArrowCounterClockwiseIcon,
   ArrowLeftIcon as PhosphorArrowLeftIcon,
   ArrowUpIcon as PhosphorArrowUpIcon,
   ArrowsClockwiseIcon as PhosphorArrowsClockwiseIcon,
@@ -27,6 +28,7 @@ import {
   MapPinIcon as PhosphorMapPinIcon,
   PaperclipIcon as PhosphorPaperclipIcon,
   PaperPlaneTiltIcon as PhosphorPaperPlaneTiltIcon,
+  PencilSimpleIcon as PhosphorPencilSimpleIcon,
   PhoneIcon as PhosphorPhoneIcon,
   PlantIcon as PhosphorPlantIcon,
   PlusIcon as PhosphorPlusIcon,
@@ -34,6 +36,9 @@ import {
   SidebarSimpleIcon as PhosphorSidebarSimpleIcon,
   StarIcon as PhosphorStarIcon,
   ThermometerIcon as PhosphorThermometerIcon,
+  TrashIcon as PhosphorTrashIcon,
+  ThumbsUpIcon as PhosphorThumbsUpIcon,
+  ThumbsDownIcon as PhosphorThumbsDownIcon,
   TreeStructureIcon as PhosphorTreeStructureIcon,
   TrendUpIcon as PhosphorTrendUpIcon,
   UserFocusIcon as PhosphorUserFocusIcon,
@@ -91,6 +96,14 @@ export const EyeIcon = createIcon(PhosphorEyeIcon)
 export const EyeOffIcon = createIcon(PhosphorEyeSlashIcon)
 export const AlertTriangleIcon = createIcon(PhosphorWarningIcon)
 export const XIcon = createIcon(PhosphorXIcon)
+export const TreeStructureIcon = createIcon(PhosphorTreeStructureIcon)
+export const UserFocusIcon = createIcon(PhosphorUserFocusIcon)
+export const ClipboardTextIcon = createIcon(PhosphorClipboardTextIcon)
+export const PencilSimpleIcon = createIcon(PhosphorPencilSimpleIcon)
+export const TrashIcon = createIcon(PhosphorTrashIcon)
+export const ThumbsUpIcon = createIcon(PhosphorThumbsUpIcon)
+export const ThumbsDownIcon = createIcon(PhosphorThumbsDownIcon)
+export const ArrowCounterClockwiseIcon = createIcon(PhosphorArrowCounterClockwiseIcon)
 
 export type AudienceIconId = "farmer" | "agronomist" | "gardener"
 
