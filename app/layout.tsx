@@ -63,7 +63,10 @@ export default async function RootLayout({
       lang={locale}
       className={`${manrope.variable} ${onest.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body
+        className="min-h-full flex flex-col font-sans"
+        cz-shortcut-listen="true"
+      >
         <I18nProvider locale={locale} dict={dict}>
           <Providers>{children}</Providers>
         </I18nProvider>

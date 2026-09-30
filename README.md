@@ -6,17 +6,17 @@
 
 ## Стек
 
-| Слой | Технология |
-|---|---|
-| Фреймворк | Next.js 16 (App Router, Server Components), React 19 |
-| Язык | TypeScript (strict) |
-| Стили | Tailwind CSS 4 — токены темы в `app/globals.css` (`@theme`) |
-| Анимации | `motion/react` + общие токены `src/lib/motion-tokens.ts` |
-| Формы и валидация | react-hook-form + zod (`@hookform/resolvers`) |
-| Уведомления | react-hot-toast |
-| Данные | `fetch` через Route Handlers |
-| Типы API | Orval — fetch-клиент и DTO из OpenAPI бэкенда (`bun run generate-api`) |
-| Шрифты | Plus Jakarta Sans (основной), Manrope (хедер) через `next/font` |
+| Слой              | Технология                                                             |
+| ----------------- | ---------------------------------------------------------------------- |
+| Фреймворк         | Next.js 16 (App Router, Server Components), React 19                   |
+| Язык              | TypeScript (strict)                                                    |
+| Стили             | Tailwind CSS 4 — токены темы в `app/globals.css` (`@theme`)            |
+| Анимации          | `motion/react` + общие токены `src/lib/motion-tokens.ts`               |
+| Формы и валидация | react-hook-form + zod (`@hookform/resolvers`)                          |
+| Уведомления       | react-hot-toast                                                        |
+| Данные            | `fetch` через Route Handlers                                           |
+| Типы API          | Orval — fetch-клиент и DTO из OpenAPI бэкенда (`bun run generate-api`) |
+| Шрифты            | Plus Jakarta Sans (основной), Manrope (хедер) через `next/font`        |
 
 ## Быстрый старт
 
@@ -26,3 +26,39 @@ bun install                  # или npm install
 bun run generate-api        # обновить API-клиент и DTO из openapi.json
 bun dev                      # или npm run dev → http://localhost:3000
 ```
+
+// !! TODO: планы
+▎ На проде появилась история чатов как в ChatGPT: список слева, открыть старый диалог, продолжить, переименовать, удалить и вернуть. База: https://admin.agro-ibo.com, везде нужен Authorization: Bearer <token>.
+▎
+▎ 1. Список чатов (боковая панель)
+▎ GET /chat/?limit=50&offset=0
+▎ В панели показываем только title, как в ChatGPT. По нажатию открываем чат по id.
+▎ • Приходят свежие сверху. По last_message_at можно группировать: «Сегодня», «Вчера», «7 дней».
+▎ • title бывает null (фото без подписи) - тогда вместо названия показываем дату из last_message_at.
+▎ • Пустые чаты (без сообщений) не приходят, так что POST /chat/ можно вызывать сразу по кнопке «Новый чат».
+▎ • created_at и messages_count показывать не обязательно.
+▎
+▎ 2. Открыть чат
+▎ GET /chat/{id}/messages?limit=50
+▎ Ответ: { "messages": [...], "has_more": true/false }
+▎ • Сообщения от старых к новым, первый запрос отдаёт последние 50.
+▎ • Элемент - пара «вопрос + ответ»: user_text, user_image, answer (полный текст), crop, disease_name, created_at.
+▎ • Если has_more: true - при прокрутке вверх запросите ?before=<created_at самого верхнего сообщения>, придут более старые.
+▎ • Продолжить чат - как раньше, тем же chat_id через WebSocket или POST /diagnosis/.
+▎
+▎ 3. Переименовать
+▎ PATCH /chat/{id} с телом {"title": "Новое название"}
+▎ Если не переименовывать, название ставится само по первому сообщению.
+▎
+▎ 4. Удалить и вернуть
+▎ DELETE /chat/{id} - в корзину на 3 дня.
+▎ GET /chat/?deleted=true - корзина, у каждого чата есть purge_at (когда исчезнет насовсем).
+▎ POST /chat/{id}/restore - вернуть из корзины. После 3 дней будет 404.
+▎
+▎ Ошибки: чужой чат - 403, нет или удалён - 404.
+▎
+▎ Старые ответы (до сегодняшнего дня) в базе обрезаны до 1000 символов, их не восстановить. Новые хранятся целиком.
+▎
+▎ Можно посмотреть и потыкать в Swagger: https://admin.agro-ibo.com/docs, раздел Chat.
+
+// !
