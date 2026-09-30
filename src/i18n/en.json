@@ -240,11 +240,12 @@
       "title": "Our flagship product",
       "description": "HYDROWOOLKS is a liquid organic fertilizer obtained through a special hydrolysis of sheep wool. It is produced in Kyrgyzstan and suitable for many types of crops.",
       "composition": [
-        "Organic matter - 10.4%",
-        "Organic carbon - 4.1%",
-        "Organic nitrogen - 0.5%",
-        "Free amino acids - 1.03%",
-        "pH level - 12-13"
+        "Organic matter - 22.2%",
+        "Organic carbon (TOC) - 9.7%",
+        "Organic nitrogen (N) - 0.5%",
+        "Total free amino acids - 2.52%",
+        "Water-soluble potassium (K₂O) - 0.7%",
+        "pH level - 5-7"
       ],
       "registration": "Officially registered and approved for sale in Kyrgyzstan (No. 25-G-1403).",
       "applicationTitle": "How and when to apply",
@@ -314,7 +315,10 @@
           "title": "Practical and eco-friendly",
           "description": "Easy to apply and reduces the chemical load."
         }
-      ]
+      ],
+      "controls": {
+        "label": "Benefits"
+      }
     },
     "mission": {
       "title": "Our mission",
