@@ -137,9 +137,9 @@ export function ReviewFormDialog({ isAuthed, onCreated }: ReviewFormDialogProps)
       <dialog
         ref={dialogRef}
         aria-labelledby="review-form-title"
-        className="m-auto w-[min(92vw,560px)] rounded-card border border-edge bg-card p-0 text-fg backdrop:bg-black/40"
+        className="m-0 mt-auto max-h-[92dvh] w-full max-w-none flex-col overflow-hidden rounded-b-none rounded-t-card border border-edge bg-card p-0 text-fg open:flex backdrop:bg-black/50 sm:m-auto sm:max-h-[90dvh] sm:w-[min(92vw,560px)] sm:rounded-card"
       >
-        <div className="flex items-center justify-between border-b border-edge px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-edge py-2 pl-5 pr-2 sm:pl-6">
           <h2 id="review-form-title" className="font-display text-xl font-semibold">
             {t.form.title}
           </h2>
@@ -147,23 +147,24 @@ export function ReviewFormDialog({ isAuthed, onCreated }: ReviewFormDialogProps)
             type="button"
             onClick={close}
             aria-label={t.form.close}
-            className="rounded-full p-2 text-fg-muted hover:bg-mint-soft"
+            className="grid size-11 place-items-center rounded-full text-fg-muted transition-colors hover:bg-mint-soft"
           >
             <XIcon size={20} />
           </button>
         </div>
 
         {sent ? (
-          <div className="flex flex-col items-start gap-5 px-6 py-8">
+          <div className="flex flex-col items-stretch gap-5 px-5 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:items-start sm:px-6">
             <p role="status" className="text-base leading-7">
               {t.form.success}
             </p>
-            <Button type="button" onClick={close}>
+            <Button type="button" onClick={close} className="min-h-12 sm:min-h-0">
               {t.form.successClose}
             </Button>
           </div>
         ) : (
-          <form onSubmit={submit} className="flex flex-col gap-4 px-6 py-6">
+          <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
+            <div className="flex flex-col gap-5 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6 sm:py-6">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="review-text" className="text-sm font-medium">
                 {t.form.text}
@@ -173,11 +174,12 @@ export function ReviewFormDialog({ isAuthed, onCreated }: ReviewFormDialogProps)
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 rows={5}
+                enterKeyHint="enter"
                 maxLength={REVIEW_TEXT_MAX}
                 required
-                className="resize-y rounded-xl border border-edge bg-card px-4 py-3 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25"
+                className="min-h-32 resize-y rounded-xl border border-edge bg-card px-4 py-3 text-base outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/25"
               />
-              <p className="text-xs text-fg-muted">{t.form.textHint}</p>
+              <p className="text-[13px] text-fg-muted">{t.form.textHint}</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-[repeat(2,minmax(0,1fr))]">
@@ -249,12 +251,18 @@ export function ReviewFormDialog({ isAuthed, onCreated }: ReviewFormDialogProps)
                 {error}
               </p>
             ) : null}
+            </div>
 
-            <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="ghost" onClick={close}>
+            <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-edge bg-card px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:flex-row sm:justify-end sm:px-6">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={close}
+                className="min-h-12 sm:min-h-0"
+              >
                 {t.form.cancel}
               </Button>
-              <Button type="submit" loading={loading}>
+              <Button type="submit" loading={loading} className="min-h-12 sm:min-h-0">
                 {t.form.submit}
               </Button>
             </div>
