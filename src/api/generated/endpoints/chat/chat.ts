@@ -7,7 +7,12 @@
  */
 import type {
   ChatInputSchema,
-  ChatOutSchema
+  ChatListItemSchema,
+  ChatMessagesSchema,
+  ChatOutSchema,
+  ChatRenameSchema,
+  GetChatMessagesChatChatIdMessagesGetParams,
+  ListChatsChatGetParams
 } from '../../models';
 
 
@@ -41,6 +46,44 @@ export const createChatChatPost = async (chatInputSchema: ChatInputSchema, optio
 }
 
 
+export const getListChatsChatGetUrl = (params?: ListChatsChatGetParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/chat/?${stringifiedParams}` : `/chat/`
+}
+
+/**
+ * Мои чаты, свежие сверху. Пустые чаты (без единого сообщения) не показываются.
+ * @summary List Chats
+ */
+export const listChatsChatGet = async (params?: ListChatsChatGetParams, options?: RequestInit): Promise<ChatListItemSchema[]> => {
+
+  const res = await fetch(getListChatsChatGetUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+)
+
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: ChatListItemSchema[] = body ? JSON.parse(body) : {}
+  return data
+}
+
+
 export const getGetChatChatChatIdGetUrl = (chatId: string,) => {
 
 
@@ -60,6 +103,37 @@ export const getChatChatChatIdGet = async (chatId: string, options?: RequestInit
     method: 'GET'
 
 
+  }
+)
+
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: ChatOutSchema = body ? JSON.parse(body) : {}
+  return data
+}
+
+
+export const getRenameChatChatChatIdPatchUrl = (chatId: string,) => {
+
+
+
+
+  return `/chat/${chatId}`
+}
+
+/**
+ * @summary Rename Chat
+ */
+export const renameChatChatChatIdPatch = async (chatId: string,
+    chatRenameSchema: ChatRenameSchema, options?: RequestInit): Promise<ChatOutSchema> => {
+
+  const res = await fetch(getRenameChatChatChatIdPatchUrl(chatId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(chatRenameSchema)
   }
 )
 
@@ -97,6 +171,77 @@ export const deleteChatChatChatIdDelete = async (chatId: string, options?: Reque
   const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
   const data: unknown = body ? JSON.parse(body) : {}
+  return data
+}
+
+
+export const getGetChatMessagesChatChatIdMessagesGetUrl = (chatId: string,
+    params?: GetChatMessagesChatChatIdMessagesGetParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/chat/${chatId}/messages?${stringifiedParams}` : `/chat/${chatId}/messages`
+}
+
+/**
+ * Диалог целиком, от старых сообщений к новым, страницами с конца.
+ * @summary Get Chat Messages
+ */
+export const getChatMessagesChatChatIdMessagesGet = async (chatId: string,
+    params?: GetChatMessagesChatChatIdMessagesGetParams, options?: RequestInit): Promise<ChatMessagesSchema> => {
+
+  const res = await fetch(getGetChatMessagesChatChatIdMessagesGetUrl(chatId,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+)
+
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: ChatMessagesSchema = body ? JSON.parse(body) : {}
+  return data
+}
+
+
+export const getRestoreChatChatChatIdRestorePostUrl = (chatId: string,) => {
+
+
+
+
+  return `/chat/${chatId}/restore`
+}
+
+/**
+ * Вернуть удалённый чат, пока не прошли RETENTION_DAYS. После - 404, чата уже нет.
+ * @summary Restore Chat
+ */
+export const restoreChatChatChatIdRestorePost = async (chatId: string, options?: RequestInit): Promise<ChatOutSchema> => {
+
+  const res = await fetch(getRestoreChatChatChatIdRestorePostUrl(chatId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+)
+
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: ChatOutSchema = body ? JSON.parse(body) : {}
   return data
 }
 

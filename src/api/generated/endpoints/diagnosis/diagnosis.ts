@@ -38,6 +38,9 @@ if(bodyCreateDiagnosisDiagnosisPost.longitude !== undefined && bodyCreateDiagnos
 if(bodyCreateDiagnosisDiagnosisPost.user_image !== undefined && bodyCreateDiagnosisDiagnosisPost.user_image !== null) {
  formData.append(`user_image`, bodyCreateDiagnosisDiagnosisPost.user_image);
  }
+if(bodyCreateDiagnosisDiagnosisPost.document !== undefined && bodyCreateDiagnosisDiagnosisPost.document !== null) {
+ formData.append(`document`, bodyCreateDiagnosisDiagnosisPost.document);
+ }
 
   const res = await fetch(getCreateDiagnosisDiagnosisPostUrl(),
   {

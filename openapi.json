@@ -496,6 +496,98 @@
             "BearerAuth": []
           }
         ]
+      },
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "List Chats",
+        "description": "Мои чаты, свежие сверху. Пустые чаты (без единого сообщения) не показываются.",
+        "operationId": "list_chats_chat__get",
+        "parameters": [
+          {
+            "name": "deleted",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "true - корзина: удалённые чаты, которые ещё можно восстановить",
+              "default": false,
+              "title": "Deleted"
+            },
+            "description": "true - корзина: удалённые чаты, которые ещё можно восстановить"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatListItemSchema"
+                  },
+                  "title": "Response List Chats Chat  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/chat/{chat_id}": {
@@ -533,6 +625,78 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatOutSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Rename Chat",
+        "operationId": "rename_chat_chat__chat_id__patch",
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Chat Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRenameSchema"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -601,6 +765,167 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/chat/{chat_id}/messages": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Get Chat Messages",
+        "description": "Диалог целиком, от старых сообщений к новым, страницами с конца.",
+        "operationId": "get_chat_messages_chat__chat_id__messages_get",
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Chat Id"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "created_at первого уже загруженного сообщения",
+              "title": "Before"
+            },
+            "description": "created_at первого уже загруженного сообщения"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatMessagesSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/chat/{chat_id}/restore": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Restore Chat",
+        "description": "Вернуть удалённый чат, пока не прошли RETENTION_DAYS. После - 404, чата уже нет.",
+        "operationId": "restore_chat_chat__chat_id__restore_post",
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Chat Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatOutSchema"
+                }
               }
             }
           },
@@ -810,6 +1135,265 @@
         ]
       }
     },
+    "/reviews/": {
+      "get": {
+        "tags": [
+          "Отзывы"
+        ],
+        "summary": "List Reviews",
+        "description": "Лента: одобренные отзывы, новые сверху.",
+        "operationId": "list_reviews_reviews__get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReviewSchema"
+                  },
+                  "title": "Response List Reviews Reviews  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Отзывы"
+        ],
+        "summary": "Create Review",
+        "description": "Написать отзыв. Уходит на проверку и в ленте появится после одобрения администратором.",
+        "operationId": "create_review_reviews__post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_review_reviews__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/mine": {
+      "get": {
+        "tags": [
+          "Отзывы"
+        ],
+        "summary": "My Reviews",
+        "description": "Свои отзывы в любом статусе - чтобы автор видел, что его отзыв на проверке или отклонён.",
+        "operationId": "my_reviews_reviews_mine_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyReviewSchema"
+                  },
+                  "title": "Response My Reviews Reviews Mine Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{review_id}/reaction": {
+      "put": {
+        "tags": [
+          "Отзывы"
+        ],
+        "summary": "Set Reaction",
+        "description": "Поставить лайк, дизлайк или снять реакцию (reaction: null).\n\nКак в Instagram: повторное нажатие на ту же кнопку снимает её - клиент присылает\nnull. Нажатие на другую меняет реакцию, лайк и дизлайк сразу невозможны.",
+        "operationId": "set_reaction_reviews__review_id__reaction_put",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewReactionInSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewReactionSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/top-diseases/": {
       "get": {
         "tags": [
@@ -841,6 +1425,7 @@
           "Главная страница"
         ],
         "summary": "Disease Details",
+        "description": "Справка по болезни из госкаталога. Страна необязательна и по умолчанию прежняя.\n\nЭндпоинт публичный - авторизации у него нет и не было, - поэтому страну\nприходится принимать параметром, а не выводить из пользователя. Не передали -\nотвечаем каталогом по умолчанию, как отвечали до появления второй страны.",
         "operationId": "disease_details_top_diseases__disease_name__details_get",
         "parameters": [
           {
@@ -851,6 +1436,26 @@
               "type": "string",
               "title": "Disease Name"
             }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Код страны ISO 3166-1 alpha-2",
+              "title": "Country"
+            },
+            "description": "Код страны ISO 3166-1 alpha-2"
           }
         ],
         "responses": {
@@ -1317,6 +1922,7 @@
           "Health"
         ],
         "summary": "Health Check",
+        "description": "Живость сервиса. Справочник местоположений проверяется наравне с самим запуском.\n\nБез этой проверки пропавший при развёртывании data/geo/locations.json выглядит\nполностью исправным сервисом. Страна определяется только по координатам, и без\nсправочника она не определяется ни у кого: каждый пользователь получает вежливое\n«включите геолокацию» при уже включённой геолокации, а health отвечает 200.\nСнаружи это неотличимо от того, что у всех разом отвалился GPS.",
         "operationId": "health_check_health_get",
         "responses": {
           "200": {
@@ -1399,7 +2005,21 @@
                 "type": "null"
               }
             ],
-            "title": "User Image"
+            "title": "User Image",
+            "description": "Фото растения (JPG, PNG, WEBP)"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "type": "string",
+                "contentMediaType": "application/octet-stream"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document",
+            "description": "Документ PDF: протокол анализа почвы или любой другой"
           }
         },
         "type": "object",
@@ -1407,6 +2027,54 @@
           "chat_id"
         ],
         "title": "Body_create_diagnosis_diagnosis__post"
+      },
+      "Body_create_review_reviews__post": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Текст отзыва, 10-2000 символов"
+          },
+          "crop": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crop"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "photos": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Photos",
+            "description": "До 5 фото: JPG, PNG или WEBP, до 10 МБ",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "Body_create_review_reviews__post"
       },
       "Body_upload_image_file_upload_image_file_post": {
         "properties": {
@@ -1442,6 +2110,161 @@
         },
         "type": "object",
         "title": "ChatInputSchema"
+      },
+      "ChatListItemSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "last_message_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Message At"
+          },
+          "messages_count": {
+            "type": "integer",
+            "title": "Messages Count"
+          },
+          "purge_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purge At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "created_at",
+          "last_message_at",
+          "messages_count"
+        ],
+        "title": "ChatListItemSchema",
+        "description": "Строка боковой панели, как в ChatGPT: название и время последнего сообщения.\n\ntitle бывает None - фото без подписи, по которому модель ничего не распознала.\nФронт показывает вместо него дату; выдумывать название на бэкенде хуже."
+      },
+      "ChatMessageSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Text"
+          },
+          "user_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Image"
+          },
+          "attachment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attachment"
+          },
+          "answer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer"
+          },
+          "crop": {
+            "type": "string",
+            "title": "Crop",
+            "default": ""
+          },
+          "disease_name": {
+            "type": "string",
+            "title": "Disease Name",
+            "default": ""
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_text",
+          "user_image",
+          "answer",
+          "created_at"
+        ],
+        "title": "ChatMessageSchema",
+        "description": "Один обмен: вопрос фермера и ответ модели целиком.\n\nКороткая версия ответа (ai_short) наружу не отдаётся: она для памяти модели,\nа фермер видит полный текст."
+      },
+      "ChatMessagesSchema": {
+        "properties": {
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/ChatMessageSchema"
+            },
+            "type": "array",
+            "title": "Messages"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages",
+          "has_more"
+        ],
+        "title": "ChatMessagesSchema"
       },
       "ChatOutSchema": {
         "properties": {
@@ -1490,6 +2313,21 @@
           "updated_at"
         ],
         "title": "ChatOutSchema"
+      },
+      "ChatRenameSchema": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "ChatRenameSchema"
       },
       "ChatStatus": {
         "type": "string",
@@ -1863,6 +2701,102 @@
         ],
         "title": "LoginRequest"
       },
+      "MyReviewSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "author_name": {
+            "type": "string",
+            "title": "Author Name"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "crop": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crop"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewPhotoSchema"
+            },
+            "type": "array",
+            "title": "Photos"
+          },
+          "likes_count": {
+            "type": "integer",
+            "title": "Likes Count"
+          },
+          "dislikes_count": {
+            "type": "integer",
+            "title": "Dislikes Count"
+          },
+          "my_reaction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReactionKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReviewStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "author_name",
+          "place",
+          "crop",
+          "text",
+          "photos",
+          "likes_count",
+          "dislikes_count",
+          "my_reaction",
+          "created_at",
+          "status"
+        ],
+        "title": "MyReviewSchema",
+        "description": "Свой отзыв: со статусом проверки - pending, approved или rejected."
+      },
+      "ReactionKind": {
+        "type": "string",
+        "enum": [
+          "like",
+          "dislike"
+        ],
+        "title": "ReactionKind"
+      },
       "RegisterRequest": {
         "properties": {
           "full_name": {
@@ -1955,6 +2889,167 @@
           "new_password"
         ],
         "title": "ResetPasswordRequest"
+      },
+      "ReviewPhotoSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "url"
+        ],
+        "title": "ReviewPhotoSchema"
+      },
+      "ReviewReactionInSchema": {
+        "properties": {
+          "reaction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReactionKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "reaction"
+        ],
+        "title": "ReviewReactionInSchema",
+        "description": "Какой реакция должна стать после нажатия: like, dislike или null - снять.\n\nЖелаемое состояние, а не «переключи»: повтор запроса при плохой связи иначе\nснимал бы только что поставленный лайк."
+      },
+      "ReviewReactionSchema": {
+        "properties": {
+          "likes_count": {
+            "type": "integer",
+            "title": "Likes Count"
+          },
+          "dislikes_count": {
+            "type": "integer",
+            "title": "Dislikes Count"
+          },
+          "my_reaction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReactionKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "likes_count",
+          "dislikes_count",
+          "my_reaction"
+        ],
+        "title": "ReviewReactionSchema"
+      },
+      "ReviewSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "author_name": {
+            "type": "string",
+            "title": "Author Name"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "crop": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crop"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewPhotoSchema"
+            },
+            "type": "array",
+            "title": "Photos"
+          },
+          "likes_count": {
+            "type": "integer",
+            "title": "Likes Count"
+          },
+          "dislikes_count": {
+            "type": "integer",
+            "title": "Dislikes Count"
+          },
+          "my_reaction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReactionKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "author_name",
+          "place",
+          "crop",
+          "text",
+          "photos",
+          "likes_count",
+          "dislikes_count",
+          "my_reaction",
+          "created_at"
+        ],
+        "title": "ReviewSchema",
+        "description": "Отзыв в ленте. my_reaction - только для вошедшего; у гостя всегда null."
+      },
+      "ReviewStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "approved",
+          "rejected"
+        ],
+        "title": "ReviewStatus"
       },
       "SessionSafeOutSchema": {
         "properties": {
