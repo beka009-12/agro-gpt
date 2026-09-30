@@ -5,6 +5,8 @@ import {
   ShieldCheckIcon,
 } from "@/src/components/ui/icons";
 import { SectionHeading } from "./section-heading";
+import { SECTION_PADDING } from "./section-layout";
+import { RevealGroup, RevealItem } from "./reveal";
 
 export async function Features() {
   const ru = await getDict();
@@ -13,24 +15,24 @@ export async function Features() {
   return (
     <section
       id="features"
-      className="scroll-mt-24 bg-white px-5 py-20 md:px-2 md:py-12"
+      className={`scroll-mt-24 bg-white ${SECTION_PADDING}`}
     >
       <div className="mx-auto max-w-7xl">
-        <SectionHeading title={ru.features.title} />
+        <SectionHeading compact title={ru.features.title} />
 
-        <div className="grid gap-2 lg:grid-cols-12 lg:gap-6">
-          <article className="bg-brand-gradient relative overflow-hidden rounded-card p-7 text-white sm:p-9 lg:col-span-7 lg:flex lg:h-full lg:flex-col lg:justify-center lg:p-10">
-            <h3 className="max-w-[580px] font-display text-[32px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[42px]">
+        <RevealGroup className="grid gap-4 lg:grid-cols-12 lg:gap-5">
+          <RevealItem as="article" className="bg-brand-gradient relative overflow-hidden rounded-card p-6 text-white sm:p-8 lg:col-span-7 lg:flex lg:h-full lg:flex-col lg:justify-center lg:p-10">
+            <h3 className="max-w-[580px] font-display text-[28px] font-semibold leading-[1.1] tracking-[-0.03em] sm:text-[36px]">
               {ru.features.panel.title}
             </h3>
-            <p className="mt-5 max-w-[540px] text-base leading-7 text-white/75">
+            <p className="mt-4 max-w-[540px] text-base leading-7 text-white/75">
               {ru.features.panel.description}
             </p>
-            <ul className="mt-10 grid gap-0 border-t border-white/20">
+            <ul className="mt-6 grid gap-0 border-t border-white/20">
               {ru.features.panel.points.map((point) => (
                 <li
                   key={point}
-                  className="group flex items-start gap-3 border-b border-white/20 py-4 text-[15px] leading-6 text-white/90 transition-colors duration-200 hover:text-white"
+                  className="group flex items-start gap-3 border-b border-white/20 py-3 text-[15px] leading-6 text-white/90 transition-colors duration-200 hover:text-white"
                 >
                   <CheckIcon
                     className="mt-1 shrink-0 text-lime transition-transform duration-200 group-hover:scale-110"
@@ -41,30 +43,30 @@ export async function Features() {
                 </li>
               ))}
             </ul>
-          </article>
+          </RevealItem>
 
-          <div className="grid gap-5 lg:col-span-5 lg:h-full lg:content-center lg:gap-6">
-            <article className="rounded-card border border-edge bg-white p-6 sm:p-7">
+          <div className="grid gap-4 md:grid-cols-2 lg:col-span-5 lg:h-full lg:grid-cols-1 lg:content-center lg:gap-5">
+            <RevealItem as="article" className="rounded-card border border-edge bg-white p-6 sm:p-7">
               <CameraIcon size={23} className="text-accent" />
-              <h3 className="mt-4 font-display text-2xl font-semibold tracking-[-0.025em] text-fg">
+              <h3 className="mt-3 font-display text-xl font-semibold tracking-[-0.025em] text-fg sm:text-2xl">
                 {photoCard.title}
               </h3>
-              <p className="mt-3 text-base leading-7 text-fg-muted">
+              <p className="mt-2 text-base leading-7 text-fg-muted">
                 {photoCard.description}
               </p>
-            </article>
+            </RevealItem>
 
-            <article className="rounded-card border border-edge bg-surface-muted p-6 sm:p-7">
+            <RevealItem as="article" className="rounded-card border border-edge bg-surface-muted p-6 sm:p-7">
               <ShieldCheckIcon size={24} className="text-accent" />
-              <h3 className="mt-4 font-display text-2xl font-semibold tracking-[-0.025em] text-fg">
+              <h3 className="mt-3 font-display text-xl font-semibold tracking-[-0.025em] text-fg sm:text-2xl">
                 {safetyCard.title}
               </h3>
-              <p className="mt-3 text-base leading-7 text-fg-muted">
+              <p className="mt-2 text-base leading-7 text-fg-muted">
                 {safetyCard.description}
               </p>
-            </article>
+            </RevealItem>
           </div>
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

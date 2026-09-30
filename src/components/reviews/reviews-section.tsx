@@ -5,6 +5,8 @@ import { TOKEN_COOKIE } from "@/src/lib/auth-cookies"
 import { fetchReviews } from "@/src/lib/reviews-server"
 import { ChevronRightIcon } from "@/src/components/ui/icons"
 import { SectionHeading } from "@/src/components/landing/section-heading"
+import { SECTION_PADDING } from "@/src/components/landing/section-layout"
+import { RevealGroup, RevealItem } from "@/src/components/landing/reveal"
 import { ReviewCard } from "./review-card"
 import { ReviewFormDialog } from "./review-form-dialog"
 
@@ -25,33 +27,33 @@ export async function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="scroll-mt-24 bg-tan-soft px-5 py-24 md:px-8 md:py-32"
+      className={`scroll-mt-24 bg-white ${SECTION_PADDING}`}
     >
       <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow={ru.reviews.eyebrow} title={ru.reviews.title} />
+        <SectionHeading compact eyebrow={ru.reviews.eyebrow} title={ru.reviews.title} />
 
         {reviews && reviews.length > 0 ? (
-          <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          <RevealGroup as="ul" className="grid gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6">
             {reviews.map((review) => (
-              <li key={review.id}>
+              <RevealItem as="li" key={review.id}>
                 <ReviewCard
                   review={review}
                   isAuthed={Boolean(token)}
                   labels={ru.reviews}
                   locale={locale}
                 />
-              </li>
+              </RevealItem>
             ))}
-          </ul>
+          </RevealGroup>
         ) : (
           <p className="text-fg-muted">{ru.reviews.empty}</p>
         )}
 
-        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
           <ReviewFormDialog isAuthed={Boolean(token)} />
           <Link
             href="/reviews"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-accent-strong hover:underline"
+            className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-accent-strong hover:underline"
           >
             {ru.reviews.allLink}
             <ChevronRightIcon size={16} />

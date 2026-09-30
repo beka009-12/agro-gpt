@@ -1,19 +1,21 @@
 import { getDict } from "@/src/i18n/server"
 import { SectionHeading } from "./section-heading"
+import { SECTION_PADDING } from "./section-layout"
+import { RevealGroup, RevealItem } from "./reveal"
 
 export async function HowItWorks() {
   const ru = await getDict()
   const steps = ru.howItWorks.steps
 
   return (
-    <section id="how-it-works" className="scroll-mt-24 bg-white px-5 py-24 md:px-8 md:py-32">
+    <section id="how-it-works" className={`scroll-mt-24 bg-tan-soft ${SECTION_PADDING}`}>
       <div className="mx-auto max-w-7xl">
-        <SectionHeading title={ru.howItWorks.title} />
+        <SectionHeading compact title={ru.howItWorks.title} />
 
         {/* мобилка: вертикальный таймлайн */}
-        <ol className="border-t border-edge pt-10 md:hidden">
+        <RevealGroup as="ol" className="border-t border-edge pt-6 md:hidden">
           {steps.map((step, index) => (
-            <li key={step.title} className="relative pb-10 pl-14 last:pb-0">
+            <RevealItem as="li" key={step.title} className="relative pb-6 pl-14 last:pb-0">
               {index !== steps.length - 1 && (
                 <span
                   aria-hidden
@@ -26,20 +28,21 @@ export async function HowItWorks() {
               >
                 {index + 1}
               </span>
-              <h3 className="pt-1.5 font-display text-xl font-semibold tracking-[-0.02em] text-fg">
+              <h3 className="pt-1.5 font-display text-xl font-semibold leading-tight tracking-[-0.02em] text-fg">
                 {step.title}
               </h3>
-              <p className="mt-3 text-[15px] leading-7 text-fg-muted">
+              <p className="mt-1.5 text-[15px] leading-6 text-fg-muted">
                 {step.description}
               </p>
-            </li>
+            </RevealItem>
           ))}
-        </ol>
+        </RevealGroup>
 
         {/* планшет/десктоп: колонки */}
-        <div className="hidden border-t border-edge pt-10 md:grid md:grid-cols-2 md:gap-10 lg:grid-cols-4 lg:gap-0 lg:pt-12">
+        <RevealGroup className="hidden border-t border-edge pt-8 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-0 lg:pt-10">
           {steps.map((step, index) => (
-            <article
+            <RevealItem
+              as="article"
               key={step.title}
               className="group relative transition-transform duration-200 lg:border-r lg:border-edge lg:px-8 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0 lg:hover:-translate-y-1"
             >
@@ -49,15 +52,15 @@ export async function HowItWorks() {
               >
                 {index + 1}
               </span>
-              <h3 className="mt-7 font-display text-xl font-semibold tracking-[-0.02em] text-fg">
+              <h3 className="mt-5 font-display text-xl font-semibold tracking-[-0.02em] text-fg">
                 {step.title}
               </h3>
-              <p className="mt-3 text-[15px] leading-7 text-fg-muted">
+              <p className="mt-1.5 text-[15px] leading-6 text-fg-muted">
                 {step.description}
               </p>
-            </article>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )

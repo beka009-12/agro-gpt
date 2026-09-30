@@ -20,7 +20,7 @@ export function DiagnosisCard({ label, status, cases }: DiagnosisCardProps) {
 
   return (
     <figure className="min-w-0 overflow-hidden rounded-card border border-edge bg-surface-raised shadow-[0_24px_70px_rgba(13,59,41,0.12)]">
-      <div className="relative aspect-[4/3] min-h-[320px] overflow-hidden">
+      <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3]">
         <Image
           src="/images/nitrogen-deficiency.webp"
           alt={diagnosis.title}
@@ -29,14 +29,14 @@ export function DiagnosisCard({ label, status, cases }: DiagnosisCardProps) {
           sizes="(min-width: 1024px) 560px, 100vw"
           className="object-cover"
         />
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest/85 to-transparent px-6 pb-6 pt-20 text-white">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest/85 to-transparent px-5 pb-5 pt-14 text-white sm:px-6 sm:pb-6 sm:pt-20">
           <p className="text-sm font-medium text-white/75">{diagnosis.crop}</p>
-          <p className="mt-1 font-display text-2xl font-semibold leading-tight">
+          <p className="mt-1 font-display text-xl font-semibold leading-tight sm:text-2xl">
             {diagnosis.title}
           </p>
         </div>
       </div>
-      <figcaption className="flex items-center justify-between gap-5 px-5 py-4 sm:px-6">
+      <figcaption className="flex items-center justify-between gap-5 px-5 py-3.5 sm:px-6 sm:py-4">
         <span className="flex min-w-0 items-center gap-3 text-sm font-semibold text-fg">
           <span className="grid size-9 place-items-center rounded-control bg-accent-soft text-accent-strong">
             <LeafIcon size={18} />
