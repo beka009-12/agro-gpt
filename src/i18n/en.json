@@ -468,5 +468,54 @@
       "unexpectedResponse": "The server returned an unexpected response",
       "unauthorized": "Session expired - please sign in again"
     }
+  },
+  "reviews": {
+    "eyebrow": "Reviews",
+    "title": "What farmers say",
+    "allLink": "All reviews",
+    "pageTitle": "Reviews",
+    "pageDescription": "Reviews from farmers and gardeners about ibo",
+    "write": "Write a review",
+    "empty": "No reviews yet. Be the first!",
+    "loadMore": "Show more",
+    "loading": "Loading...",
+    "loadError": "Could not load reviews",
+    "retry": "Retry",
+    "tabAll": "All reviews",
+    "tabMine": "My reviews",
+    "mineEmpty": "You haven't written any reviews yet",
+    "loginToReact": "Log in to rate a review",
+    "login": "Log in",
+    "like": "Like",
+    "dislike": "Dislike",
+    "photoAlt": "Review photo",
+    "status": {
+      "pending": "Under review",
+      "approved": "Published",
+      "rejected": "Rejected"
+    },
+    "form": {
+      "title": "Your review",
+      "text": "Review text",
+      "textHint": "10 to 2000 characters",
+      "crop": "Crop",
+      "cropPlaceholder": "E.g. tomatoes",
+      "place": "Place",
+      "placePlaceholder": "Region or village",
+      "photos": "Photos",
+      "addPhotos": "Add photos",
+      "removePhoto": "Remove photo",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "close": "Close",
+      "success": "Review sent for moderation and will appear once approved",
+      "successClose": "Got it",
+      "errors": {
+        "textLength": "Text must be 10 to 2000 characters",
+        "tooManyPhotos": "No more than 5 photos",
+        "photoType": "JPG, PNG or WEBP only",
+        "photoSize": "Photos must be up to 10 MB"
+      }
+    }
   }
 }

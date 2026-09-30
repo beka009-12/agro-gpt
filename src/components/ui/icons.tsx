@@ -37,6 +37,8 @@ import {
   StarIcon as PhosphorStarIcon,
   ThermometerIcon as PhosphorThermometerIcon,
   TrashIcon as PhosphorTrashIcon,
+  ThumbsUpIcon as PhosphorThumbsUpIcon,
+  ThumbsDownIcon as PhosphorThumbsDownIcon,
   TreeStructureIcon as PhosphorTreeStructureIcon,
   TrendUpIcon as PhosphorTrendUpIcon,
   UserFocusIcon as PhosphorUserFocusIcon,
@@ -99,6 +101,8 @@ export const UserFocusIcon = createIcon(PhosphorUserFocusIcon)
 export const ClipboardTextIcon = createIcon(PhosphorClipboardTextIcon)
 export const PencilSimpleIcon = createIcon(PhosphorPencilSimpleIcon)
 export const TrashIcon = createIcon(PhosphorTrashIcon)
+export const ThumbsUpIcon = createIcon(PhosphorThumbsUpIcon)
+export const ThumbsDownIcon = createIcon(PhosphorThumbsDownIcon)
 export const ArrowCounterClockwiseIcon = createIcon(PhosphorArrowCounterClockwiseIcon)
 
 export type AudienceIconId = "farmer" | "agronomist" | "gardener"
