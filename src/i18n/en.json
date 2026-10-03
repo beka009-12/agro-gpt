@@ -373,9 +373,7 @@
       "imageTooLarge": "File is too large - attach a photo up to 10 MB"
     },
     "history": {
-      "today": "Today",
-      "yesterday": "Yesterday",
-      "last7Days": "Last 7 days",
+      "otherTopic": "Other",
       "trash": "Trash",
       "backToChats": "Back to chats",
       "rename": "Rename chat",

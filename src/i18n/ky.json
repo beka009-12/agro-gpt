@@ -373,9 +373,7 @@
       "imageTooLarge": "Файл өтө чоң - 10 МБга чейинки сүрөт тиркеңиз"
     },
     "history": {
-      "today": "Бүгүн",
-      "yesterday": "Кечээ",
-      "last7Days": "7 күн",
+      "otherTopic": "Башка",
       "trash": "Себет",
       "backToChats": "Чаттарга кайтуу",
       "rename": "Чатты өзгөртүү",

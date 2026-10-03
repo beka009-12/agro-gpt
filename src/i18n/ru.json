@@ -373,9 +373,7 @@
       "imageTooLarge": "Файл слишком большой - приложите фото до 10 МБ"
     },
     "history": {
-      "today": "Сегодня",
-      "yesterday": "Вчера",
-      "last7Days": "7 дней",
+      "otherTopic": "Другое",
       "trash": "Корзина",
       "backToChats": "К чатам",
       "rename": "Переименовать чат",

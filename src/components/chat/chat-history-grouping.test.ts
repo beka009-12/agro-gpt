@@ -1,57 +1,71 @@
 import { describe, expect, test } from "bun:test"
-import { groupChatsByDate } from "./chat-history-grouping"
+import { groupChatsByTopic, splitChatTitle } from "./chat-history-grouping"
 import type { ChatListItemSchema } from "@/src/api/generated/models"
 
-function chat(id: string, lastMessageAt: string): ChatListItemSchema {
+function chat(id: string, title: string | null, lastMessageAt: string): ChatListItemSchema {
   return {
     id,
-    title: `chat-${id}`,
+    title,
     created_at: lastMessageAt,
     last_message_at: lastMessageAt,
     messages_count: 1,
   }
 }
 
-describe("groupChatsByDate", () => {
-  const now = new Date("2026-09-29T12:00:00")
+describe("splitChatTitle", () => {
+  test("splits crop and problem on hyphen and dashes", () => {
+    expect(splitChatTitle("Томат - дефицит фосфора")).toEqual({
+      topic: "Томат",
+      rest: "дефицит фосфора",
+    })
+    expect(splitChatTitle("Пшеница — бурая ржавчина")).toEqual({
+      topic: "Пшеница",
+      rest: "бурая ржавчина",
+    })
+  })
 
-  test("buckets today, yesterday, last7Days, and older correctly", () => {
+  test("returns null for titles without a topic", () => {
+    expect(splitChatTitle(null)).toBeNull()
+    expect(splitChatTitle("Мой огород")).toBeNull()
+    expect(splitChatTitle("Сорт-гибрид")).toBeNull()
+    expect(splitChatTitle(" - пусто")).toBeNull()
+  })
+})
+
+describe("groupChatsByTopic", () => {
+  test("groups by crop case-insensitively with newest groups first", () => {
     const items = [
-      chat("today-chat", "2026-09-29T08:00:00"),
-      chat("yesterday-chat", "2026-09-28T08:00:00"),
-      chat("week-chat", "2026-09-24T08:00:00"),
-      chat("old-chat", "2026-09-01T08:00:00"),
+      chat("t1", "Томат - дефицит фосфора", "2026-09-20T08:00:00Z"),
+      chat("w1", "Пшеница - бурая ржавчина", "2026-09-28T08:00:00Z"),
+      chat("t2", "томат - фитофтороз", "2026-09-29T08:00:00Z"),
     ]
 
-    const groups = groupChatsByDate(items, now)
+    const groups = groupChatsByTopic(items)
 
-    expect(groups).toEqual([
-      { key: "today", items: [items[0]] },
-      { key: "yesterday", items: [items[1]] },
-      { key: "last7Days", items: [items[2]] },
-      { key: "older", items: [items[3]] },
+    expect(groups.map((group) => group.topic)).toEqual(["Томат", "Пшеница"])
+    expect(groups[0].items.map((item) => [item.chat.id, item.label])).toEqual([
+      ["t2", "Фитофтороз"],
+      ["t1", "Дефицит фосфора"],
     ])
   })
 
-  test("omits empty groups", () => {
-    const items = [chat("today-chat", "2026-09-29T08:00:00")]
-    const groups = groupChatsByDate(items, now)
-    expect(groups).toEqual([{ key: "today", items }])
-  })
-
-  test("returns an empty array for no chats", () => {
-    expect(groupChatsByDate([], now)).toEqual([])
-  })
-
-  test("treats exactly 7 days ago as last7Days, and 8 days ago as older", () => {
+  test("puts untitled and free-form chats into a trailing other group", () => {
     const items = [
-      chat("seven-days", "2026-09-22T08:00:00"),
-      chat("eight-days", "2026-09-21T08:00:00"),
+      chat("free", "Мой огород", "2026-09-29T10:00:00Z"),
+      chat("none", null, "2026-09-29T09:00:00Z"),
+      chat("t1", "Томат - фитофтороз", "2026-09-01T08:00:00Z"),
     ]
-    const groups = groupChatsByDate(items, now)
-    expect(groups).toEqual([
-      { key: "last7Days", items: [items[0]] },
-      { key: "older", items: [items[1]] },
+
+    const groups = groupChatsByTopic(items)
+
+    expect(groups.map((group) => group.topic)).toEqual(["Томат", null])
+    expect(groups[1].items.map((item) => [item.chat.id, item.label])).toEqual([
+      ["free", "Мой огород"],
+      ["none", null],
     ])
+  })
+
+  test("returns no groups for an empty list", () => {
+    expect(groupChatsByTopic([])).toEqual([])
   })
 })

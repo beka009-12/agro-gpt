@@ -13,6 +13,8 @@ import type { ChatListItemSchema } from "@/src/api/generated/models";
 
 interface ChatHistoryItemProps {
   item: ChatListItemSchema;
+  /** Короткая подпись в списке; полное название остаётся в подтверждении удаления. */
+  label?: string | null;
   isActive: boolean;
   isTrash: boolean;
   isRenaming: boolean;
@@ -29,6 +31,7 @@ interface ChatHistoryItemProps {
 
 export function ChatHistoryItem({
   item,
+  label,
   isActive,
   isTrash,
   isRenaming,
@@ -101,7 +104,7 @@ export function ChatHistoryItem({
             : "text-fg-muted hover:bg-surface-muted hover:text-fg"
         }`}
       >
-        <span className="truncate">{displayTitle}</span>
+        <span className="truncate" title={displayTitle}>{label || displayTitle}</span>
       </button>
 
       <div className="absolute right-1 flex items-center gap-1 opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
