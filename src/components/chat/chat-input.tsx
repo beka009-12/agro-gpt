@@ -1,23 +1,41 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import { useI18n } from "@/src/i18n/client";
 import { CameraIcon, SendIcon, XIcon } from "@/src/components/ui/icons";
 import { shouldSubmitChatInput } from "./chat-input-keyboard";
 
 interface ChatInputProps {
   pending: boolean;
+  notice?: ReactNode;
   onSend: (text: string, image?: File) => void;
 }
 
-export function ChatInput({ pending, onSend }: ChatInputProps) {
+export function ChatInput({ pending, notice, onSend }: ChatInputProps) {
   const { dict } = useI18n();
   const [value, setValue] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImageState] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const previewUrlRef = useRef<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const setImage = (file: File | null) => {
+    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    const url = file ? URL.createObjectURL(file) : null;
+    previewUrlRef.current = url;
+    setPreviewUrl(url);
+    setImageState(file);
+  };
+
+  useEffect(
+    () => () => {
+      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -71,22 +89,33 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         tabIndex={-1}
       />
 
+      {notice}
+
       <div className="rounded-[22px] border border-edge bg-white p-2 shadow-[0_10px_32px_rgba(6,48,34,0.08)] transition-[border-color,box-shadow] duration-150 focus-within:border-accent/70 focus-within:shadow-[0_0_0_3px_rgba(22,163,74,0.1),0_12px_36px_rgba(6,48,34,0.1)]">
         {image && (
           <div className="mb-2 flex items-center justify-between gap-3 rounded-xl bg-accent-soft px-3 py-2">
             <span className="flex min-w-0 items-center gap-2.5">
-              <span
-                aria-hidden
-                className="grid size-9 flex-none place-items-center rounded-lg bg-white text-accent shadow-[0_3px_10px_rgba(6,48,34,0.06)]"
-              >
-                <CameraIcon size={17} strokeWidth={2} />
-              </span>
+              {previewUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element -- blob: превью, next/image тут не нужен
+                <img
+                  src={previewUrl}
+                  alt=""
+                  className="size-14 flex-none rounded-lg bg-white object-cover shadow-[0_3px_10px_rgba(6,48,34,0.06)]"
+                />
+              ) : (
+                <span
+                  aria-hidden
+                  className="grid size-14 flex-none place-items-center rounded-lg bg-white text-accent shadow-[0_3px_10px_rgba(6,48,34,0.06)]"
+                >
+                  <CameraIcon size={20} strokeWidth={2} />
+                </span>
+              )}
               <span className="min-w-0">
                 <strong className="block truncate text-xs font-bold text-fg">
                   {dict.chat.imageChipTitle}
                 </strong>
                 <small className="block truncate text-[11px] text-fg-faint">
-                  {image.name || dict.chat.imageChipNote}
+                  {dict.chat.imageChipNote}
                 </small>
               </span>
             </span>

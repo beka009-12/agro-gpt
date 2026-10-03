@@ -360,18 +360,19 @@
     "imagePreviewLabel": "Open plant photo",
     "enlargedImageAlt": "Enlarged plant photo",
     "closeImageLabel": "Close photo preview",
-    "geoWarning": {
-      "text": "You haven't allowed location access - diagnosis may be less accurate: without it we can't factor in your local weather.",
-      "dismissLabel": "Hide warning"
+    "geoStatus": {
+      "denied": "Location is off — without it we can't factor in your local weather.",
+      "unavailable": "Couldn't determine your location — diagnosis may be less accurate.",
+      "enable": "Turn on",
+      "locating": "Locating…",
+      "deniedHint": "Your browser blocked location access. Allow it in the site settings (icon left of the address bar) and tap “Turn on” again.",
+      "failedHint": "Location still couldn't be determined. Make sure location services are on for your device."
     },
     "errors": {
       "failed": "Couldn't get a response. Please try again.",
       "imageTooLarge": "File is too large - attach a photo up to 10 MB"
     },
     "history": {
-      "today": "Today",
-      "yesterday": "Yesterday",
-      "last7Days": "Last 7 days",
       "trash": "Trash",
       "backToChats": "Back to chats",
       "rename": "Rename chat",
