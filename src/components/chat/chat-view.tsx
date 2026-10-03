@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useI18n } from "@/src/i18n/client";
 import { mapHistoryMessage, parseHistoryResponse } from "./chat-history-mapping";
 import { ChatInput } from "./chat-input";
-import { GeoWarningBanner } from "./geo-warning-banner";
+import { GeoStatusNotice } from "./geo-status-notice";
 import { MessageList } from "./message-list";
 import type { ChatMessage } from "./types";
 import { useChatGeo } from "./use-chat-geo";
@@ -55,9 +55,10 @@ export function ChatView({
 }: ChatViewProps) {
   const router = useRouter();
   const { dict: ru } = useI18n();
-  const { status: geoStatus, getCoords } = useChatGeo();
+  const { status: geoStatus, hasCoords, getCoords, enable: enableGeo } = useChatGeo();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pending, setPending] = useState(false);
+  const [enablingGeo, setEnablingGeo] = useState(false);
   const [hasMoreOlder, setHasMoreOlder] = useState(false);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const chatIdRef = useRef<string | null>(initialChatId);
@@ -226,10 +227,30 @@ export function ChatView({
     }
   };
 
+  const enableGeolocation = async () => {
+    setEnablingGeo(true);
+    try {
+      const next = await enableGeo();
+      if (next === "denied") toast.error(ru.chat.geoStatus.deniedHint);
+      else if (next === "unavailable") toast.error(ru.chat.geoStatus.failedHint);
+    } finally {
+      setEnablingGeo(false);
+    }
+  };
+
+  const geoNoticeStatus =
+    geoStatus === "denied" || geoStatus === "unavailable"
+      ? geoStatus
+      : geoStatus === "locating" && enablingGeo
+        ? geoStatus
+        : null;
+  const geoNotice =
+    geoNoticeStatus && !hasCoords && !hasProfileLocation ? (
+      <GeoStatusNotice status={geoNoticeStatus} onEnable={() => void enableGeolocation()} />
+    ) : null;
+
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-[880px] flex-1 flex-col overflow-hidden">
-      {geoStatus === "denied" && !hasProfileLocation && <GeoWarningBanner />}
-
       <MessageList
         messages={messages}
         pending={pending}
@@ -239,6 +260,7 @@ export function ChatView({
 
       <ChatInput
         pending={pending}
+        notice={geoNotice}
         onSend={(text, image) => void send(text, image)}
       />
     </div>

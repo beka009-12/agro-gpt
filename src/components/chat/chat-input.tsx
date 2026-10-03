@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import { useI18n } from "@/src/i18n/client";
 import { CameraIcon, SendIcon, XIcon } from "@/src/components/ui/icons";
 import { shouldSubmitChatInput } from "./chat-input-keyboard";
 
 interface ChatInputProps {
   pending: boolean;
+  notice?: ReactNode;
   onSend: (text: string, image?: File) => void;
 }
 
-export function ChatInput({ pending, onSend }: ChatInputProps) {
+export function ChatInput({ pending, notice, onSend }: ChatInputProps) {
   const { dict } = useI18n();
   const [value, setValue] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -70,6 +71,8 @@ export function ChatInput({ pending, onSend }: ChatInputProps) {
         className="hidden"
         tabIndex={-1}
       />
+
+      {notice}
 
       <div className="rounded-[22px] border border-edge bg-white p-2 shadow-[0_10px_32px_rgba(6,48,34,0.08)] transition-[border-color,box-shadow] duration-150 focus-within:border-accent/70 focus-within:shadow-[0_0_0_3px_rgba(22,163,74,0.1),0_12px_36px_rgba(6,48,34,0.1)]">
         {image && (
