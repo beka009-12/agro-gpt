@@ -95,7 +95,12 @@ export function ChatHistoryItem({
       <button
         type="button"
         onClick={() => onSelect(item.id)}
-        className={`flex min-h-9 w-full min-w-0 items-center truncate rounded-lg py-1.5 pl-2 pr-9 text-left text-sm transition-colors duration-150 [@media(hover:none)]:pr-16 ${
+        className={`flex min-h-9 w-full min-w-0 items-center truncate rounded-lg py-1.5 pl-2 pr-2 text-left text-sm transition-colors duration-150 ${
+          // Место под кнопки справа — только когда они видны (hover/фокус/тач), иначе текст под ними
+          isTrash
+            ? "group-focus-within:pr-9 group-hover:pr-9 [@media(hover:none)]:pr-9"
+            : "group-focus-within:pr-16 group-hover:pr-16 [@media(hover:none)]:pr-16"
+        } ${
           isActive
             ? "bg-accent-soft text-accent-strong"
             : "text-fg-muted hover:bg-surface-muted hover:text-fg"
