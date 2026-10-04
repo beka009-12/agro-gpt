@@ -1,7 +1,10 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useI18n } from "@/src/i18n/client";
 import { ArrowLeftIcon, TrashIcon } from "@/src/components/ui/icons";
+import type { ChatListItemSchema } from "@/src/api/generated/models";
+import { groupChatsByDay } from "./chat-history-groups";
 import { ChatHistoryItem } from "./chat-history-item";
 import { useChatHistory } from "./use-chat-history";
 
@@ -9,19 +12,27 @@ const SKELETON_WIDTHS = ["82%", "64%", "90%", "56%", "74%", "60%"];
 
 function HistoryListSkeleton() {
   return (
-    <div aria-hidden className="flex flex-col gap-0.5">
+    <div aria-hidden className="flex flex-col gap-0.5 pt-2">
+      <span className="mx-2.5 mb-2 h-3 w-16 rounded-md bg-surface-muted motion-safe:animate-pulse" />
       {SKELETON_WIDTHS.map((width) => (
-        <div
-          key={width}
-          className="flex min-h-12 flex-col justify-center gap-1.5 px-2.5 py-1.5"
-        >
+        <div key={width} className="flex min-h-11 items-center px-2.5">
           <span
             className="h-3.5 rounded-md bg-surface-muted motion-safe:animate-pulse"
             style={{ width }}
           />
-          <span className="h-2.5 w-16 rounded-md bg-surface-muted motion-safe:animate-pulse" />
         </div>
       ))}
+    </div>
+  );
+}
+
+function HistorySection({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div role="group" aria-label={label} className="flex flex-col gap-0.5">
+      <p aria-hidden className="px-2.5 pb-1 pt-2 text-[13px] font-bold text-fg-muted">
+        {label}
+      </p>
+      {children}
     </div>
   );
 }
@@ -43,10 +54,31 @@ export function ChatHistoryPanel({
   const history = useChatHistory(activeChatId, onActiveChatRemoved, historyRefreshToken);
   const isEmpty = history.status === "ready" && history.items.length === 0;
   const isTrash = history.view === "trash";
+  const groups = isTrash ? null : groupChatsByDay(history.items, new Date());
+
+  const renderItems = (items: ChatListItemSchema[]) =>
+    items.map((item) => (
+      <ChatHistoryItem
+        key={item.id}
+        item={item}
+        isActive={item.id === activeChatId}
+        isTrash={isTrash}
+        isRenaming={history.renamingId === item.id}
+        isPendingDelete={history.pendingDeleteId === item.id}
+        onSelect={onSelectChat}
+        onStartRename={history.startRename}
+        onCancelRename={history.cancelRename}
+        onSubmitRename={history.submitRename}
+        onRequestDelete={history.requestDelete}
+        onCancelDelete={history.cancelDelete}
+        onConfirmDelete={history.confirmDelete}
+        onRestore={history.restoreChat}
+      />
+    ));
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-3">
-      {isTrash ? (
+      {isTrash && (
         <div className="flex min-h-10 flex-none items-center gap-1">
           <button
             type="button"
@@ -59,10 +91,6 @@ export function ChatHistoryPanel({
           </button>
           <p className="text-sm font-bold text-fg">{dict.chat.history.trash}</p>
         </div>
-      ) : (
-        <p className="flex min-h-10 flex-none items-center px-2 text-[13px] font-bold text-fg-muted">
-          {dict.chat.history.title}
-        </p>
       )}
 
       <div
@@ -77,24 +105,22 @@ export function ChatHistoryPanel({
           </p>
         )}
 
-        {history.items.map((item) => (
-          <ChatHistoryItem
-            key={item.id}
-            item={item}
-            isActive={item.id === activeChatId}
-            isTrash={isTrash}
-            isRenaming={history.renamingId === item.id}
-            isPendingDelete={history.pendingDeleteId === item.id}
-            onSelect={onSelectChat}
-            onStartRename={history.startRename}
-            onCancelRename={history.cancelRename}
-            onSubmitRename={history.submitRename}
-            onRequestDelete={history.requestDelete}
-            onCancelDelete={history.cancelDelete}
-            onConfirmDelete={history.confirmDelete}
-            onRestore={history.restoreChat}
-          />
-        ))}
+        {groups ? (
+          <div className="flex flex-col gap-2">
+            {groups.today.length > 0 && (
+              <HistorySection label={dict.chat.history.today}>
+                {renderItems(groups.today)}
+              </HistorySection>
+            )}
+            {groups.earlier.length > 0 && (
+              <HistorySection label={dict.chat.history.earlier}>
+                {renderItems(groups.earlier)}
+              </HistorySection>
+            )}
+          </div>
+        ) : (
+          renderItems(history.items)
+        )}
       </div>
 
       {!isTrash && (

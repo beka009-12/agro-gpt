@@ -11,7 +11,6 @@ import {
 } from "@/src/components/ui/icons";
 import { SPRING_SNAPPY } from "@/src/lib/motion-tokens";
 import type { ChatListItemSchema } from "@/src/api/generated/models";
-import { formatChatDate } from "./chat-history-date";
 
 interface ChatHistoryItemProps {
   item: ChatListItemSchema;
@@ -86,11 +85,6 @@ export function ChatHistoryItem({
     };
   }, [menuOpen]);
 
-  const dateLabel = formatChatDate(item.last_message_at, new Date(), locale, {
-    today: dict.chat.history.today,
-    yesterday: dict.chat.history.yesterday,
-  });
-
   const displayTitle =
     item.title ??
     new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(
@@ -133,22 +127,15 @@ export function ChatHistoryItem({
         type="button"
         onClick={() => onSelect(item.id)}
         aria-current={isActive ? "page" : undefined}
-        className={`flex min-h-12 w-full min-w-0 flex-col justify-center rounded-lg py-1.5 pl-2.5 pr-11 text-left transition-colors duration-150 ${
+        className={`flex min-h-11 w-full min-w-0 items-center rounded-lg py-1.5 pl-2.5 pr-11 text-left transition-colors duration-150 ${
           isActive
             ? "bg-accent-soft text-accent-strong"
             : "text-fg hover:bg-surface-muted"
         }`}
       >
-        <span className="truncate text-sm font-medium" title={displayTitle}>
+        <span className="truncate text-sm" title={displayTitle}>
           {displayTitle}
         </span>
-        {dateLabel && (
-          <span
-            className={`truncate text-xs ${isActive ? "text-accent-strong/80" : "text-fg-muted"}`}
-          >
-            {dateLabel}
-          </span>
-        )}
       </button>
 
       <div
