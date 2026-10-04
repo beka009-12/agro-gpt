@@ -118,3 +118,16 @@ export function shouldRedirectAfterRemoval(
 export function shouldRollbackAfterFailure(status: number): boolean {
   return status !== 404
 }
+
+// скелетон — только когда показать нечего; при фоновом обновлении список остаётся на месте
+export function shouldShowHistorySkeleton(state: ChatHistoryState): boolean {
+  return (
+    state.items.length === 0 &&
+    (state.status === "idle" || state.status === "loading")
+  )
+}
+
+export function canSubmitRename(draft: string, currentTitle: string | null): boolean {
+  const title = draft.trim()
+  return title.length > 0 && title !== currentTitle
+}

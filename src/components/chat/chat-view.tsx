@@ -5,8 +5,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/src/i18n/client";
 import { mapHistoryMessage, parseHistoryResponse } from "./chat-history-mapping";
-import { ChatInput } from "./chat-input";
+import { ChatInput, type ChatInputHandle } from "./chat-input";
+import { EmptyState } from "./empty-state";
 import { GeoStatusNotice } from "./geo-status-notice";
+import { preloadBotMarkdown } from "./message-bubble";
 import { MessageList } from "./message-list";
 import type { ChatMessage } from "./types";
 import { useChatGeo } from "./use-chat-geo";
@@ -59,14 +61,20 @@ export function ChatView({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pending, setPending] = useState(false);
   const [enablingGeo, setEnablingGeo] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(Boolean(initialChatId));
   const [hasMoreOlder, setHasMoreOlder] = useState(false);
-  const [loadingOlder, setLoadingOlder] = useState(false);
   const chatIdRef = useRef<string | null>(initialChatId);
+  // чат создан этим view: URL сменился, но сообщения уже на экране
+  const createdChatIdRef = useRef<string | null>(null);
+  // ref, а не state: scroll шлёт события чаще, чем React успевает перерендерить
+  const loadingOlderRef = useRef(false);
   const oldestCreatedAtRef = useRef<string | null>(null);
   const objectUrlsRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<ChatInputHandle>(null);
 
   useEffect(() => {
+    void preloadBotMarkdown();
     const urls = objectUrlsRef.current;
     return () => {
       abortControllerRef.current?.abort();
@@ -76,12 +84,15 @@ export function ChatView({
   }, []);
 
   useEffect(() => {
-    if (!initialChatId) return;
+    if (!initialChatId || initialChatId === createdChatIdRef.current) return;
     let cancelled = false;
 
     const load = async () => {
       try {
-        const res = await fetch(`/api/chat/${initialChatId}/messages?limit=50`);
+        const [res] = await Promise.all([
+          fetch(`/api/chat/${initialChatId}/messages?limit=50`),
+          preloadBotMarkdown(),
+        ]);
         const data: unknown = await res.json().catch(() => null);
         if (cancelled) return;
 
@@ -114,6 +125,8 @@ export function ChatView({
           toast.error(ru.auth.errors.network);
           router.push("/chat");
         }
+      } finally {
+        if (!cancelled) setLoadingHistory(false);
       }
     };
 
@@ -126,8 +139,8 @@ export function ChatView({
   }, [initialChatId]);
 
   const loadOlderMessages = async () => {
-    if (!chatIdRef.current || !hasMoreOlder || loadingOlder) return;
-    setLoadingOlder(true);
+    if (!chatIdRef.current || !hasMoreOlder || loadingOlderRef.current) return;
+    loadingOlderRef.current = true;
     try {
       const before = oldestCreatedAtRef.current
         ? `&before=${encodeURIComponent(oldestCreatedAtRef.current)}`
@@ -142,12 +155,12 @@ export function ChatView({
       if (!parsed) return;
 
       const mapped = parsed.messages.flatMap(mapHistoryMessage);
-      setMessages((prev) => [...mapped, ...prev]);
+      if (mapped.length > 0) setMessages((prev) => [...mapped, ...prev]);
       setHasMoreOlder(parsed.has_more);
       oldestCreatedAtRef.current =
         parsed.messages.at(0)?.created_at ?? oldestCreatedAtRef.current;
     } finally {
-      setLoadingOlder(false);
+      loadingOlderRef.current = false;
     }
   };
 
@@ -155,32 +168,27 @@ export function ChatView({
     setMessages((prev) => [...prev, { id: crypto.randomUUID(), ...message }]);
   };
 
-  const send = async (text: string, image?: File) => {
-    const trimmed = text.trim();
-    if (pending || (!trimmed && !image)) return;
-
-    let imageUrl: string | undefined;
-    if (image) {
-      imageUrl = URL.createObjectURL(image);
-      objectUrlsRef.current.push(imageUrl);
-    }
-    pushMessage({
-      role: "user",
-      text: trimmed,
-      imageUrl,
-      imageName: image?.name,
-    });
+  const requestAnswer = async (text: string, image?: File) => {
     const wasNewChat = !chatIdRef.current;
     setPending(true);
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    // повтор имеет смысл только для сбоев сети и сервера — 4xx вернёт то же самое
+    const pushError = (message: string, retryable: boolean) => {
+      pushMessage({
+        role: "error",
+        text: message,
+        retry: retryable ? { text, image } : undefined,
+      });
+    };
 
     try {
       const coords = await getCoords();
 
       const form = new FormData();
       if (chatIdRef.current) form.set("chatId", chatIdRef.current);
-      if (trimmed) form.set("text", trimmed);
+      if (text) form.set("text", text);
       if (image) form.set("image", image);
       if (coords) {
         form.set("latitude", String(coords.latitude));
@@ -201,30 +209,55 @@ export function ChatView({
       }
 
       if (!res.ok) {
-        pushMessage({
-          role: "bot",
-          text: readErrorMessage(data) ?? ru.chat.errors.failed,
-        });
+        pushError(readErrorMessage(data) ?? ru.chat.errors.failed, res.status >= 500);
         return;
       }
 
       const parsed = parseMessageResponse(data);
       if (!parsed) {
-        pushMessage({ role: "bot", text: ru.auth.errors.unexpectedResponse });
+        pushError(ru.auth.errors.unexpectedResponse, true);
         return;
       }
       chatIdRef.current = parsed.chatId;
+      await preloadBotMarkdown();
       pushMessage({ role: "bot", text: parsed.answer });
-      if (wasNewChat) onChatCreated?.(parsed.chatId);
+      if (wasNewChat) {
+        createdChatIdRef.current = parsed.chatId;
+        onChatCreated?.(parsed.chatId);
+      }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      pushMessage({ role: "bot", text: ru.auth.errors.network });
+      pushError(ru.auth.errors.network, true);
     } finally {
       if (abortControllerRef.current === controller) {
         abortControllerRef.current = null;
         setPending(false);
       }
     }
+  };
+
+  const send = async (text: string, image?: File) => {
+    const trimmed = text.trim();
+    if (pending || (!trimmed && !image)) return;
+
+    let imageUrl: string | undefined;
+    if (image) {
+      imageUrl = URL.createObjectURL(image);
+      objectUrlsRef.current.push(imageUrl);
+    }
+    pushMessage({
+      role: "user",
+      text: trimmed,
+      imageUrl,
+      imageName: image?.name,
+    });
+    await requestAnswer(trimmed, image);
+  };
+
+  const retry = (failed: ChatMessage) => {
+    if (pending || !failed.retry) return;
+    setMessages((prev) => prev.filter((message) => message.id !== failed.id));
+    void requestAnswer(failed.retry.text, failed.retry.image);
   };
 
   const enableGeolocation = async () => {
@@ -250,15 +283,21 @@ export function ChatView({
     ) : null;
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-[880px] flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <MessageList
         messages={messages}
         pending={pending}
+        loading={loadingHistory}
         hasMoreOlder={hasMoreOlder}
         onLoadOlder={() => void loadOlderMessages()}
+        onRetry={retry}
+        emptyState={
+          <EmptyState onPickPhoto={() => inputRef.current?.pickPhoto()} />
+        }
       />
 
       <ChatInput
+        ref={inputRef}
         pending={pending}
         notice={geoNotice}
         onSend={(text, image) => void send(text, image)}

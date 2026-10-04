@@ -4,7 +4,7 @@ import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useI18n } from "@/src/i18n/client";
-import { PlusIcon, SidebarIcon, XIcon } from "@/src/components/ui/icons";
+import { HistoryIcon, PlusIcon, SidebarIcon, XIcon } from "@/src/components/ui/icons";
 import { ChatHistoryPanel } from "@/src/components/chat/chat-history-panel";
 import { LanguageSwitcher } from "@/src/components/layout/language-switcher";
 import { LogoMark } from "@/src/components/layout/logo";
@@ -129,7 +129,7 @@ export function ChatSidebar({
         } ${desktopExpanded ? "lg:w-[272px]" : "lg:w-[72px]"}`}
       >
         <div
-          className={`flex h-[72px] flex-none items-center border-b border-edge ${
+          className={`flex h-16 flex-none items-center ${
             expanded ? "justify-between px-4" : "justify-center px-2"
           }`}
         >
@@ -161,7 +161,7 @@ export function ChatSidebar({
           </button>
         </div>
 
-        <div className="px-3 py-4">
+        <div className="px-3 pb-3 pt-1">
           <button
             type="button"
             onClick={onNewChat}
@@ -185,7 +185,17 @@ export function ChatSidebar({
             historyRefreshToken={historyRefreshToken}
           />
         ) : (
-          <div className="flex-1" />
+          <div className="flex flex-1 flex-col items-center px-2">
+            <button
+              type="button"
+              onClick={onToggle}
+              aria-label={dict.chat.history.open}
+              title={dict.chat.history.open}
+              className="grid size-11 place-items-center rounded-xl text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <HistoryIcon size={21} />
+            </button>
+          </div>
         )}
 
         <div

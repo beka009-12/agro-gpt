@@ -1,10 +1,7 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import type {
-  RegisterRequest,
-  UpdateProfileRequest,
-} from "@/src/api/generated/models"
+import type { RegisterRequest } from "@/src/api/generated/models"
 import { getDict } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
 import { setAuthCookies, setLocaleCookie } from "@/src/lib/auth-cookies"
@@ -12,6 +9,7 @@ import {
   loginResponseSchema,
   makeRegisterFormSchema,
 } from "@/src/lib/auth-schemas"
+import { syncProfileLanguage } from "@/src/lib/profile-language"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ru = await getDict()
@@ -62,25 +60,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     })
     setLocaleCookie(store, language)
 
-    // бэк не принимает language при регистрации — сохраняем отдельным
-    // вызовом; ошибка здесь не должна ронять регистрацию
-    try {
-      const profilePayload: UpdateProfileRequest = { language }
-      await apiFetch(
-        "/api/profile",
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${login.data.access_token}` },
-          body: JSON.stringify(profilePayload),
-        },
-        apiMsgs
-      )
-    } catch (error) {
-      console.error(
-        "[auth/register] language patch failed (non-blocking):",
-        error
-      )
-    }
+    // бэк не принимает language при регистрации — сохраняем отдельным вызовом
+    await syncProfileLanguage(store, login.data.access_token, language)
 
     return NextResponse.json({ ok: true })
   } catch (error) {

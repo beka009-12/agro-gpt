@@ -22,6 +22,10 @@ export function ChatShell() {
   const activeChatId = typeof params.chatId === "string" ? params.chatId : null;
 
   const [sessionId, setSessionId] = useState(0);
+  const [createdChat, setCreatedChat] = useState<{
+    id: string;
+    sessionId: number;
+  } | null>(null);
   const [historyRefreshToken, setHistoryRefreshToken] = useState(0);
   const [sidebarState, dispatchSidebar] = useReducer(
     reduceSidebarState,
@@ -45,6 +49,12 @@ export function ChatShell() {
   }, []);
 
   const presentation = getSidebarPresentation(sidebarState);
+  // чат, созданный первым сообщением, получает свой URL без перемонтирования
+  // ChatView — иначе сообщения пропадут и история перезагрузится
+  const chatViewKey =
+    activeChatId !== null && activeChatId === createdChat?.id
+      ? `new-${createdChat.sessionId}`
+      : (activeChatId ?? `new-${sessionId}`);
   const hasProfileLocation =
     profile !== null &&
     profile.latitude !== null &&
@@ -62,10 +72,14 @@ export function ChatShell() {
   };
 
   const handleActiveChatRemoved = () => {
+    // новый sessionId: если удалён только что созданный чат, его view
+    // держит ключ new-<sessionId> и иначе остался бы на экране
+    setSessionId((id) => id + 1);
     router.push("/chat");
   };
 
   const handleChatCreated = (id: string) => {
+    setCreatedChat({ id, sessionId });
     router.replace(`/chat/${id}`);
     setHistoryRefreshToken((token) => token + 1);
   };
@@ -107,7 +121,7 @@ export function ChatShell() {
         />
 
         <ChatView
-          key={activeChatId ?? `new-${sessionId}`}
+          key={chatViewKey}
           initialChatId={activeChatId}
           hasProfileLocation={hasProfileLocation}
           onChatCreated={handleChatCreated}

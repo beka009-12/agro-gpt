@@ -100,8 +100,15 @@ button:not(:disabled),
   outline-offset: 3px;
 }
 
-.chat-input-field:focus-visible {
+.chat-input-field:focus-visible,
+.rename-chat-input:focus-visible {
   outline: none;
+}
+
+/* при открытии весь текст выделен — мягкая подсветка вместо сплошной брендовой заливки */
+.rename-chat-input::selection {
+  background: var(--color-mint);
+  color: var(--color-fg);
 }
 
 .disease-details-dialog:focus-visible {
@@ -121,11 +128,6 @@ button:not(:disabled),
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
-}
-
-.chat-dot-grid {
-  background-image: radial-gradient(circle, var(--color-edge) 1px, transparent 1px);
-  background-size: 22px 22px;
 }
 
 .no-scrollbar::-webkit-scrollbar {
