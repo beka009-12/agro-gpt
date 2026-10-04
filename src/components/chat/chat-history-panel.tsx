@@ -12,10 +12,10 @@ const SKELETON_WIDTHS = ["82%", "64%", "90%", "56%", "74%", "60%"];
 
 function HistoryListSkeleton() {
   return (
-    <div aria-hidden className="flex flex-col gap-0.5 pt-2">
+    <div aria-hidden className="flex flex-col pt-2">
       <span className="mx-2.5 mb-2 h-3 w-16 rounded-md bg-surface-muted motion-safe:animate-pulse" />
       {SKELETON_WIDTHS.map((width) => (
-        <div key={width} className="flex min-h-11 items-center px-2.5">
+        <div key={width} className="flex min-h-10 items-center px-2.5 lg:min-h-9">
           <span
             className="h-3.5 rounded-md bg-surface-muted motion-safe:animate-pulse"
             style={{ width }}
@@ -28,7 +28,7 @@ function HistoryListSkeleton() {
 
 function HistorySection({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div role="group" aria-label={label} className="flex flex-col gap-0.5">
+    <div role="group" aria-label={label} className="flex flex-col">
       <p aria-hidden className="px-2.5 pb-1 pt-2 text-[13px] font-bold text-fg-muted">
         {label}
       </p>

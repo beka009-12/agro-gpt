@@ -127,13 +127,13 @@ export function ChatHistoryItem({
         type="button"
         onClick={() => onSelect(item.id)}
         aria-current={isActive ? "page" : undefined}
-        className={`flex min-h-11 w-full min-w-0 items-center rounded-lg py-1.5 pl-2.5 pr-11 text-left transition-colors duration-150 ${
+        className={`flex min-h-10 w-full min-w-0 items-center rounded-lg py-1 pl-2.5 pr-11 text-left transition-colors duration-150 lg:min-h-9 ${
           isActive
             ? "bg-accent-soft text-accent-strong"
             : "text-fg hover:bg-surface-muted"
         }`}
       >
-        <span className="truncate text-sm" title={displayTitle}>
+        <span className="truncate text-sm font-medium" title={displayTitle}>
           {displayTitle}
         </span>
       </button>
@@ -147,7 +147,7 @@ export function ChatHistoryItem({
             onClick={() => onRestore(item.id)}
             aria-label={dict.chat.history.restore}
             title={dict.chat.history.restore}
-            className="grid size-9 place-items-center rounded-lg text-fg-muted hover:bg-white hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid size-8 place-items-center rounded-lg text-fg-muted hover:bg-white hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowCounterClockwiseIcon size={17} strokeWidth={1.8} />
           </button>
@@ -159,7 +159,7 @@ export function ChatHistoryItem({
             aria-label={dict.chat.history.actions}
             aria-expanded={menuOpen}
             aria-controls={menuOpen ? menuId : undefined}
-            className="grid size-9 place-items-center rounded-lg text-fg-muted hover:bg-white hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="grid size-8 place-items-center rounded-lg text-fg-muted hover:bg-white hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <DotsThreeIcon size={20} weight="bold" />
           </button>
