@@ -381,6 +381,11 @@
       "imageTooLarge": "File is too large - attach a photo up to 10 MB"
     },
     "history": {
+      "title": "Chats",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "actions": "Chat actions",
+      "open": "Chat history",
       "trash": "Trash",
       "backToChats": "Back to chats",
       "rename": "Rename chat",

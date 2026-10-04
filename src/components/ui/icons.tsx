@@ -13,8 +13,10 @@ import {
   CaretRightIcon as PhosphorCaretRightIcon,
   CheckIcon as PhosphorCheckIcon,
   ClipboardTextIcon as PhosphorClipboardTextIcon,
+  ClockCounterClockwiseIcon as PhosphorClockCounterClockwiseIcon,
   CloudIcon as PhosphorCloudIcon,
   CopyIcon as PhosphorCopyIcon,
+  DotsThreeIcon as PhosphorDotsThreeIcon,
   EnvelopeSimpleIcon as PhosphorEnvelopeSimpleIcon,
   EyeIcon as PhosphorEyeIcon,
   EyeSlashIcon as PhosphorEyeSlashIcon,
@@ -101,6 +103,8 @@ export const TreeStructureIcon = createIcon(PhosphorTreeStructureIcon)
 export const UserFocusIcon = createIcon(PhosphorUserFocusIcon)
 export const ClipboardTextIcon = createIcon(PhosphorClipboardTextIcon)
 export const CopyIcon = createIcon(PhosphorCopyIcon)
+export const DotsThreeIcon = createIcon(PhosphorDotsThreeIcon)
+export const HistoryIcon = createIcon(PhosphorClockCounterClockwiseIcon)
 export const PencilSimpleIcon = createIcon(PhosphorPencilSimpleIcon)
 export const TrashIcon = createIcon(PhosphorTrashIcon)
 export const ThumbsUpIcon = createIcon(PhosphorThumbsUpIcon)
