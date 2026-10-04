@@ -1,54 +1,75 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useI18n } from "@/src/i18n/client";
-import { PlantIcon } from "@/src/components/ui/icons";
-import { BotMarkdown } from "./bot-markdown";
 import { EmptyState } from "./empty-state";
+import { MessageBubble } from "./message-bubble";
 import { TypingIndicator } from "./typing-indicator";
 import type { ChatMessage } from "./types";
 
 interface MessageListProps {
   messages: ChatMessage[];
   pending: boolean;
+  loading?: boolean;
   hasMoreOlder?: boolean;
   onLoadOlder?: () => void;
+}
+
+function HistorySkeleton() {
+  return (
+    <div aria-hidden className="flex flex-col gap-4">
+      <div className="ml-auto h-11 w-[42%] rounded-[16px_16px_4px_16px] bg-accent-soft motion-safe:animate-pulse" />
+      <div className="flex items-start gap-2.5 pr-[8%] sm:pr-[16%]">
+        <span className="size-8 flex-none rounded-lg bg-accent-soft" />
+        <div className="h-32 flex-1 rounded-[4px_16px_16px_16px] border border-edge bg-surface-muted motion-safe:animate-pulse" />
+      </div>
+      <div className="ml-auto h-11 w-[30%] rounded-[16px_16px_4px_16px] bg-accent-soft motion-safe:animate-pulse" />
+      <div className="flex items-start gap-2.5 pr-[8%] sm:pr-[16%]">
+        <span className="size-8 flex-none rounded-lg bg-accent-soft" />
+        <div className="h-20 flex-1 rounded-[4px_16px_16px_16px] border border-edge bg-surface-muted motion-safe:animate-pulse" />
+      </div>
+    </div>
+  );
 }
 
 export function MessageList({
   messages,
   pending,
+  loading = false,
   hasMoreOlder = false,
   onLoadOlder,
 }: MessageListProps) {
   const { dict } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
-  const prevScrollHeightRef = useRef<number | null>(null);
-  const prevMessageCountRef = useRef(messages.length);
+  const firstMessageIdRef = useRef<string | undefined>(undefined);
+  const lastScrollHeightRef = useRef(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = scrollRef.current;
     if (!element) return;
 
-    const grew = messages.length > prevMessageCountRef.current;
-    if (grew && prevScrollHeightRef.current !== null) {
-      element.scrollTop = element.scrollHeight - prevScrollHeightRef.current;
-      prevScrollHeightRef.current = null;
+    const firstId = messages.at(0)?.id;
+    const prepended =
+      firstMessageIdRef.current !== undefined &&
+      firstId !== firstMessageIdRef.current;
+
+    if (prepended) {
+      // сверху подгрузились старые сообщения — держим текущий экран на месте
+      element.scrollTop += element.scrollHeight - lastScrollHeightRef.current;
     } else {
       element.scrollTop = element.scrollHeight;
     }
-    prevMessageCountRef.current = messages.length;
-  }, [messages.length, pending]);
+
+    firstMessageIdRef.current = firstId;
+    lastScrollHeightRef.current = element.scrollHeight;
+  }, [messages, pending, loading]);
 
   const handleScroll = () => {
     const element = scrollRef.current;
     if (!element || !hasMoreOlder || !onLoadOlder) return;
-    if (element.scrollTop < 80) {
-      prevScrollHeightRef.current = element.scrollHeight;
-      onLoadOlder();
-    }
+    if (element.scrollTop < 80) onLoadOlder();
   };
 
   useEffect(() => {
@@ -62,7 +83,7 @@ export function MessageList({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeImage]);
 
-  const isEmpty = messages.length === 0 && !pending;
+  const isEmpty = messages.length === 0 && !pending && !loading;
 
   return (
     <>
@@ -70,6 +91,7 @@ export function MessageList({
         ref={scrollRef}
         onScroll={handleScroll}
         aria-live="polite"
+        aria-busy={loading}
         className={`chat-dot-grid relative flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-4 [webkit-overflow-scrolling:touch] sm:p-6 ${
           isEmpty ? "items-center" : ""
         }`}
@@ -84,51 +106,14 @@ export function MessageList({
           </div>
         )}
 
-        {messages.map((message) => (
-          <div key={message.id}>
-            {message.role === "bot" ? (
-              <div className="flex items-start justify-start gap-2.5 pr-[8%] sm:pr-[16%]">
-                <span
-                  aria-hidden
-                  className="mt-0.5 grid size-8 flex-none place-items-center rounded-lg bg-accent-soft text-accent"
-                >
-                  <PlantIcon size={17} strokeWidth={1.8} />
-                </span>
-                <div className="min-w-0 rounded-[4px_16px_16px_16px] border border-edge bg-surface-muted px-4 py-3 text-sm leading-relaxed text-fg-muted">
-                  <BotMarkdown text={message.text} />
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-end pl-[8%] sm:pl-[16%]">
-                <div className="flex max-w-full flex-col items-end gap-2">
-                  {message.imageUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setActiveImage(message.imageUrl ?? null)}
-                      aria-label={dict.chat.imagePreviewLabel}
-                      className="group overflow-hidden rounded-[16px_16px_4px_16px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-                    >
-                      <Image
-                        src={message.imageUrl}
-                        alt={message.imageName ?? dict.chat.imageChipTitle}
-                        width={288}
-                        height={192}
-                        sizes="(max-width: 640px) 70vw, 288px"
-                        unoptimized
-                        className="h-48 w-72 max-w-[70vw] cursor-zoom-in object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                      />
-                    </button>
-                  )}
+        {loading && <HistorySkeleton />}
 
-                  {message.text && (
-                    <div className="whitespace-pre-wrap rounded-[16px_16px_4px_16px] bg-accent px-4 py-3 text-sm leading-relaxed text-accent-contrast">
-                      {message.text}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+        {messages.map((message) => (
+          <MessageBubble
+            key={message.id}
+            message={message}
+            onOpenImage={setActiveImage}
+          />
         ))}
 
         {pending && <TypingIndicator />}

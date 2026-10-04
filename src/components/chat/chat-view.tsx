@@ -7,6 +7,7 @@ import { useI18n } from "@/src/i18n/client";
 import { mapHistoryMessage, parseHistoryResponse } from "./chat-history-mapping";
 import { ChatInput } from "./chat-input";
 import { GeoStatusNotice } from "./geo-status-notice";
+import { preloadBotMarkdown } from "./message-bubble";
 import { MessageList } from "./message-list";
 import type { ChatMessage } from "./types";
 import { useChatGeo } from "./use-chat-geo";
@@ -59,14 +60,19 @@ export function ChatView({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pending, setPending] = useState(false);
   const [enablingGeo, setEnablingGeo] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(Boolean(initialChatId));
   const [hasMoreOlder, setHasMoreOlder] = useState(false);
-  const [loadingOlder, setLoadingOlder] = useState(false);
   const chatIdRef = useRef<string | null>(initialChatId);
+  // чат создан этим view: URL сменился, но сообщения уже на экране
+  const createdChatIdRef = useRef<string | null>(null);
+  // ref, а не state: scroll шлёт события чаще, чем React успевает перерендерить
+  const loadingOlderRef = useRef(false);
   const oldestCreatedAtRef = useRef<string | null>(null);
   const objectUrlsRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
+    void preloadBotMarkdown();
     const urls = objectUrlsRef.current;
     return () => {
       abortControllerRef.current?.abort();
@@ -76,12 +82,15 @@ export function ChatView({
   }, []);
 
   useEffect(() => {
-    if (!initialChatId) return;
+    if (!initialChatId || initialChatId === createdChatIdRef.current) return;
     let cancelled = false;
 
     const load = async () => {
       try {
-        const res = await fetch(`/api/chat/${initialChatId}/messages?limit=50`);
+        const [res] = await Promise.all([
+          fetch(`/api/chat/${initialChatId}/messages?limit=50`),
+          preloadBotMarkdown(),
+        ]);
         const data: unknown = await res.json().catch(() => null);
         if (cancelled) return;
 
@@ -114,6 +123,8 @@ export function ChatView({
           toast.error(ru.auth.errors.network);
           router.push("/chat");
         }
+      } finally {
+        if (!cancelled) setLoadingHistory(false);
       }
     };
 
@@ -126,8 +137,8 @@ export function ChatView({
   }, [initialChatId]);
 
   const loadOlderMessages = async () => {
-    if (!chatIdRef.current || !hasMoreOlder || loadingOlder) return;
-    setLoadingOlder(true);
+    if (!chatIdRef.current || !hasMoreOlder || loadingOlderRef.current) return;
+    loadingOlderRef.current = true;
     try {
       const before = oldestCreatedAtRef.current
         ? `&before=${encodeURIComponent(oldestCreatedAtRef.current)}`
@@ -142,12 +153,12 @@ export function ChatView({
       if (!parsed) return;
 
       const mapped = parsed.messages.flatMap(mapHistoryMessage);
-      setMessages((prev) => [...mapped, ...prev]);
+      if (mapped.length > 0) setMessages((prev) => [...mapped, ...prev]);
       setHasMoreOlder(parsed.has_more);
       oldestCreatedAtRef.current =
         parsed.messages.at(0)?.created_at ?? oldestCreatedAtRef.current;
     } finally {
-      setLoadingOlder(false);
+      loadingOlderRef.current = false;
     }
   };
 
@@ -214,8 +225,12 @@ export function ChatView({
         return;
       }
       chatIdRef.current = parsed.chatId;
+      await preloadBotMarkdown();
       pushMessage({ role: "bot", text: parsed.answer });
-      if (wasNewChat) onChatCreated?.(parsed.chatId);
+      if (wasNewChat) {
+        createdChatIdRef.current = parsed.chatId;
+        onChatCreated?.(parsed.chatId);
+      }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       pushMessage({ role: "bot", text: ru.auth.errors.network });
@@ -254,6 +269,7 @@ export function ChatView({
       <MessageList
         messages={messages}
         pending={pending}
+        loading={loadingHistory}
         hasMoreOlder={hasMoreOlder}
         onLoadOlder={() => void loadOlderMessages()}
       />
