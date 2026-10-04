@@ -11,7 +11,7 @@ export function EmptyState({ onPickPhoto }: EmptyStateProps) {
   const { dict } = useI18n();
 
   return (
-    <div className="w-full max-w-[600px] px-1 sm:px-4">
+    <div className="mx-auto w-full max-w-[600px] px-1 sm:px-4">
       <div className="text-center">
         <span
           aria-hidden
