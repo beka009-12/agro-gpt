@@ -1,11 +1,26 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { useI18n } from "@/src/i18n/client";
 import { TrashIcon } from "@/src/components/ui/icons";
-import { DURATION, EASE_OUT } from "@/src/lib/motion-tokens";
 import { ChatHistoryItem } from "./chat-history-item";
 import { useChatHistory } from "./use-chat-history";
+
+const SKELETON_WIDTHS = ["82%", "64%", "90%", "56%", "74%", "60%"];
+
+function HistoryListSkeleton() {
+  return (
+    <div aria-hidden className="flex flex-col">
+      {SKELETON_WIDTHS.map((width) => (
+        <div key={width} className="flex min-h-9 items-center px-2 py-1.5">
+          <span
+            className="h-3.5 rounded-md bg-surface-muted motion-safe:animate-pulse"
+            style={{ width }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 interface ChatHistoryPanelProps {
   activeChatId: string | null;
@@ -26,50 +41,37 @@ export function ChatHistoryPanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-3">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={history.view}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: DURATION.base, ease: EASE_OUT }}
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto pt-2"
-        >
-          {isEmpty && (
-            <p className="px-2 py-3 text-sm text-fg-faint">
-              {history.view === "trash" ? dict.chat.history.emptyTrash : dict.chat.history.emptyChats}
-            </p>
-          )}
+      <div
+        aria-busy={history.showSkeleton}
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto pt-2"
+      >
+        {history.showSkeleton && <HistoryListSkeleton />}
 
-          <AnimatePresence mode="popLayout">
-            {history.items.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-              >
-                <ChatHistoryItem
-                  item={item}
-                  isActive={item.id === activeChatId}
-                  isTrash={history.view === "trash"}
-                  isRenaming={history.renamingId === item.id}
-                  isPendingDelete={history.pendingDeleteId === item.id}
-                  onSelect={onSelectChat}
-                  onStartRename={history.startRename}
-                  onCancelRename={history.cancelRename}
-                  onSubmitRename={history.submitRename}
-                  onRequestDelete={history.requestDelete}
-                  onCancelDelete={history.cancelDelete}
-                  onConfirmDelete={history.confirmDelete}
-                  onRestore={history.restoreChat}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      </AnimatePresence>
+        {isEmpty && (
+          <p className="px-2 py-3 text-sm text-fg-faint">
+            {history.view === "trash" ? dict.chat.history.emptyTrash : dict.chat.history.emptyChats}
+          </p>
+        )}
+
+        {history.items.map((item) => (
+          <ChatHistoryItem
+            key={item.id}
+            item={item}
+            isActive={item.id === activeChatId}
+            isTrash={history.view === "trash"}
+            isRenaming={history.renamingId === item.id}
+            isPendingDelete={history.pendingDeleteId === item.id}
+            onSelect={onSelectChat}
+            onStartRename={history.startRename}
+            onCancelRename={history.cancelRename}
+            onSubmitRename={history.submitRename}
+            onRequestDelete={history.requestDelete}
+            onCancelDelete={history.cancelDelete}
+            onConfirmDelete={history.confirmDelete}
+            onRestore={history.restoreChat}
+          />
+        ))}
+      </div>
 
       <button
         type="button"

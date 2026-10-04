@@ -8,6 +8,7 @@ import {
   reduceChatHistory,
   shouldRedirectAfterRemoval,
   shouldRollbackAfterFailure,
+  shouldShowHistorySkeleton,
 } from "./chat-history-state"
 
 export function useChatHistory(
@@ -110,6 +111,7 @@ export function useChatHistory(
     view: state.view,
     items: state.items,
     status: state.status,
+    showSkeleton: shouldShowHistorySkeleton(state),
     renamingId: state.renamingId,
     pendingDeleteId: state.pendingDeleteId,
     toggleView,

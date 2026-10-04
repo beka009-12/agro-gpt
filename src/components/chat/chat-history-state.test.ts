@@ -4,6 +4,7 @@ import {
   reduceChatHistory,
   shouldRedirectAfterRemoval,
   shouldRollbackAfterFailure,
+  shouldShowHistorySkeleton,
 } from "./chat-history-state"
 import type { ChatListItemSchema } from "@/src/api/generated/models"
 
@@ -153,5 +154,42 @@ describe("shouldRollbackAfterFailure", () => {
     expect(shouldRollbackAfterFailure(500)).toBe(true)
     expect(shouldRollbackAfterFailure(403)).toBe(true)
     expect(shouldRollbackAfterFailure(0)).toBe(true)
+  })
+})
+
+describe("shouldShowHistorySkeleton", () => {
+  test("shows the skeleton before and during the first load", () => {
+    let state = createChatHistoryState()
+    expect(shouldShowHistorySkeleton(state)).toBe(true)
+
+    state = reduceChatHistory(state, { type: "load-started" })
+    expect(shouldShowHistorySkeleton(state)).toBe(true)
+  })
+
+  test("keeps the current list during a background refresh", () => {
+    let state = createChatHistoryState()
+    state = reduceChatHistory(state, { type: "load-succeeded", items: [chat("a")] })
+    state = reduceChatHistory(state, { type: "load-started" })
+
+    expect(shouldShowHistorySkeleton(state)).toBe(false)
+  })
+
+  test("shows the skeleton again after switching to trash", () => {
+    let state = createChatHistoryState()
+    state = reduceChatHistory(state, { type: "load-succeeded", items: [chat("a")] })
+    state = reduceChatHistory(state, { type: "view-changed", view: "trash" })
+
+    expect(shouldShowHistorySkeleton(state)).toBe(true)
+  })
+
+  test("hides the skeleton once loaded, even when the list is empty or failed", () => {
+    const empty = reduceChatHistory(createChatHistoryState(), {
+      type: "load-succeeded",
+      items: [],
+    })
+    const failed = reduceChatHistory(createChatHistoryState(), { type: "load-failed" })
+
+    expect(shouldShowHistorySkeleton(empty)).toBe(false)
+    expect(shouldShowHistorySkeleton(failed)).toBe(false)
   })
 })
