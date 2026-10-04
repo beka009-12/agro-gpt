@@ -126,3 +126,8 @@ export function shouldShowHistorySkeleton(state: ChatHistoryState): boolean {
     (state.status === "idle" || state.status === "loading")
   )
 }
+
+export function canSubmitRename(draft: string, currentTitle: string | null): boolean {
+  const title = draft.trim()
+  return title.length > 0 && title !== currentTitle
+}

@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from "@/src/components/ui/icons";
 import type { ChatListItemSchema } from "@/src/api/generated/models";
 import { groupChatsByDay } from "./chat-history-groups";
 import { ChatHistoryItem } from "./chat-history-item";
+import { RenameChatDialog } from "./rename-chat-dialog";
 import { useChatHistory } from "./use-chat-history";
 
 const SKELETON_WIDTHS = ["82%", "64%", "90%", "56%", "74%", "60%"];
@@ -55,6 +56,8 @@ export function ChatHistoryPanel({
   const isEmpty = history.status === "ready" && history.items.length === 0;
   const isTrash = history.view === "trash";
   const groups = isTrash ? null : groupChatsByDay(history.items, new Date());
+  const renamingChat =
+    history.items.find((item) => item.id === history.renamingId) ?? null;
 
   const renderItems = (items: ChatListItemSchema[]) =>
     items.map((item) => (
@@ -63,12 +66,9 @@ export function ChatHistoryPanel({
         item={item}
         isActive={item.id === activeChatId}
         isTrash={isTrash}
-        isRenaming={history.renamingId === item.id}
         isPendingDelete={history.pendingDeleteId === item.id}
         onSelect={onSelectChat}
         onStartRename={history.startRename}
-        onCancelRename={history.cancelRename}
-        onSubmitRename={history.submitRename}
         onRequestDelete={history.requestDelete}
         onCancelDelete={history.cancelDelete}
         onConfirmDelete={history.confirmDelete}
@@ -123,6 +123,12 @@ export function ChatHistoryPanel({
         )}
       </div>
 
+
+      <RenameChatDialog
+        chat={renamingChat}
+        onSubmit={(id, title) => void history.submitRename(id, title)}
+        onClose={history.cancelRename}
+      />
     </div>
   );
 }

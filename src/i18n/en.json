@@ -396,6 +396,8 @@
       "emptyChats": "No chats yet",
       "emptyTrash": "Trash is empty",
       "renameInputLabel": "Chat title",
+      "cancel": "Cancel",
+      "save": "Save",
       "errors": {
         "notFound": "Chat not found",
         "noAccess": "You don't have access to this chat",

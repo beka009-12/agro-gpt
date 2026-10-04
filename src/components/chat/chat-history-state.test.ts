@@ -4,6 +4,7 @@ import {
   reduceChatHistory,
   shouldRedirectAfterRemoval,
   shouldRollbackAfterFailure,
+  canSubmitRename,
   shouldShowHistorySkeleton,
 } from "./chat-history-state"
 import type { ChatListItemSchema } from "@/src/api/generated/models"
@@ -191,5 +192,24 @@ describe("shouldShowHistorySkeleton", () => {
 
     expect(shouldShowHistorySkeleton(empty)).toBe(false)
     expect(shouldShowHistorySkeleton(failed)).toBe(false)
+  })
+})
+
+describe("canSubmitRename", () => {
+  test("allows a new non-empty title", () => {
+    expect(canSubmitRename("Пшеница — ржавчина", "Пшеница")).toBe(true)
+  })
+
+  test("rejects empty and whitespace-only titles", () => {
+    expect(canSubmitRename("", "Пшеница")).toBe(false)
+    expect(canSubmitRename("   ", "Пшеница")).toBe(false)
+  })
+
+  test("rejects a title that only differs by surrounding spaces", () => {
+    expect(canSubmitRename("  Пшеница ", "Пшеница")).toBe(false)
+  })
+
+  test("allows naming a chat that had no title", () => {
+    expect(canSubmitRename("Томаты", null)).toBe(true)
   })
 })

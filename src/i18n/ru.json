@@ -396,6 +396,8 @@
       "emptyChats": "Пока нет чатов",
       "emptyTrash": "Корзина пуста",
       "renameInputLabel": "Название чата",
+      "cancel": "Отмена",
+      "save": "Сохранить",
       "errors": {
         "notFound": "Чат не найден",
         "noAccess": "Нет доступа к этому чату",

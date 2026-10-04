@@ -396,6 +396,8 @@
       "emptyChats": "Азырынча чаттар жок",
       "emptyTrash": "Себет бош",
       "renameInputLabel": "Чаттын аталышы",
+      "cancel": "Жокко чыгаруу",
+      "save": "Сактоо",
       "errors": {
         "notFound": "Чат табылган жок",
         "noAccess": "Бул чатка кирүү мүмкүн эмес",

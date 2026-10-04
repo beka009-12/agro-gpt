@@ -16,12 +16,9 @@ interface ChatHistoryItemProps {
   item: ChatListItemSchema;
   isActive: boolean;
   isTrash: boolean;
-  isRenaming: boolean;
   isPendingDelete: boolean;
   onSelect: (id: string) => void;
   onStartRename: (id: string) => void;
-  onCancelRename: () => void;
-  onSubmitRename: (id: string, title: string) => void;
   onRequestDelete: (id: string) => void;
   onCancelDelete: () => void;
   onConfirmDelete: (id: string) => void;
@@ -32,12 +29,9 @@ export function ChatHistoryItem({
   item,
   isActive,
   isTrash,
-  isRenaming,
   isPendingDelete,
   onSelect,
   onStartRename,
-  onCancelRename,
-  onSubmitRename,
   onRequestDelete,
   onCancelDelete,
   onConfirmDelete,
@@ -45,25 +39,10 @@ export function ChatHistoryItem({
 }: ChatHistoryItemProps) {
   const { dict, locale } = useI18n();
   const reduceMotion = useReducedMotion();
-  const [draft, setDraft] = useState(item.title ?? "");
-  const [trackedRenaming, setTrackedRenaming] = useState(isRenaming);
   const [menuOpen, setMenuOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuId = `chat-actions-${item.id}`;
-
-  if (isRenaming !== trackedRenaming) {
-    setTrackedRenaming(isRenaming);
-    if (isRenaming) setDraft(item.title ?? "");
-  }
-
-  useEffect(() => {
-    if (isRenaming) {
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    }
-  }, [isRenaming]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -90,30 +69,6 @@ export function ChatHistoryItem({
     new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(
       new Date(item.last_message_at),
     );
-
-  const commitRename = () => {
-    const trimmed = draft.trim();
-    if (trimmed && trimmed !== item.title) onSubmitRename(item.id, trimmed);
-    else onCancelRename();
-  };
-
-  if (isRenaming) {
-    return (
-      <input
-        ref={inputRef}
-        value={draft}
-        onChange={(event) => setDraft(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") commitRename();
-          if (event.key === "Escape") onCancelRename();
-        }}
-        onBlur={commitRename}
-        aria-label={dict.chat.history.renameInputLabel}
-        maxLength={200}
-        className="w-full rounded-md border border-accent bg-white px-2 py-1.5 text-sm text-fg focus-visible:outline-none"
-      />
-    );
-  }
 
   // кнопка действий видна при наведении, на активном чате, с открытым меню и всегда на тач-экранах
   const actionsVisible =
@@ -175,6 +130,8 @@ export function ChatHistoryItem({
             type="button"
             onClick={() => {
               setMenuOpen(false);
+              // модалка вернёт фокус туда, где он был при открытии, — на «⋯»
+              menuButtonRef.current?.focus();
               onStartRename(item.id);
             }}
             className="flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 text-left text-fg hover:bg-surface-muted focus-visible:bg-surface-muted focus-visible:outline-none"
