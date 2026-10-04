@@ -8,7 +8,7 @@ import {
   AlertTriangleIcon,
   ArrowCounterClockwiseIcon,
   CheckIcon,
-  ClipboardTextIcon,
+  CopyIcon,
   PlantIcon,
 } from "@/src/components/ui/icons";
 import type { BotMarkdown as BotMarkdownComponent } from "./bot-markdown";
@@ -72,20 +72,24 @@ function CopyButton({ text }: { text: string }) {
   };
 
   return (
-    <button
-      type="button"
-      onClick={() => void copy()}
-      className="-ml-2 flex min-h-11 w-fit items-center gap-1.5 rounded-lg px-2 text-[13px] font-semibold text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-    >
-      {copied ? (
-        <CheckIcon size={16} className="text-accent" />
-      ) : (
-        <ClipboardTextIcon size={16} />
-      )}
-      <span aria-live="polite">
-        {copied ? dict.chat.copied : dict.chat.copy}
+    <>
+      <button
+        type="button"
+        onClick={() => void copy()}
+        aria-label={copied ? dict.chat.copied : dict.chat.copy}
+        title={dict.chat.copy}
+        className="-ml-3 grid size-11 place-items-center rounded-lg text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
+        {copied ? (
+          <CheckIcon size={18} strokeWidth={2} className="text-accent" />
+        ) : (
+          <CopyIcon size={18} />
+        )}
+      </button>
+      <span aria-live="polite" className="sr-only">
+        {copied ? dict.chat.copied : ""}
       </span>
-    </button>
+    </>
   );
 }
 
