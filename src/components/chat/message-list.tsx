@@ -150,40 +150,44 @@ export function MessageList({
           onScroll={handleScroll}
           aria-live="polite"
           aria-busy={loading}
-          className={`flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-contain px-4 py-5 [webkit-overflow-scrolling:touch] sm:px-6 sm:py-6 ${
-            isEmpty ? "items-center" : ""
-          }`}
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch]"
         >
-          {isEmpty && (
-            <div className="relative flex w-full flex-1 items-center justify-center py-4 sm:py-8">
-              <span
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/3 size-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[90px]"
-              />
-              <div className="relative w-full">{emptyState}</div>
-            </div>
-          )}
+          <div
+            className={`mx-auto flex min-h-full w-full max-w-[880px] flex-col gap-6 px-4 py-5 sm:px-6 sm:py-6 lg:pt-16 ${
+              isEmpty ? "items-center" : ""
+            }`}
+          >
+            {isEmpty && (
+              <div className="relative flex w-full flex-1 items-center justify-center py-4 sm:py-8">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/3 size-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[90px]"
+                />
+                <div className="relative w-full">{emptyState}</div>
+              </div>
+            )}
 
-          {loading && <HistorySkeleton />}
+            {loading && <HistorySkeleton />}
 
-          {messages.map((message) =>
-            message.role === "error" ? (
-              <ErrorNotice
-                key={message.id}
-                message={message}
-                disabled={pending}
-                onRetry={onRetry}
-              />
-            ) : (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                onOpenImage={setActiveImage}
-              />
-            ),
-          )}
+            {messages.map((message) =>
+              message.role === "error" ? (
+                <ErrorNotice
+                  key={message.id}
+                  message={message}
+                  disabled={pending}
+                  onRetry={onRetry}
+                />
+              ) : (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  onOpenImage={setActiveImage}
+                />
+              ),
+            )}
 
-          {pending && <TypingIndicator withPhoto={pendingWithPhoto} />}
+            {pending && <TypingIndicator withPhoto={pendingWithPhoto} />}
+          </div>
         </div>
 
         {showJump && (

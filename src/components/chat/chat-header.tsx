@@ -26,42 +26,43 @@ export function ChatHeader({
   const { dict } = useI18n();
 
   return (
-    <header className="flex h-16 flex-none items-center gap-2 border-b border-edge bg-white px-3 sm:px-5 lg:h-[72px] lg:px-7">
-      <button
-        ref={sidebarTriggerRef}
-        type="button"
-        onClick={onOpenSidebar}
-        aria-label={dict.chat.openSidebarLabel}
-        aria-expanded={sidebarOpen}
-        className="grid size-11 flex-none place-items-center rounded-xl text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
-      >
-        <MenuIcon size={21} />
-      </button>
+    <>
+      <header className="flex h-14 flex-none items-center gap-2 bg-white px-3 sm:px-5 lg:hidden">
+        <button
+          ref={sidebarTriggerRef}
+          type="button"
+          onClick={onOpenSidebar}
+          aria-label={dict.chat.openSidebarLabel}
+          aria-expanded={sidebarOpen}
+          className="grid size-11 flex-none place-items-center rounded-xl text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <MenuIcon size={21} />
+        </button>
 
+        <Link
+          href="/"
+          aria-label={dict.header.logoAria}
+          className="flex h-11 flex-none items-center gap-2 rounded-xl px-2 text-fg transition-colors duration-150 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <LogoMark size={27} />
+          <span className="text-base font-bold tracking-tight">ibo</span>
+        </Link>
+
+        <div className="flex-1" />
+
+        {profile && (
+          <ProfileMenu profile={profile} onProfileChange={onProfileChange} />
+        )}
+      </header>
+
+      {/* на десктопе вместо шапки — только кнопка, чтобы чат начинался от верхнего края */}
       <Link
         href="/"
-        aria-label={dict.header.logoAria}
-        className="flex h-11 flex-none items-center gap-2 rounded-xl px-2 text-fg transition-colors duration-150 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
-      >
-        <LogoMark size={27} />
-        <span className="text-base font-bold tracking-tight">ibo</span>
-      </Link>
-
-      <Link
-        href="/"
-        className="hidden items-center gap-2 rounded-control px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg lg:flex"
+        className="absolute left-4 top-3 z-20 hidden h-10 items-center gap-2 rounded-xl bg-white/90 px-3 text-sm font-semibold text-fg-muted backdrop-blur-sm transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:flex"
       >
         <ArrowLeftIcon size={16} />
         <span>{dict.chat.back}</span>
       </Link>
-
-      <div className="flex-1" />
-
-      <div className="lg:hidden">
-        {profile && (
-          <ProfileMenu profile={profile} onProfileChange={onProfileChange} />
-        )}
-      </div>
-    </header>
+    </>
   );
 }

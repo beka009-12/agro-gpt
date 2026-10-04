@@ -5,10 +5,9 @@ import { CameraIcon, PlantIcon } from "@/src/components/ui/icons";
 
 interface EmptyStateProps {
   onPickPhoto: () => void;
-  onAsk: (question: string) => void;
 }
 
-export function EmptyState({ onPickPhoto, onAsk }: EmptyStateProps) {
+export function EmptyState({ onPickPhoto }: EmptyStateProps) {
   const { dict } = useI18n();
 
   return (
@@ -39,24 +38,6 @@ export function EmptyState({ onPickPhoto, onAsk }: EmptyStateProps) {
         </button>
 
         <p className="mt-2.5 text-xs text-fg-muted">{dict.chat.photoTip}</p>
-      </div>
-
-      <div className="mt-8">
-        <p className="px-1 text-sm font-semibold text-fg-muted">
-          {dict.chat.suggestionsTitle}
-        </p>
-        <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
-          {dict.chat.suggestions.map((question) => (
-            <button
-              key={question}
-              type="button"
-              onClick={() => onAsk(question)}
-              className="flex min-h-12 items-center rounded-xl border border-edge bg-white px-4 py-2.5 text-left text-sm font-medium leading-snug text-fg transition-colors duration-150 hover:border-accent/50 hover:bg-accent-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              {question}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

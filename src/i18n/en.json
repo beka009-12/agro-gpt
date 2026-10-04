@@ -344,17 +344,9 @@
     "emptySubtitle": "Take a photo of the affected leaf or describe the symptoms — ibo will tell you what it is and what to do.",
     "photoCta": "Take a plant photo",
     "photoTip": "Shoot the affected area close up, in daylight",
-    "suggestionsTitle": "Or ask:",
-    "suggestions": [
-      "Why are my tomato leaves turning yellow?",
-      "How do I treat aphids on cucumbers?",
-      "White coating on leaves — what is it?",
-      "When should I sow winter wheat?"
-    ],
     "assistantLabel": "ibo · AI agronomist",
     "typingPhoto": "ibo is studying the photo…",
     "typingText": "ibo is preparing an answer…",
-    "typingHint": "This usually takes 10–20 seconds",
     "copy": "Copy",
     "copied": "Copied",
     "copyFailed": "Couldn't copy the text",

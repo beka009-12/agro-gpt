@@ -283,7 +283,7 @@ export function ChatView({
     ) : null;
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-[880px] flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <MessageList
         messages={messages}
         pending={pending}
@@ -292,10 +292,7 @@ export function ChatView({
         onLoadOlder={() => void loadOlderMessages()}
         onRetry={retry}
         emptyState={
-          <EmptyState
-            onPickPhoto={() => inputRef.current?.pickPhoto()}
-            onAsk={(question) => void send(question)}
-          />
+          <EmptyState onPickPhoto={() => inputRef.current?.pickPhoto()} />
         }
       />
 
