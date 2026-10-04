@@ -1,10 +1,11 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getDict } from "@/src/i18n/server"
+import { getDict, getLocale } from "@/src/i18n/server"
 import { apiFetch } from "@/src/lib/api-server"
 import { handleApiError } from "@/src/lib/api-route-helpers"
 import { TOKEN_COOKIE } from "@/src/lib/auth-cookies"
+import { ensureProfileLanguage } from "@/src/lib/profile-language"
 import {
   chatCoordsSchema,
   chatCreateResponseSchema,
@@ -111,6 +112,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       backendForm.set("latitude", String(coords.data.latitude))
       backendForm.set("longitude", String(coords.data.longitude))
     }
+
+    await ensureProfileLanguage(store, token, await getLocale())
 
     const data = await apiFetch(
       "/diagnosis/",

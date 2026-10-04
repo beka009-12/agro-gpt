@@ -2,13 +2,14 @@ import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import type { LoginRequest } from "@/src/api/generated/models"
-import { getDict } from "@/src/i18n/server"
+import { getDict, getLocale } from "@/src/i18n/server"
 import { ApiError, apiFetch } from "@/src/lib/api-server"
-import { setAuthCookies } from "@/src/lib/auth-cookies"
+import { setAuthCookies, setSyncedAiLanguage } from "@/src/lib/auth-cookies"
 import {
   loginResponseSchema,
   makeLoginFormSchema,
 } from "@/src/lib/auth-schemas"
+import { syncProfileLanguage } from "@/src/lib/profile-language"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ru = await getDict()
@@ -56,6 +57,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       expiresAt: login.data.expires_at,
       userId: login.data.user.id,
     })
+
+    // язык могли сменить до логина — тогда он есть только в cookie
+    const locale = await getLocale()
+    if (login.data.user.language === locale) {
+      setSyncedAiLanguage(store, locale)
+    } else {
+      await syncProfileLanguage(store, login.data.access_token, locale)
+    }
 
     return NextResponse.json({ ok: true })
   } catch (error) {
