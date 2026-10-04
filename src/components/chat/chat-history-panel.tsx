@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useI18n } from "@/src/i18n/client";
-import { ArrowLeftIcon, TrashIcon } from "@/src/components/ui/icons";
+import { ArrowLeftIcon } from "@/src/components/ui/icons";
 import type { ChatListItemSchema } from "@/src/api/generated/models";
 import { groupChatsByDay } from "./chat-history-groups";
 import { ChatHistoryItem } from "./chat-history-item";
@@ -123,16 +123,6 @@ export function ChatHistoryPanel({
         )}
       </div>
 
-      {!isTrash && (
-        <button
-          type="button"
-          onClick={history.toggleView}
-          className="mt-1 flex min-h-11 flex-none items-center gap-2 rounded-xl px-2 text-sm text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          <TrashIcon size={16} strokeWidth={1.8} />
-          {dict.chat.history.trash}
-        </button>
-      )}
     </div>
   );
 }
