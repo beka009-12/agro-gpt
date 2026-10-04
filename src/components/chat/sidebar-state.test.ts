@@ -6,6 +6,15 @@ import {
 } from "./sidebar-state"
 
 describe("chat sidebar state", () => {
+  test("shows chat history on desktop by default", () => {
+    const state = reduceSidebarState(createSidebarState(), {
+      type: "viewport-changed",
+      isDesktop: true,
+    })
+
+    expect(getSidebarPresentation(state).desktopExpanded).toBe(true)
+  })
+
   test("preserves the desktop preference across viewport changes", () => {
     let state = createSidebarState()
 
@@ -25,7 +34,7 @@ describe("chat sidebar state", () => {
     })
 
     expect(getSidebarPresentation(state)).toEqual({
-      desktopExpanded: true,
+      desktopExpanded: false,
       mobileOpen: false,
       visible: true,
     })

@@ -55,13 +55,6 @@ export function ChatHeader({
         <span>{dict.chat.back}</span>
       </Link>
 
-      <span aria-hidden className="hidden h-5 w-px bg-edge lg:block" />
-
-      <div className="hidden items-center gap-2 px-3 text-sm font-bold text-fg-muted lg:flex">
-        <span aria-hidden className="size-2 rounded-full bg-accent" />
-        <span>{dict.chat.readyStatus}</span>
-      </div>
-
       <div className="flex-1" />
 
       <div className="lg:hidden">

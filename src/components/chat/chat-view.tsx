@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/src/i18n/client";
 import { mapHistoryMessage, parseHistoryResponse } from "./chat-history-mapping";
-import { ChatInput } from "./chat-input";
+import { ChatInput, type ChatInputHandle } from "./chat-input";
+import { EmptyState } from "./empty-state";
 import { GeoStatusNotice } from "./geo-status-notice";
 import { preloadBotMarkdown } from "./message-bubble";
 import { MessageList } from "./message-list";
@@ -70,6 +71,7 @@ export function ChatView({
   const oldestCreatedAtRef = useRef<string | null>(null);
   const objectUrlsRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<ChatInputHandle>(null);
 
   useEffect(() => {
     void preloadBotMarkdown();
@@ -166,32 +168,27 @@ export function ChatView({
     setMessages((prev) => [...prev, { id: crypto.randomUUID(), ...message }]);
   };
 
-  const send = async (text: string, image?: File) => {
-    const trimmed = text.trim();
-    if (pending || (!trimmed && !image)) return;
-
-    let imageUrl: string | undefined;
-    if (image) {
-      imageUrl = URL.createObjectURL(image);
-      objectUrlsRef.current.push(imageUrl);
-    }
-    pushMessage({
-      role: "user",
-      text: trimmed,
-      imageUrl,
-      imageName: image?.name,
-    });
+  const requestAnswer = async (text: string, image?: File) => {
     const wasNewChat = !chatIdRef.current;
     setPending(true);
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    // повтор имеет смысл только для сбоев сети и сервера — 4xx вернёт то же самое
+    const pushError = (message: string, retryable: boolean) => {
+      pushMessage({
+        role: "error",
+        text: message,
+        retry: retryable ? { text, image } : undefined,
+      });
+    };
 
     try {
       const coords = await getCoords();
 
       const form = new FormData();
       if (chatIdRef.current) form.set("chatId", chatIdRef.current);
-      if (trimmed) form.set("text", trimmed);
+      if (text) form.set("text", text);
       if (image) form.set("image", image);
       if (coords) {
         form.set("latitude", String(coords.latitude));
@@ -212,16 +209,13 @@ export function ChatView({
       }
 
       if (!res.ok) {
-        pushMessage({
-          role: "bot",
-          text: readErrorMessage(data) ?? ru.chat.errors.failed,
-        });
+        pushError(readErrorMessage(data) ?? ru.chat.errors.failed, res.status >= 500);
         return;
       }
 
       const parsed = parseMessageResponse(data);
       if (!parsed) {
-        pushMessage({ role: "bot", text: ru.auth.errors.unexpectedResponse });
+        pushError(ru.auth.errors.unexpectedResponse, true);
         return;
       }
       chatIdRef.current = parsed.chatId;
@@ -233,13 +227,37 @@ export function ChatView({
       }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      pushMessage({ role: "bot", text: ru.auth.errors.network });
+      pushError(ru.auth.errors.network, true);
     } finally {
       if (abortControllerRef.current === controller) {
         abortControllerRef.current = null;
         setPending(false);
       }
     }
+  };
+
+  const send = async (text: string, image?: File) => {
+    const trimmed = text.trim();
+    if (pending || (!trimmed && !image)) return;
+
+    let imageUrl: string | undefined;
+    if (image) {
+      imageUrl = URL.createObjectURL(image);
+      objectUrlsRef.current.push(imageUrl);
+    }
+    pushMessage({
+      role: "user",
+      text: trimmed,
+      imageUrl,
+      imageName: image?.name,
+    });
+    await requestAnswer(trimmed, image);
+  };
+
+  const retry = (failed: ChatMessage) => {
+    if (pending || !failed.retry) return;
+    setMessages((prev) => prev.filter((message) => message.id !== failed.id));
+    void requestAnswer(failed.retry.text, failed.retry.image);
   };
 
   const enableGeolocation = async () => {
@@ -272,9 +290,17 @@ export function ChatView({
         loading={loadingHistory}
         hasMoreOlder={hasMoreOlder}
         onLoadOlder={() => void loadOlderMessages()}
+        onRetry={retry}
+        emptyState={
+          <EmptyState
+            onPickPhoto={() => inputRef.current?.pickPhoto()}
+            onAsk={(question) => void send(question)}
+          />
+        }
       />
 
       <ChatInput
+        ref={inputRef}
         pending={pending}
         notice={geoNotice}
         onSend={(text, image) => void send(text, image)}

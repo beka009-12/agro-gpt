@@ -20,7 +20,7 @@ export interface ChatSidebarPresentation {
 export function createSidebarState(): ChatSidebarState {
   return {
     isDesktop: false,
-    desktopExpanded: false,
+    desktopExpanded: true,
     mobileOpen: false,
   }
 }

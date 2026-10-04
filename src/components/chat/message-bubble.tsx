@@ -2,9 +2,17 @@
 
 import { memo, useEffect, useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import { useI18n } from "@/src/i18n/client";
-import { PlantIcon } from "@/src/components/ui/icons";
+import {
+  AlertTriangleIcon,
+  ArrowCounterClockwiseIcon,
+  CheckIcon,
+  ClipboardTextIcon,
+  PlantIcon,
+} from "@/src/components/ui/icons";
 import type { BotMarkdown as BotMarkdownComponent } from "./bot-markdown";
+import { markdownToPlainText } from "./markdown-plain-text";
 import type { ChatMessage } from "./types";
 
 let BotMarkdown: typeof BotMarkdownComponent | null = null;
@@ -43,6 +51,78 @@ function BotText({ text }: { text: string }) {
   return <p className="whitespace-pre-wrap">{text}</p>;
 }
 
+function CopyButton({ text }: { text: string }) {
+  const { dict } = useI18n();
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timeoutId = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timeoutId);
+  }, [copied]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(markdownToPlainText(text));
+      setCopied(true);
+    } catch (error) {
+      console.error("[chat] copy failed:", error);
+      toast.error(dict.chat.copyFailed);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={() => void copy()}
+      className="-ml-2 flex min-h-11 w-fit items-center gap-1.5 rounded-lg px-2 text-[13px] font-semibold text-fg-muted transition-colors duration-150 hover:bg-surface-muted hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      {copied ? (
+        <CheckIcon size={16} className="text-accent" />
+      ) : (
+        <ClipboardTextIcon size={16} />
+      )}
+      <span aria-live="polite">
+        {copied ? dict.chat.copied : dict.chat.copy}
+      </span>
+    </button>
+  );
+}
+
+interface ErrorNoticeProps {
+  message: ChatMessage;
+  disabled: boolean;
+  onRetry: (message: ChatMessage) => void;
+}
+
+export function ErrorNotice({ message, disabled, onRetry }: ErrorNoticeProps) {
+  const { dict } = useI18n();
+
+  return (
+    <div
+      data-message-id={message.id}
+      role="alert"
+      className="flex w-fit max-w-[70ch] items-start gap-3 rounded-2xl border border-danger/25 bg-danger/5 px-4 py-3 text-sm text-danger sm:ml-9"
+    >
+      <AlertTriangleIcon size={18} className="mt-0.5 flex-none" />
+      <div className="min-w-0 flex-1">
+        <p className="leading-relaxed">{message.text}</p>
+        {message.retry && (
+          <button
+            type="button"
+            onClick={() => onRetry(message)}
+            disabled={disabled}
+            className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-danger/20 bg-white px-3.5 text-sm font-bold text-danger transition-colors duration-150 hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <ArrowCounterClockwiseIcon size={16} strokeWidth={2} />
+            {dict.chat.retry}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface MessageBubbleProps {
   message: ChatMessage;
   onOpenImage: (url: string) => void;
@@ -57,29 +137,38 @@ export const MessageBubble = memo(function MessageBubble({
 
   if (message.role === "bot") {
     return (
-      <div className="flex items-start justify-start gap-2.5 pr-[8%] sm:pr-[16%]">
-        <span
-          aria-hidden
-          className="mt-0.5 grid size-8 flex-none place-items-center rounded-lg bg-accent-soft text-accent"
-        >
-          <PlantIcon size={17} strokeWidth={1.8} />
-        </span>
-        <div className="min-w-0 rounded-[4px_16px_16px_16px] border border-edge bg-surface-muted px-4 py-3 text-sm leading-relaxed text-fg-muted">
-          <BotText text={message.text} />
+      <div data-message-id={message.id} className="flex flex-col gap-2">
+        <div className="flex items-center gap-2 text-[13px] font-bold text-fg">
+          <span
+            aria-hidden
+            className="grid size-7 flex-none place-items-center rounded-lg bg-accent-soft text-accent"
+          >
+            <PlantIcon size={15} strokeWidth={1.8} />
+          </span>
+          {dict.chat.assistantLabel}
+        </div>
+        <div className="flex max-w-[70ch] flex-col gap-1 sm:pl-9">
+          <div className="text-[15px] leading-[1.7] text-fg sm:text-base">
+            <BotText text={message.text} />
+          </div>
+          <CopyButton text={message.text} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex justify-end pl-[8%] sm:pl-[16%]">
+    <div
+      data-message-id={message.id}
+      className="flex justify-end pl-[8%] sm:pl-[16%]"
+    >
       <div className="flex max-w-full flex-col items-end gap-2">
         {imageUrl && (
           <button
             type="button"
             onClick={() => onOpenImage(imageUrl)}
             aria-label={dict.chat.imagePreviewLabel}
-            className="group overflow-hidden rounded-[16px_16px_4px_16px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="group overflow-hidden rounded-[18px_18px_6px_18px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             <Image
               src={imageUrl}
@@ -94,7 +183,7 @@ export const MessageBubble = memo(function MessageBubble({
         )}
 
         {message.text && (
-          <div className="whitespace-pre-wrap rounded-[16px_16px_4px_16px] bg-accent px-4 py-3 text-sm leading-relaxed text-accent-contrast">
+          <div className="whitespace-pre-wrap rounded-[18px_18px_6px_18px] bg-accent px-4 py-2.5 text-[15px] leading-relaxed text-accent-contrast">
             {message.text}
           </div>
         )}
