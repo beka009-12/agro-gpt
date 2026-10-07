@@ -41,23 +41,6 @@ export async function fetchReviews(
   return parsed.data.map(withSameOriginPhotos)
 }
 
-export async function fetchMyReviews(
-  token: string,
-  msgs?: ApiMessages
-): Promise<MyReview[] | null> {
-  const data = await apiFetch(
-    "/reviews/mine",
-    { headers: authHeaders(token) },
-    msgs
-  )
-  const parsed = z.array(myReviewSchema).safeParse(data)
-  if (!parsed.success) {
-    console.error("[reviews:mine] unexpected response:", parsed.error.message)
-    return null
-  }
-  return parsed.data.map(withSameOriginPhotos)
-}
-
 export function parseCreatedReview(data: unknown): MyReview | null {
   const parsed = myReviewSchema.safeParse(data)
   return parsed.success ? withSameOriginPhotos(parsed.data) : null

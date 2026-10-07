@@ -1,19 +1,18 @@
+import type { ReactNode } from "react"
+
 interface SectionHeadingProps {
   eyebrow?: string
   title: string
   /** плотный вариант для уплотнённых секций; по умолчанию — прежний вид */
   compact?: boolean
+  /** элемент справа от заголовка (ссылка «Все …»), прижат к нижней линии */
+  action?: ReactNode
 }
 
-export function SectionHeading({ eyebrow, title, compact = false }: SectionHeadingProps) {
-  return (
-    <div
-      className={
-        compact
-          ? "mb-8 max-w-[820px] md:mb-10"
-          : "mb-12 max-w-[820px] md:mb-16"
-      }
-    >
+export function SectionHeading({ eyebrow, title, compact = false, action }: SectionHeadingProps) {
+  const spacing = compact ? "mb-8 md:mb-10" : "mb-12 md:mb-16"
+  const heading = (
+    <div className="max-w-[820px]">
       {eyebrow ? (
         <p
           className={`font-semibold text-accent ${compact ? "mb-3 text-sm" : "mb-5 text-sm"}`}
@@ -30,6 +29,15 @@ export function SectionHeading({ eyebrow, title, compact = false }: SectionHeadi
       >
         {title}
       </h2>
+    </div>
+  )
+
+  if (!action) return <div className={spacing}>{heading}</div>
+
+  return (
+    <div className={`flex flex-wrap items-end justify-between gap-x-8 gap-y-3 ${spacing}`}>
+      {heading}
+      {action}
     </div>
   )
 }
