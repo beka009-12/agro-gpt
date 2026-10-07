@@ -496,15 +496,17 @@
     "loadMore": "Дагы көрсөтүү",
     "loadError": "Пикирлерди жүктөө мүмкүн болгон жок",
     "retry": "Кайра аракет",
+    "readMore": "Толук окуу",
+    "showLess": "Жыйыштыруу",
     "loginToReact": "Баалоо үчүн кириңиз",
     "like": "Жакты",
     "dislike": "Жакпады",
     "photoAlt": "Пикирге сүрөт",
-    "status": {
-      "pending": "Текшерүүдө",
-      "approved": "Лентада",
-      "rejected": "Четке кагылды"
-    },
+    "openPhoto": "{total} сүрөттүн {current}-сүрөтүн ачуу",
+    "photoViewer": "Пикирдин сүрөттөрү",
+    "prevPhoto": "Мурунку сүрөт",
+    "nextPhoto": "Кийинки сүрөт",
+    "closePhoto": "Жабуу",
     "form": {
       "title": "Сиздин пикириңиз",
       "text": "Пикирдин тексти",

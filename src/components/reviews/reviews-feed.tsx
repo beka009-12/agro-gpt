@@ -82,12 +82,7 @@ export function ReviewsFeed({ initial, initialHasMore, pageSize, isAuthed }: Rev
       <RevealGroup as="ul" className="grid items-start gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
         {reviews.map((review, i) => (
           <RevealItem as="li" key={review.id} className={reviewItemVisibility(i, mobileExpanded)}>
-            <ReviewCard
-              review={review}
-              isAuthed={isAuthed}
-              labels={dict.reviews}
-              locale={locale}
-            />
+            <ReviewCard review={review} isAuthed={isAuthed} locale={locale} />
           </RevealItem>
         ))}
       </RevealGroup>

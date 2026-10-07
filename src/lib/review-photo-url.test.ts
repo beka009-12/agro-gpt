@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { toSameOriginPhotoUrl } from "./review-photo-url"
+import { reviewPhotoTileCount, toSameOriginPhotoUrl } from "./review-photo-url"
 
 const API = "http://167.233.203.129"
 
@@ -28,4 +28,13 @@ describe("toSameOriginPhotoUrl", () => {
     expect(toSameOriginPhotoUrl("media/reviews/a.jpg", undefined)).toBe(
       "/media/reviews/a.jpg"
     ))
+})
+
+describe("reviewPhotoTileCount", () => {
+  test("до четырёх фото — все превью", () => {
+    expect(reviewPhotoTileCount(1)).toEqual({ tiles: 1, hidden: 0 })
+    expect(reviewPhotoTileCount(4)).toEqual({ tiles: 4, hidden: 0 })
+  })
+  test("больше четырёх — четыре превью и счётчик остатка", () =>
+    expect(reviewPhotoTileCount(5)).toEqual({ tiles: 4, hidden: 1 }))
 })

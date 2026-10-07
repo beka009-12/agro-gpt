@@ -10,6 +10,7 @@ import {
   ArrowsClockwiseIcon as PhosphorArrowsClockwiseIcon,
   CameraIcon as PhosphorCameraIcon,
   CaretDownIcon as PhosphorCaretDownIcon,
+  CaretLeftIcon as PhosphorCaretLeftIcon,
   CaretRightIcon as PhosphorCaretRightIcon,
   CheckIcon as PhosphorCheckIcon,
   ClipboardTextIcon as PhosphorClipboardTextIcon,
@@ -90,6 +91,7 @@ export const CloudIcon = createIcon(PhosphorCloudIcon)
 export const SendIcon = createIcon(PhosphorPaperPlaneTiltIcon)
 export const MapPinIcon = createIcon(PhosphorMapPinIcon)
 export const ChevronRightIcon = createIcon(PhosphorCaretRightIcon)
+export const ChevronLeftIcon = createIcon(PhosphorCaretLeftIcon)
 export const EnvelopeSimpleIcon = createIcon(PhosphorEnvelopeSimpleIcon)
 export const PhoneIcon = createIcon(PhosphorPhoneIcon)
 export const InstagramLogoIcon = createIcon(PhosphorInstagramLogoIcon)

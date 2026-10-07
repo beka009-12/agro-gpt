@@ -496,15 +496,17 @@
     "loadMore": "Show more",
     "loadError": "Could not load reviews",
     "retry": "Retry",
+    "readMore": "Read more",
+    "showLess": "Show less",
     "loginToReact": "Log in to rate a review",
     "like": "Like",
     "dislike": "Dislike",
     "photoAlt": "Review photo",
-    "status": {
-      "pending": "Under review",
-      "approved": "Published",
-      "rejected": "Rejected"
-    },
+    "openPhoto": "Open photo {current} of {total}",
+    "photoViewer": "Review photos",
+    "prevPhoto": "Previous photo",
+    "nextPhoto": "Next photo",
+    "closePhoto": "Close",
     "form": {
       "title": "Your review",
       "text": "Review text",

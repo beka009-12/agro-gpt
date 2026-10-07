@@ -496,15 +496,17 @@
     "loadMore": "Показать ещё",
     "loadError": "Не удалось загрузить отзывы",
     "retry": "Повторить",
+    "readMore": "Читать полностью",
+    "showLess": "Свернуть",
     "loginToReact": "Войдите, чтобы оценить отзыв",
     "like": "Нравится",
     "dislike": "Не нравится",
     "photoAlt": "Фото к отзыву",
-    "status": {
-      "pending": "На проверке",
-      "approved": "В ленте",
-      "rejected": "Отклонён"
-    },
+    "openPhoto": "Открыть фото {current} из {total}",
+    "photoViewer": "Фото к отзыву",
+    "prevPhoto": "Предыдущее фото",
+    "nextPhoto": "Следующее фото",
+    "closePhoto": "Закрыть",
     "form": {
       "title": "Ваш отзыв",
       "text": "Текст отзыва",
