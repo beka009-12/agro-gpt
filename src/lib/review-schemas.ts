@@ -93,3 +93,31 @@ export function validateReviewForm(input: ReviewFormInput): ReviewFormError | nu
   }
   return null
 }
+
+/**
+ * Отбор фото при добавлении: неподходящие по типу/размеру и сверх лимита отбрасываются сразу,
+ * чтобы пользователь узнал об этом в момент выбора, а не при отправке. Ошибка — первая встреченная.
+ */
+export function pickReviewPhotos<T extends { type: string; size: number }>(
+  files: ReadonlyArray<T>,
+  existing: number
+): { accepted: T[]; error: ReviewFormError | null } {
+  const accepted: T[] = []
+  let error: ReviewFormError | null = null
+  for (const file of files) {
+    if (!REVIEW_PHOTO_TYPES.includes(file.type)) {
+      error ??= "photoType"
+      continue
+    }
+    if (file.size > REVIEW_MAX_PHOTO_BYTES) {
+      error ??= "photoSize"
+      continue
+    }
+    if (existing + accepted.length >= REVIEW_MAX_PHOTOS) {
+      error ??= "tooManyPhotos"
+      continue
+    }
+    accepted.push(file)
+  }
+  return { accepted, error }
+}

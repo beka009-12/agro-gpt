@@ -3,6 +3,7 @@ import {
   applyReaction,
   myReviewSchema,
   nextReaction,
+  pickReviewPhotos,
   validateReviewForm,
 } from "./review-schemas"
 
@@ -80,5 +81,26 @@ describe("myReviewSchema", () => {
       status: "pending",
     })
     expect(parsed.success).toBe(true)
+  })
+})
+
+describe("pickReviewPhotos", () => {
+  const jpg = (size = 1000) => ({ type: "image/jpeg", size })
+  test("берёт подходящие, пока есть место", () =>
+    expect(pickReviewPhotos([jpg(), jpg()], 0)).toEqual({ accepted: [jpg(), jpg()], error: null }))
+  test("лишние сверх пяти отбрасывает с ошибкой", () => {
+    const { accepted, error } = pickReviewPhotos([jpg(), jpg(), jpg()], 3)
+    expect(accepted).toHaveLength(2)
+    expect(error).toBe("tooManyPhotos")
+  })
+  test("неверный тип пропускает, остальные берёт", () => {
+    const { accepted, error } = pickReviewPhotos([{ type: "image/gif", size: 10 }, jpg()], 0)
+    expect(accepted).toEqual([jpg()])
+    expect(error).toBe("photoType")
+  })
+  test("слишком большой файл пропускает", () => {
+    const { accepted, error } = pickReviewPhotos([jpg(11 * 1024 * 1024)], 0)
+    expect(accepted).toHaveLength(0)
+    expect(error).toBe("photoSize")
   })
 })
