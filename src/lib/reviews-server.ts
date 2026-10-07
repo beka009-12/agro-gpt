@@ -2,20 +2,17 @@ import { z } from "zod"
 import { apiFetch, type ApiMessages } from "@/src/lib/api-server"
 import { myReviewSchema, reviewSchema } from "@/src/lib/review-schemas"
 import type { MyReview, Review } from "@/src/lib/review-schemas"
+import { toSameOriginPhotoUrl } from "@/src/lib/review-photo-url"
 
-// бэкенд может вернуть относительный путь к фото — приводим к абсолютному URL
-function absolutePhotoUrl(url: string): string {
-  if (/^https?:\/\//.test(url)) return url
-  const base = process.env.API_URL ?? ""
-  return `${base}${url.startsWith("/") ? "" : "/"}${url}`
-}
-
-function withAbsolutePhotos<T extends { photos: { id: string; url: string }[] }>(
+function withSameOriginPhotos<T extends { photos: { id: string; url: string }[] }>(
   review: T
 ): T {
   return {
     ...review,
-    photos: review.photos.map((p) => ({ ...p, url: absolutePhotoUrl(p.url) })),
+    photos: review.photos.map((p) => ({
+      ...p,
+      url: toSameOriginPhotoUrl(p.url, process.env.API_URL),
+    })),
   }
 }
 
@@ -41,7 +38,7 @@ export async function fetchReviews(
     console.error("[reviews:list] unexpected response:", parsed.error.message)
     return null
   }
-  return parsed.data.map(withAbsolutePhotos)
+  return parsed.data.map(withSameOriginPhotos)
 }
 
 export async function fetchMyReviews(
@@ -58,10 +55,10 @@ export async function fetchMyReviews(
     console.error("[reviews:mine] unexpected response:", parsed.error.message)
     return null
   }
-  return parsed.data.map(withAbsolutePhotos)
+  return parsed.data.map(withSameOriginPhotos)
 }
 
 export function parseCreatedReview(data: unknown): MyReview | null {
   const parsed = myReviewSchema.safeParse(data)
-  return parsed.success ? withAbsolutePhotos(parsed.data) : null
+  return parsed.success ? withSameOriginPhotos(parsed.data) : null
 }
