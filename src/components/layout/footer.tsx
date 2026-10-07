@@ -20,7 +20,7 @@ export async function Footer() {
 
   const navLinks = [
     { href: "/about", label: ru.footer.aboutLink },
-    { href: "/reviews", label: ru.reviews.pageTitle },
+    { href: "/#reviews", label: ru.reviews.eyebrow },
     { href: "/chat", label: ru.header.startChat },
   ]
   const linkClass =

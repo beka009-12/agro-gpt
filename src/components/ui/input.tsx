@@ -1,7 +1,7 @@
-import type { InputHTMLAttributes, Ref } from "react"
+import type { InputHTMLAttributes, ReactNode, Ref } from "react"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string
+  label: ReactNode
   error?: string
   hint?: string
   warning?: string

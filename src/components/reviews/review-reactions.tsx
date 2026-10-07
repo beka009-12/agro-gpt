@@ -16,12 +16,14 @@ interface ReviewReactionsProps {
   reviewId: string
   initial: ReviewReaction
   isAuthed: boolean
+  className?: string
 }
 
 export function ReviewReactions({
   reviewId,
   initial,
   isAuthed,
+  className = "",
 }: ReviewReactionsProps) {
   const { dict } = useI18n()
   const router = useRouter()
@@ -79,7 +81,7 @@ export function ReviewReactions({
   ] as const
 
   return (
-    <div className="-ml-2 flex items-center gap-1">
+    <div className={`flex items-center ${className}`}>
       {buttons.map(({ kind, Icon, count, label }) => {
         const active = state.my_reaction === kind
         return (
@@ -90,13 +92,13 @@ export function ReviewReactions({
             aria-pressed={active}
             aria-label={label}
             title={isAuthed ? label : dict.reviews.loginToReact}
-            className={`inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition-colors ${
+            className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold transition-colors active:scale-95 ${
               active
-                ? "bg-mint-soft text-accent-strong"
-                : "text-fg-muted hover:bg-mint-soft"
+                ? "text-accent-strong"
+                : "text-fg-muted hover:bg-surface-muted hover:text-fg"
             }`}
           >
-            <Icon size={18} weight={active ? "fill" : "regular"} />
+            <Icon size={17} weight={active ? "fill" : "regular"} />
             <span className="tabular-nums">{count}</span>
           </button>
         )
