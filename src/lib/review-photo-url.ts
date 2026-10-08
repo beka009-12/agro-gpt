@@ -1,4 +1,5 @@
-export const REVIEW_PHOTO_MAX_TILES = 4
+/** Три превью + реакции влезают в одну строку карточки; остальное — счётчиком «+N». */
+export const REVIEW_PHOTO_MAX_TILES = 3
 
 /**
  * Фото отзывов отдаём с нашего origin (rewrite /media/reviews в next.config.ts):
