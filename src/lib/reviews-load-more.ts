@@ -1,48 +1,42 @@
-/** На мобиле сначала три отзыва: шесть карточек подряд — слишком длинная прокрутка. */
-export const MOBILE_INITIAL_REVIEWS = 3
-
-/** Столько отзывов и меньше не прячем за «Показать ещё»: клик ради пары карточек того не стоит. */
-export const REVIEWS_TAIL = 3
+/** Сначала один ряд десктопной сетки. */
+export const REVIEWS_INITIAL = 3
+/** За клик — ещё два ряда. */
+export const REVIEWS_STEP = 6
 
 interface FeedState {
-  mobileExpanded: boolean
+  visible: number
   loaded: number
   hasMore: boolean
 }
 
-export type LoadMoreAction = "reveal" | "fetch" | "none"
+export type FeedButton = "more" | "less" | "none"
 
-/** Страница + хвост + 1: по лишнему отзыву понимаем, есть ли продолжение. */
-export function reviewsFetchLimit(pageSize: number): number {
-  return pageSize + REVIEWS_TAIL + 1
+/** Первая порция с сервера: стартовый ряд + следующий шаг, чтобы первый клик был мгновенным. */
+export const REVIEWS_PREFETCH = REVIEWS_INITIAL + REVIEWS_STEP
+
+/** Отдаёт size элементов; лишний сверху — признак, что есть продолжение. */
+export function splitLookahead<T>(fetched: T[], size: number): { page: T[]; hasMore: boolean } {
+  return { page: fetched.slice(0, size), hasMore: fetched.length > size }
 }
 
-/** Короткий хвост показываем сразу, длинный — оставляем за кнопкой. */
-export function takeReviewsPage<T>(fetched: T[], pageSize: number): { page: T[]; hasMore: boolean } {
-  if (fetched.length <= pageSize + REVIEWS_TAIL) return { page: fetched, hasMore: false }
-  return { page: fetched.slice(0, pageSize), hasMore: true }
+export function feedButton({ visible, loaded, hasMore }: FeedState): FeedButton {
+  if (loaded > visible || hasMore) return "more"
+  return loaded > REVIEWS_INITIAL ? "less" : "none"
 }
 
-/** Свёрнута ли лента на мобиле: только если за кнопкой окажется больше хвоста. */
-export function isMobileCollapsed({ mobileExpanded, loaded, hasMore }: FeedState): boolean {
-  if (mobileExpanded || loaded <= MOBILE_INITIAL_REVIEWS) return false
-  return hasMore || loaded > MOBILE_INITIAL_REVIEWS + REVIEWS_TAIL
+/** Чего не хватает до следующего шага; null — всё уже загружено. */
+export function nextFetch({ visible, loaded, hasMore }: FeedState): { offset: number; size: number } | null {
+  const target = visible + REVIEWS_STEP
+  if (!hasMore || loaded >= target) return null
+  return { offset: loaded, size: target - loaded }
 }
 
-/** Что делает «Показать ещё»: на мобиле сначала раскрывает уже загруженные, потом грузит. */
-export function loadMoreAction({
-  isMobile,
-  ...state
-}: FeedState & { isMobile: boolean }): LoadMoreAction {
-  if (isMobile && isMobileCollapsed(state)) return "reveal"
-  return state.hasMore ? "fetch" : "none"
-}
-
-export function loadMoreButtonVisibility(state: FeedState): "all" | "mobile" | "none" {
-  if (state.hasMore) return "all"
-  return isMobileCollapsed(state) ? "mobile" : "none"
-}
-
-export function reviewItemVisibility(index: number, mobileCollapsed: boolean): string {
-  return mobileCollapsed && index >= MOBILE_INITIAL_REVIEWS ? "max-md:hidden" : ""
+/**
+ * На md две колонки, а шаги нечётные (3, 9, 15): последнюю карточку там прячем,
+ * чтобы не было дыры в ряду. В конце ленты не прячем — иначе отзыв не увидеть.
+ */
+export function reviewItemVisibility(index: number, state: FeedState): string {
+  const { visible, loaded, hasMore } = state
+  const hasNext = loaded > visible || hasMore
+  return hasNext && visible % 2 === 1 && index === visible - 1 ? "md:max-lg:hidden" : ""
 }

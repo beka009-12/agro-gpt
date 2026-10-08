@@ -1,85 +1,51 @@
 import { describe, expect, test } from "bun:test"
 import {
-  isMobileCollapsed,
-  loadMoreAction,
-  loadMoreButtonVisibility,
+  feedButton,
+  nextFetch,
   reviewItemVisibility,
-  reviewsFetchLimit,
-  takeReviewsPage,
+  splitLookahead,
 } from "./reviews-load-more"
 
 const range = (n: number) => Array.from({ length: n }, (_, i) => i)
 
-describe("takeReviewsPage", () => {
-  test("запрашиваем страницу, хвост и один лишний", () => expect(reviewsFetchLimit(6)).toBe(10))
-  test("хвост до трёх показываем сразу, без кнопки", () => {
-    expect(takeReviewsPage(range(9), 6)).toEqual({ page: range(9), hasMore: false })
-    expect(takeReviewsPage(range(7), 6)).toEqual({ page: range(7), hasMore: false })
-    expect(takeReviewsPage(range(2), 6)).toEqual({ page: range(2), hasMore: false })
+describe("splitLookahead", () => {
+  test("лишний элемент — есть продолжение", () =>
+    expect(splitLookahead(range(10), 9)).toEqual({ page: range(9), hasMore: true }))
+  test("ровно страница или меньше — конец", () => {
+    expect(splitLookahead(range(9), 9)).toEqual({ page: range(9), hasMore: false })
+    expect(splitLookahead(range(2), 9)).toEqual({ page: range(2), hasMore: false })
   })
-  test("за кнопкой больше трёх — отдаём ровно страницу", () =>
-    expect(takeReviewsPage(range(10), 6)).toEqual({ page: range(6), hasMore: true }))
 })
 
-describe("isMobileCollapsed", () => {
-  test("скрыто не больше трёх — показываем всё", () => {
-    expect(isMobileCollapsed({ mobileExpanded: false, loaded: 6, hasMore: false })).toBe(false)
-    expect(isMobileCollapsed({ mobileExpanded: false, loaded: 3, hasMore: false })).toBe(false)
-  })
-  test("скрыто больше трёх или есть продолжение — сворачиваем", () => {
-    expect(isMobileCollapsed({ mobileExpanded: false, loaded: 7, hasMore: false })).toBe(true)
-    expect(isMobileCollapsed({ mobileExpanded: false, loaded: 6, hasMore: true })).toBe(true)
-  })
-  test("после раскрытия не сворачиваем", () =>
-    expect(isMobileCollapsed({ mobileExpanded: true, loaded: 9, hasMore: true })).toBe(false))
+describe("feedButton", () => {
+  test("загружено больше, чем показано, — «ещё», даже если осталось три", () =>
+    expect(feedButton({ visible: 3, loaded: 6, hasMore: false })).toBe("more"))
+  test("всё показано, но сервер отдаст ещё — «ещё»", () =>
+    expect(feedButton({ visible: 9, loaded: 9, hasMore: true })).toBe("more"))
+  test("всё показано и раскрыто — «свернуть»", () =>
+    expect(feedButton({ visible: 9, loaded: 9, hasMore: false })).toBe("less"))
+  test("шаг больше остатка — тоже «свернуть»", () =>
+    expect(feedButton({ visible: 15, loaded: 11, hasMore: false })).toBe("less"))
+  test("отзывов не больше стартового ряда — без кнопки", () =>
+    expect(feedButton({ visible: 3, loaded: 3, hasMore: false })).toBe("none"))
 })
 
-describe("loadMoreAction", () => {
-  test("мобила: сначала раскрываем уже загруженные", () =>
-    expect(
-      loadMoreAction({ isMobile: true, mobileExpanded: false, loaded: 6, hasMore: true })
-    ).toBe("reveal"))
-  test("мобила после раскрытия — грузим следующую страницу", () =>
-    expect(
-      loadMoreAction({ isMobile: true, mobileExpanded: true, loaded: 6, hasMore: true })
-    ).toBe("fetch"))
-  test("мобила, загружено не больше трёх — раскрывать нечего, грузим", () =>
-    expect(
-      loadMoreAction({ isMobile: true, mobileExpanded: false, loaded: 3, hasMore: true })
-    ).toBe("fetch"))
-  test("десктоп сразу грузит", () =>
-    expect(
-      loadMoreAction({ isMobile: false, mobileExpanded: false, loaded: 6, hasMore: true })
-    ).toBe("fetch"))
-  test("всё загружено и раскрыто — ничего", () =>
-    expect(
-      loadMoreAction({ isMobile: false, mobileExpanded: true, loaded: 6, hasMore: false })
-    ).toBe("none"))
-})
-
-describe("loadMoreButtonVisibility", () => {
-  test("есть что грузить — видна везде", () =>
-    expect(loadMoreButtonVisibility({ mobileExpanded: false, loaded: 6, hasMore: true })).toBe(
-      "all"
-    ))
-  test("грузить нечего, но на мобиле скрыто больше трёх — только мобила", () =>
-    expect(loadMoreButtonVisibility({ mobileExpanded: false, loaded: 9, hasMore: false })).toBe(
-      "mobile"
-    ))
-  test("скрыто три и меньше или всё показано — скрыта", () => {
-    expect(loadMoreButtonVisibility({ mobileExpanded: false, loaded: 6, hasMore: false })).toBe(
-      "none"
-    )
-    expect(loadMoreButtonVisibility({ mobileExpanded: true, loaded: 9, hasMore: false })).toBe(
-      "none"
-    )
-  })
+describe("nextFetch", () => {
+  test("следующий шаг уже загружен — не ходим в сеть", () =>
+    expect(nextFetch({ visible: 3, loaded: 9, hasMore: true })).toBeNull())
+  test("догружаем ровно недостающее", () =>
+    expect(nextFetch({ visible: 9, loaded: 9, hasMore: true })).toEqual({ offset: 9, size: 6 }))
+  test("сервер пуст — не грузим", () =>
+    expect(nextFetch({ visible: 9, loaded: 9, hasMore: false })).toBeNull())
 })
 
 describe("reviewItemVisibility", () => {
-  test("в свёрнутой ленте на мобиле видны первые три", () => {
-    expect(reviewItemVisibility(2, true)).toBe("")
-    expect(reviewItemVisibility(3, true)).toBe("max-md:hidden")
+  test("на md прячем непарную последнюю, пока есть продолжение", () => {
+    expect(reviewItemVisibility(2, { visible: 3, loaded: 9, hasMore: false })).toBe(
+      "md:max-lg:hidden"
+    )
+    expect(reviewItemVisibility(1, { visible: 3, loaded: 9, hasMore: false })).toBe("")
   })
-  test("в развёрнутой видны все", () => expect(reviewItemVisibility(5, false)).toBe(""))
+  test("в конце ленты ничего не прячем", () =>
+    expect(reviewItemVisibility(8, { visible: 9, loaded: 9, hasMore: false })).toBe(""))
 })
