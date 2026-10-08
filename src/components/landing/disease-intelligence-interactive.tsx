@@ -18,7 +18,7 @@ import { DiseaseDetailsModal } from "./disease-details-modal"
 const DiseaseMap = dynamic(() => import("./disease-map"), {
   ssr: false,
   loading: () => (
-    <div className="min-h-[360px] animate-pulse rounded-card border border-edge bg-surface-muted lg:min-h-[440px]" />
+    <div className="h-full min-h-[360px] animate-pulse rounded-card border border-edge bg-surface-muted" />
   ),
 })
 
@@ -105,8 +105,8 @@ export function DiseaseIntelligenceInteractive({
   return (
     <>
       <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]">
-        <div className="rounded-card border border-edge bg-white p-5 sm:p-7">
-          <div className="flex items-start justify-between gap-5 border-b border-edge pb-5">
+        <div className="rounded-card border border-edge bg-white p-5 sm:p-6">
+          <div className="flex items-start justify-between gap-5 border-b border-edge pb-4">
             <div>
               <p className="text-sm font-semibold text-accent">
                 {labels.ranking.eyebrow}
@@ -119,7 +119,7 @@ export function DiseaseIntelligenceInteractive({
           </div>
 
           {visibleDiseases.length > 0 ? (
-            <ol className="mt-2">
+            <ol className="mt-1">
               {visibleDiseases.map((disease, index) => {
                 const selected = selectedDisease === disease.diseaseName
                 const width = `${Math.max((disease.count / maximumCount) * 100, 8)}%`
@@ -129,7 +129,7 @@ export function DiseaseIntelligenceInteractive({
                     <button
                       type="button"
                       onClick={() => selectDisease(disease.diseaseName)}
-                      className="group w-full py-4 text-left"
+                      className="group w-full py-3 text-left"
                       aria-haspopup="dialog"
                       aria-expanded={selected}
                     >
@@ -144,17 +144,17 @@ export function DiseaseIntelligenceInteractive({
                           {disease.count}
                         </span>
                       </span>
-                      <span className="mt-3 block h-1.5 overflow-hidden rounded-full bg-accent-soft">
+                      <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-accent-soft">
                         <span
                           className="block h-full rounded-full bg-accent transition-[width] duration-300"
                           style={{ width }}
                         />
                       </span>
-                      <span className="mt-2 block pl-8 text-xs text-fg-faint">
-                        {disease.isFallback
-                          ? labels.ranking.fallback
-                          : labels.ranking.observed}
-                      </span>
+                      {disease.isFallback ? (
+                        <span className="mt-1.5 block pl-8 text-xs text-fg-faint">
+                          {labels.ranking.fallback}
+                        </span>
+                      ) : null}
                     </button>
                   </li>
                 )
@@ -174,7 +174,7 @@ export function DiseaseIntelligenceInteractive({
           )}
         </div>
 
-        <div>
+        <div className="flex flex-col">
           <div className="mb-4 flex items-end justify-between gap-5">
             <div>
               <p className="text-sm font-semibold text-accent">
@@ -190,18 +190,21 @@ export function DiseaseIntelligenceInteractive({
             </span>
           </div>
           {mapFailed ? (
-            <div className="flex min-h-[360px] items-center justify-center rounded-card border border-edge bg-surface-muted p-7 lg:min-h-[440px]">
+            <div className="flex min-h-[360px] flex-1 items-center justify-center rounded-card border border-edge bg-surface-muted p-7">
               <StatusMessage
                 title={labels.map.error}
                 description={labels.map.errorDescription}
               />
             </div>
           ) : (
-            <DiseaseMap
-              points={mapPoints}
-              labels={labels.map}
-              onSelectDisease={selectDisease}
-            />
+            // карта тянется до высоты рейтинга — без пустоты под ней
+            <div className="flex-1">
+              <DiseaseMap
+                points={mapPoints}
+                labels={labels.map}
+                onSelectDisease={selectDisease}
+              />
+            </div>
           )}
         </div>
       </div>

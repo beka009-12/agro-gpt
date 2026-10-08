@@ -6,8 +6,8 @@ export async function CtaBanner() {
   const ru = await getDict()
 
   return (
-    <section className="bg-white px-5 pb-12 md:px-8 md:pb-16 lg:pb-20">
-      <div className="bg-brand-gradient relative mx-auto max-w-7xl overflow-hidden rounded-card px-6 py-8 text-white sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+    <section className="bg-white px-5 pb-10 md:px-8 md:pb-14 lg:pb-16">
+      <div className="bg-brand-gradient relative mx-auto max-w-7xl overflow-hidden rounded-card px-6 py-8 text-white sm:px-10 sm:py-10 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-14 lg:py-12">
         <LeafIcon
           aria-hidden
           size={340}
@@ -21,14 +21,15 @@ export async function CtaBanner() {
           <p className="mt-4 text-base leading-7 text-white/75">
             {ru.cta.description}
           </p>
-          <Link
-            href="/chat"
-            className="mt-6 flex w-full min-h-12 items-center justify-center gap-2 sm:inline-flex sm:w-auto whitespace-nowrap rounded-control bg-white px-6 py-3 text-[15px] font-semibold text-forest transition-[background-color,transform] duration-200 hover:bg-accent-soft active:translate-y-px"
-          >
-            {ru.cta.button}
-            <ChevronRightIcon size={17} />
-          </Link>
         </div>
+        {/* на десктопе кнопка справа от текста — баннер ниже на ряд */}
+        <Link
+          href="/chat"
+          className="relative mt-6 flex w-full min-h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-control bg-white px-6 py-3 text-[15px] font-semibold text-forest transition-[background-color,transform] duration-200 hover:bg-accent-soft active:translate-y-px sm:inline-flex sm:w-auto lg:mt-0"
+        >
+          {ru.cta.button}
+          <ChevronRightIcon size={17} />
+        </Link>
       </div>
     </section>
   )
