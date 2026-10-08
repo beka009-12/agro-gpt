@@ -1,8 +1,10 @@
 # ibo — AI-помощник агронома
 
-Фронтенд продукта **ibo**: лендинг, страница «О нас», регистрация/вход и чат с ИИ-диагностикой растений. Пользователь описывает симптомы или загружает фото — AI Agro API (FastAPI + Dify) определяет возможную причину и даёт рекомендации. Компания также производит органическое удобрение HYDROWOOLKS, лендинг рассказывает о продукте.
+Фронтенд продукта **ibo**: лендинг, страница «О нас», регистрация и вход, чат с ИИ-диагностикой растений и отзывы. Пользователь описывает симптомы или загружает фото — AI Agro API (FastAPI + Dify) определяет возможную причину и даёт рекомендации.
 
 Интерфейс на трёх языках: кыргызский, русский, английский.
+
+Прод: [agro-ibo.com](https://agro-ibo.com) (Vercel).
 
 ## Стек
 
@@ -12,53 +14,45 @@
 | Язык              | TypeScript (strict)                                                    |
 | Стили             | Tailwind CSS 4 — токены темы в `app/globals.css` (`@theme`)            |
 | Анимации          | `motion/react` + общие токены `src/lib/motion-tokens.ts`               |
-| Формы и валидация | react-hook-form + zod (`@hookform/resolvers`)                          |
+| Формы и валидация | react-hook-form + zod                                                  |
 | Уведомления       | react-hot-toast                                                        |
-| Данные            | `fetch` через Route Handlers                                           |
-| Типы API          | Orval — fetch-клиент и DTO из OpenAPI бэкенда (`bun run generate-api`) |
-| Шрифты            | Plus Jakarta Sans (основной), Manrope (хедер) через `next/font`        |
+| Карта             | Leaflet                                                                |
+| Данные            | `fetch` через Route Handlers (`app/api`)                               |
+| Типы API          | Orval — fetch-клиент и DTO из `openapi.json` (`bun run generate-api`) |
+| Шрифты            | Onest (текст), Manrope (заголовки), IBM Plex Mono — через `next/font`  |
 
 ## Быстрый старт
 
 ```bash
 cp .env.example .env.local   # указать API_URL бэкенда
-bun install                  # или npm install
-bun run generate-api        # обновить API-клиент и DTO из openapi.json
-bun dev                      # или npm run dev → http://localhost:3000
+bun install
+bun dev                      # http://localhost:3000
 ```
 
-// !! TODO: планы
-▎ На проде появилась история чатов как в ChatGPT: список слева, открыть старый диалог, продолжить, переименовать, удалить и вернуть. База: https://admin.agro-ibo.com, везде нужен Authorization: Bearer <token>.
-▎
-▎ 1. Список чатов (боковая панель)
-▎ GET /chat/?limit=50&offset=0
-▎ В панели показываем только title, как в ChatGPT. По нажатию открываем чат по id.
-▎ • Приходят свежие сверху. По last_message_at можно группировать: «Сегодня», «Вчера», «7 дней».
-▎ • title бывает null (фото без подписи) - тогда вместо названия показываем дату из last_message_at.
-▎ • Пустые чаты (без сообщений) не приходят, так что POST /chat/ можно вызывать сразу по кнопке «Новый чат».
-▎ • created_at и messages_count показывать не обязательно.
-▎
-▎ 2. Открыть чат
-▎ GET /chat/{id}/messages?limit=50
-▎ Ответ: { "messages": [...], "has_more": true/false }
-▎ • Сообщения от старых к новым, первый запрос отдаёт последние 50.
-▎ • Элемент - пара «вопрос + ответ»: user_text, user_image, answer (полный текст), crop, disease_name, created_at.
-▎ • Если has_more: true - при прокрутке вверх запросите ?before=<created_at самого верхнего сообщения>, придут более старые.
-▎ • Продолжить чат - как раньше, тем же chat_id через WebSocket или POST /diagnosis/.
-▎
-▎ 3. Переименовать
-▎ PATCH /chat/{id} с телом {"title": "Новое название"}
-▎ Если не переименовывать, название ставится само по первому сообщению.
-▎
-▎ 4. Удалить и вернуть
-▎ DELETE /chat/{id} - в корзину на 3 дня.
-▎ GET /chat/?deleted=true - корзина, у каждого чата есть purge_at (когда исчезнет насовсем).
-▎ POST /chat/{id}/restore - вернуть из корзины. После 3 дней будет 404.
-▎
-▎ Ошибки: чужой чат - 403, нет или удалён - 404.
-▎
-▎ Старые ответы (до сегодняшнего дня) в базе обрезаны до 1000 символов, их не восстановить. Новые хранятся целиком.
-▎
-▎ Можно посмотреть и потыкать в Swagger: https://admin.agro-ibo.com/docs, раздел Chat.
+## Переменные окружения
 
-// !
+| Переменная             | Назначение                                                                  |
+| ---------------------- | --------------------------------------------------------------------------- |
+| `API_URL`              | Адрес бэкенда. Нужен и на этапе сборки: через него проксируются `/media/*` |
+| `NEXT_PUBLIC_SITE_URL` | Публичный адрес сайта: `metadataBase`, sitemap, robots и JSON-LD            |
+
+## Скрипты
+
+| Команда                | Что делает                                       |
+| ---------------------- | ------------------------------------------------ |
+| `bun dev`              | Dev-сервер                                       |
+| `bun run build`        | Продакшен-сборка                                 |
+| `bun run lint`         | ESLint                                           |
+| `bunx tsc --noEmit`    | Проверка типов                                   |
+| `bun test`             | Тесты чистой логики (`src/lib/*.test.ts`)        |
+| `bun run generate-api` | Перегенерировать API-клиент и DTO из `openapi.json` |
+
+## Структура
+
+```
+app/              страницы и Route Handlers (app/api — прокси к бэкенду)
+src/components/   UI по разделам: landing, chat, reviews, auth, about, layout, ui
+src/i18n/         словари ky / ru / en
+src/lib/          схемы zod, работа с API и чистая логика с тестами
+src/api/generated сгенерированный Orval-клиент (не править руками)
+```
