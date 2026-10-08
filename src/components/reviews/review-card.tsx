@@ -18,7 +18,7 @@ export function ReviewCard({ review, isAuthed, locale }: ReviewCardProps) {
   })
 
   return (
-    <article className="flex flex-col rounded-card border border-edge/70 bg-card p-4 sm:p-5">
+    <article className="flex h-full flex-col rounded-card border border-edge/70 bg-card p-4 sm:p-5">
       <header className="flex items-start gap-3">
         <span
           aria-hidden
@@ -54,7 +54,7 @@ export function ReviewCard({ review, isAuthed, locale }: ReviewCardProps) {
         </div>
       ) : null}
 
-      <footer className="-mb-2 pt-2">
+      <footer className="-mb-2 mt-auto pt-2">
         <ReviewReactions
           reviewId={review.id}
           isAuthed={isAuthed}

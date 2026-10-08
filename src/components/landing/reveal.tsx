@@ -71,12 +71,32 @@ export function RevealGroup({
 
 interface RevealItemProps {
   as?: keyof typeof ITEM_TAGS
+  /**
+   * Номер в догруженной пачке. Группа передаёт «visible» только детям, смонтированным
+   * до срабатывания whileInView, — без этого новые элементы так и остались бы прозрачными.
+   */
+  appearIndex?: number
   className?: string
   children: ReactNode
 }
 
-export function RevealItem({ as = "div", className, children }: RevealItemProps) {
+export function RevealItem({ as = "div", appearIndex, className, children }: RevealItemProps) {
+  const reduced = useReducedMotion()
   const Tag = ITEM_TAGS[as]
+
+  if (appearIndex !== undefined) {
+    return (
+      <Tag
+        className={className}
+        initial={reduced ? false : itemVariants.hidden}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: DURATION.slow, ease: EASE_OUT, delay: appearIndex * STAGGER }}
+      >
+        {children}
+      </Tag>
+    )
+  }
+
   return (
     <Tag className={className} variants={itemVariants}>
       {children}

@@ -8,9 +8,12 @@ import { ChevronDownIcon } from "@/src/components/ui/icons"
 import { useI18n } from "@/src/i18n/client"
 import { reviewSchema, type Review } from "@/src/lib/review-schemas"
 import {
+  isMobileCollapsed,
   loadMoreAction,
   loadMoreButtonVisibility,
   reviewItemVisibility,
+  reviewsFetchLimit,
+  takeReviewsPage,
 } from "@/src/lib/reviews-load-more"
 import { ReviewCard } from "./review-card"
 
@@ -27,6 +30,8 @@ const MOBILE_QUERY = "(max-width: 767.98px)"
 export function ReviewsFeed({ initial, initialHasMore, pageSize, isAuthed }: ReviewsFeedProps) {
   const { dict, locale } = useI18n()
   const [reviews, setReviews] = useState<Review[]>(initial)
+  // с какого индекса началась последняя догруженная пачка — от него считаем stagger
+  const [batchStart, setBatchStart] = useState(initial.length)
   const [hasMore, setHasMore] = useState(initialHasMore)
   const [mobileExpanded, setMobileExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -36,17 +41,20 @@ export function ReviewsFeed({ initial, initialHasMore, pageSize, isAuthed }: Rev
     setLoading(true)
     setFailed(false)
     try {
-      // на один больше страницы — так знаем, есть ли продолжение, без пустого клика в конце
-      const res = await fetch(`/api/reviews?limit=${pageSize + 1}&offset=${reviews.length}`)
+      const res = await fetch(
+        `/api/reviews?limit=${reviewsFetchLimit(pageSize)}&offset=${reviews.length}`
+      )
       const parsed = z.array(reviewSchema).safeParse(res.ok ? await res.json() : null)
       if (!parsed.success) {
         setFailed(true)
         return
       }
       const known = new Set(reviews.map((r) => r.id))
-      const page = parsed.data.slice(0, pageSize).filter((r) => !known.has(r.id))
-      setReviews([...reviews, ...page])
-      setHasMore(parsed.data.length > pageSize && page.length > 0)
+      const { page, hasMore: more } = takeReviewsPage(parsed.data, pageSize)
+      const fresh = page.filter((r) => !known.has(r.id))
+      setBatchStart(reviews.length)
+      setReviews([...reviews, ...fresh])
+      setHasMore(more && fresh.length > 0)
     } catch (error) {
       console.error("[reviews] load more failed:", error)
       setFailed(true)
@@ -55,12 +63,12 @@ export function ReviewsFeed({ initial, initialHasMore, pageSize, isAuthed }: Rev
     }
   }
 
+  const feedState = { mobileExpanded, loaded: reviews.length, hasMore }
+
   function handleLoadMore() {
     const action = loadMoreAction({
       isMobile: window.matchMedia(MOBILE_QUERY).matches,
-      mobileExpanded,
-      loaded: reviews.length,
-      hasMore,
+      ...feedState,
     })
     if (action === "none") return
     setMobileExpanded(true)
@@ -71,17 +79,19 @@ export function ReviewsFeed({ initial, initialHasMore, pageSize, isAuthed }: Rev
     return <p className="text-fg-muted">{dict.reviews.empty}</p>
   }
 
-  const buttonVisibility = loadMoreButtonVisibility({
-    mobileExpanded,
-    loaded: reviews.length,
-    hasMore,
-  })
+  const buttonVisibility = loadMoreButtonVisibility(feedState)
+  const collapsed = isMobileCollapsed(feedState)
 
   return (
     <div>
-      <RevealGroup as="ul" className="grid items-start gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
+      <RevealGroup as="ul" className="grid gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
         {reviews.map((review, i) => (
-          <RevealItem as="li" key={review.id} className={reviewItemVisibility(i, mobileExpanded)}>
+          <RevealItem
+            as="li"
+            key={review.id}
+            appearIndex={i >= initial.length ? Math.max(0, i - batchStart) : undefined}
+            className={reviewItemVisibility(i, collapsed)}
+          >
             <ReviewCard review={review} isAuthed={isAuthed} locale={locale} />
           </RevealItem>
         ))}
