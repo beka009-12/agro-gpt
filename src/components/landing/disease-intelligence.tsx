@@ -2,6 +2,7 @@ import { getDict } from "@/src/i18n/server"
 import { getDiseaseLandingData } from "@/src/lib/disease-data"
 import { DiseaseIntelligenceInteractive } from "./disease-intelligence-interactive"
 import { SectionHeading } from "./section-heading"
+import { SECTION_PADDING } from "./section-layout"
 
 export async function DiseaseIntelligence() {
   const [dict, data] = await Promise.all([getDict(), getDiseaseLandingData()])
@@ -9,16 +10,15 @@ export async function DiseaseIntelligence() {
   return (
     <section
       id="disease-data"
-      className="scroll-mt-24 border-b border-edge bg-white px-5 py-20 md:px-8 md:py-24"
+      className={`scroll-mt-24 border-b border-edge bg-white ${SECTION_PADDING}`}
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
+          compact
           eyebrow={dict.diseaseIntelligence.eyebrow}
           title={dict.diseaseIntelligence.title}
+          description={dict.diseaseIntelligence.description}
         />
-        <p className="-mt-8 mb-10 max-w-2xl text-base leading-7 text-fg-muted md:-mt-12 md:mb-12">
-          {dict.diseaseIntelligence.description}
-        </p>
         <DiseaseIntelligenceInteractive
           {...data}
           labels={dict.diseaseIntelligence}

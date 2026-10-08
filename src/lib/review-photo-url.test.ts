@@ -31,10 +31,10 @@ describe("toSameOriginPhotoUrl", () => {
 })
 
 describe("reviewPhotoTileCount", () => {
-  test("до четырёх фото — все превью", () => {
+  test("до трёх фото — все превью", () => {
     expect(reviewPhotoTileCount(1)).toEqual({ tiles: 1, hidden: 0 })
-    expect(reviewPhotoTileCount(4)).toEqual({ tiles: 4, hidden: 0 })
+    expect(reviewPhotoTileCount(3)).toEqual({ tiles: 3, hidden: 0 })
   })
-  test("больше четырёх — четыре превью и счётчик остатка", () =>
-    expect(reviewPhotoTileCount(5)).toEqual({ tiles: 4, hidden: 1 }))
+  test("больше трёх — три превью и счётчик остатка", () =>
+    expect(reviewPhotoTileCount(5)).toEqual({ tiles: 3, hidden: 2 }))
 })

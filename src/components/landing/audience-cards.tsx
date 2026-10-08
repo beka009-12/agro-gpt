@@ -6,7 +6,7 @@ type AudienceItem = Dictionary["audience"]["items"][number]
 
 function AudienceArticle({ item }: { item: AudienceItem }) {
   return (
-    <article className="group h-full py-6 transition-transform duration-200 md:flex md:items-start md:gap-6 lg:block lg:py-8 lg:hover:-translate-y-1">
+    <article className="group h-full py-6 transition-transform duration-200 md:flex md:items-start md:gap-6 lg:block lg:hover:-translate-y-1">
       <span className="grid size-11 shrink-0 place-items-center rounded-control bg-accent-soft text-accent-strong transition-colors duration-200 group-hover:bg-accent group-hover:text-white">
         <AudienceIcon
           id={item.icon as AudienceIconId}
@@ -15,10 +15,10 @@ function AudienceArticle({ item }: { item: AudienceItem }) {
         />
       </span>
       <div className="min-w-0">
-        <h3 className="mt-5 font-display text-xl font-semibold tracking-[-0.025em] text-fg md:mt-0 lg:mt-5 lg:text-[26px]">
+        <h3 className="mt-4 font-display text-xl font-semibold tracking-[-0.025em] text-fg md:mt-0 lg:mt-4 lg:text-2xl">
           {item.title}
         </h3>
-        <p className="mt-3 max-w-[560px] text-base leading-7 text-fg-muted md:mt-2 lg:mt-3">
+        <p className="mt-2 max-w-[560px] text-base leading-7 text-fg-muted">
           {item.description}
         </p>
       </div>

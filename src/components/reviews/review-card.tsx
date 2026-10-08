@@ -18,11 +18,11 @@ export function ReviewCard({ review, isAuthed, locale }: ReviewCardProps) {
   })
 
   return (
-    <article className="flex flex-col rounded-card border border-edge/70 bg-card p-4 sm:p-5">
+    <article className="flex h-full flex-col rounded-card border border-edge/70 bg-card p-4 sm:p-5">
       <header className="flex items-start gap-3">
         <span
           aria-hidden
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft font-display text-[15px] font-semibold text-accent-strong"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-accent-soft font-display text-sm font-semibold text-accent-strong"
         >
           {review.author_name.trim().charAt(0).toUpperCase()}
         </span>
@@ -44,21 +44,21 @@ export function ReviewCard({ review, isAuthed, locale }: ReviewCardProps) {
         </div>
       </header>
 
-      <div className="mt-3">
+      <div className="mt-2.5">
         <ReviewText text={review.text} />
       </div>
 
-      {review.photos.length > 0 ? (
-        <div className="mt-3">
-          <ReviewPhotos photos={review.photos} />
-        </div>
-      ) : null}
-
-      <footer className="-mb-2 pt-2">
+      {/* фото и реакции в одной строке: справа от превью иначе пусто */}
+      <footer className="-mb-2 mt-auto flex items-end gap-2 pt-3">
+        {review.photos.length > 0 ? (
+          <div className="min-w-0 flex-1 pb-2">
+            <ReviewPhotos photos={review.photos} />
+          </div>
+        ) : null}
         <ReviewReactions
           reviewId={review.id}
           isAuthed={isAuthed}
-          className="-ml-3"
+          className="-mr-3 ml-auto shrink-0"
           initial={{
             likes_count: review.likes_count,
             dislikes_count: review.dislikes_count,
